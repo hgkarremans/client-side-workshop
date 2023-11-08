@@ -59,7 +59,7 @@ jobs:
           name: share-a-meal-web
 
       - name: Unzip artifact for deployment
-        run: unzip frontend-app-release.zip
+        run: unzip share-a-meal-web-release.zip
         
       - name: Deploy to static azure web app
         id: builddeploy
