@@ -87,7 +87,7 @@ jobs:
           name: data-api
 
       - name: Unzip artifact for deployment
-        run: unzip backend-api-release.zip
+        run: unzip data-api-release.zip
        
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
