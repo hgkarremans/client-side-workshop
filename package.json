@@ -2,7 +2,9 @@
   "name": "@clientside-nx-workshop/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx b data-api && nx b client-side-individueel"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~16.2.0",
