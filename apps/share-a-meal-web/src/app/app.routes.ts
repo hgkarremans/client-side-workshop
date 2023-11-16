@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 import { UserDetailsComponent, UserEditComponent, UserListComponent } from '@avans-nx-workshop/user';
-import { AboutComponent } from '@avans-nx-workshop/share-a-meal/features';
+import { AboutComponent, HomepageComponent } from '@avans-nx-workshop/share-a-meal/features';
 
 export const appRoutes: Route[] = [
     {
         path: '',
         pathMatch: 'full',
-        component: UserListComponent,
+        component: HomepageComponent,
     },
     {
         path: 'users',
@@ -24,8 +24,8 @@ export const appRoutes: Route[] = [
         path: 'about',
         component: AboutComponent
     },
-    // {
-    //     path: '**',
-    //     redirectTo: '',
-    // }
+    {
+        path: '**',
+        redirectTo: '',
+    }
 ];
