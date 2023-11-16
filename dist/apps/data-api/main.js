@@ -23,8 +23,8 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(19);
-const app_service_1 = __webpack_require__(20);
+const app_controller_1 = __webpack_require__(20);
+const app_service_1 = __webpack_require__(21);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
@@ -87,7 +87,7 @@ const common_1 = __webpack_require__(1);
 const meal_service_1 = __webpack_require__(8);
 const common_2 = __webpack_require__(1);
 const api_1 = __webpack_require__(10);
-const dto_1 = __webpack_require__(13);
+const dto_1 = __webpack_require__(14);
 let MealController = exports.MealController = class MealController {
     constructor(mealService) {
         this.mealService = mealService;
@@ -208,6 +208,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(11), exports);
 tslib_1.__exportStar(__webpack_require__(12), exports);
+tslib_1.__exportStar(__webpack_require__(13), exports);
 
 
 /***/ }),
@@ -232,22 +233,37 @@ var MealSort;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserRole = void 0;
+var UserRole;
+(function (UserRole) {
+    UserRole["admin"] = "admin";
+    UserRole["editor"] = "editor";
+    UserRole["guest"] = "guest";
+})(UserRole || (exports.UserRole = UserRole = {}));
 
 
 /***/ }),
 /* 13 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+/* 14 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(14), exports);
 tslib_1.__exportStar(__webpack_require__(15), exports);
-tslib_1.__exportStar(__webpack_require__(17), exports);
+tslib_1.__exportStar(__webpack_require__(16), exports);
+tslib_1.__exportStar(__webpack_require__(18), exports);
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -267,7 +283,7 @@ exports.DtoModule = DtoModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -275,7 +291,7 @@ var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateMealDto = exports.UpsertMealDto = exports.CreateMealDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(16);
+const class_validator_1 = __webpack_require__(17);
 const api_1 = __webpack_require__(10);
 /**
  * Use the `Pick` utility type to extract only the properties we want for
@@ -363,13 +379,13 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -377,7 +393,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(18);
+const operators_1 = __webpack_require__(19);
 let ApiResponseInterceptor = exports.ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -410,13 +426,13 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -425,7 +441,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(20);
+const app_service_1 = __webpack_require__(21);
 let AppController = exports.AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -447,7 +463,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -506,7 +522,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const common_1 = __webpack_require__(1);
 const core_1 = __webpack_require__(2);
 const app_module_1 = __webpack_require__(3);
-const dto_1 = __webpack_require__(13);
+const dto_1 = __webpack_require__(14);
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const globalPrefix = 'api';

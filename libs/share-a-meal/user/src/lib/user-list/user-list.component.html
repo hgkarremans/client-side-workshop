@@ -1,0 +1,17 @@
+<!-- user-list.component.html -->
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-3" *ngFor="let user of users">
+        <div class="card m-3" style="width: 18rem;">
+          <img src="{{ user.image }}" class="card-img-top" alt="{{ user.image }} Image">
+          <div class="card-body">
+            <h5 class="card-title">{{ user.firstName }} {{ user.lastName }}</h5>
+            <p class="card-text">Birthdate: {{ user.dateOfBirth | date }}</p>
+            <a routerLink="users/{{ user.id }}" class="btn btn-primary">See details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
