@@ -1,8 +1,14 @@
 export enum UserRole {
-    admin = 'admin',
-    editor = 'editor',
-    guest = 'guest',
+    admin = 'Admin',
+    editor = 'Editor',
+    guest = 'Guest',
 }
+export enum UserGender {
+    male = 'Male',
+    female = 'Female',
+    other = 'Other',
+}
+
 
 export interface User {
     id: number;
@@ -11,5 +17,6 @@ export interface User {
     emailAdress: string;
     dateOfBirth: Date;
     role: UserRole;
+    gender : UserGender;
     image: string;
 }

@@ -233,13 +233,19 @@ var MealSort;
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UserRole = void 0;
+exports.UserGender = exports.UserRole = void 0;
 var UserRole;
 (function (UserRole) {
-    UserRole["admin"] = "admin";
-    UserRole["editor"] = "editor";
-    UserRole["guest"] = "guest";
+    UserRole["admin"] = "Admin";
+    UserRole["editor"] = "Editor";
+    UserRole["guest"] = "Guest";
 })(UserRole || (exports.UserRole = UserRole = {}));
+var UserGender;
+(function (UserGender) {
+    UserGender["male"] = "Male";
+    UserGender["female"] = "Female";
+    UserGender["other"] = "Other";
+})(UserGender || (exports.UserGender = UserGender = {}));
 
 
 /***/ }),
