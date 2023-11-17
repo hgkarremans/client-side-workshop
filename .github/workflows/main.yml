@@ -42,7 +42,7 @@ jobs:
       - name: Upload backend-api artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: data-api-release
+          name: data-api
           path: data-api-release.zip
           
           

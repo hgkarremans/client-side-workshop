@@ -207,6 +207,7 @@ module.exports = require("rxjs");
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(11), exports);
+tslib_1.__exportStar(__webpack_require__(12), exports);
 tslib_1.__exportStar(__webpack_require__(13), exports);
 
 
@@ -227,7 +228,27 @@ var MealSort;
 
 
 /***/ }),
-/* 12 */,
+/* 12 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserGender = exports.UserRole = void 0;
+var UserRole;
+(function (UserRole) {
+    UserRole["admin"] = "Admin";
+    UserRole["editor"] = "Editor";
+    UserRole["guest"] = "Guest";
+})(UserRole || (exports.UserRole = UserRole = {}));
+var UserGender;
+(function (UserGender) {
+    UserGender["male"] = "Male";
+    UserGender["female"] = "Female";
+    UserGender["other"] = "Other";
+})(UserGender || (exports.UserGender = UserGender = {}));
+
+
+/***/ }),
 /* 13 */
 /***/ ((__unused_webpack_module, exports) => {
 

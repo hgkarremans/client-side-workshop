@@ -1,0 +1,160 @@
+<div class="container ml-3">
+
+
+<div class="row">
+    <div class="col-sm-6 col-md-8 col-lg-9">
+        <h3 id="aboutTitle">Over deze applicatie</h3>
+        <p>
+            Deze applicatie is gemaakt in het kader van het vak 'Clientside web
+            frameworks' van Avans Hogeschool Breda.
+        </p>
+        <h1>Ticketshop</h1>
+        <p>
+            In mijn project ga ik een applicatie ontwerpen waarbij gebruikers tickets kunnen reserveren
+            om naar wedstrijden van een voetbalclub te kunnen gaan. 
+            Voetbal clubs hebben en divisie en voetbal spelers. De gebruikers kunnen vriendschappen
+            hebben met andere gebruikers, en kunnen vervolgens kijken of ze mee kunnen rijden
+            met elkaar. Een vriendschap heeft een gebruiker 1 en gebruiker 2, deze combi maakt hem uniek.
+            Gebruikers hebben een Id, voornaam, achternaam, email, telefoonnummer, wachtwoord, adres,
+            geslacht en vervoer. Tickets hebben een Id, prijs, datum en status. Voetbalclubs hebben
+            een Id, naam, oprichtingsDatum en stadion. Divisies hebben een Id, naam en een klasse.
+            Voetballers hebben een Id, naam en een rugnummer.
+        </p>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card shadow">
+            <div class="d-flex justify-content-center align-items-center px-3 py-3">
+
+                <img src="../assets/self.jpg" class="card-img-top "
+                    alt="self_potrait" />
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Hans Gerard karremans</h5>
+                <p class="card-text">Studentnummer: 2188909</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Entiteiten</h3>
+<p>
+    De gegeven entiteiten vormen samen een mooie ERD, deze is hieronder te vinden. 
+</p>
+
+<img src="../assets/erd_nosql.png" class="px-5 py-5" alt="erd" style="width: 100%;">
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-4">
+        <p>Gebruiker</p>
+        <ul>
+            <li>id: number</li>
+            <li>Voornaam: string</li>
+            <li>Achternaam: string</li>
+            <li>Email: string</li>
+            <li>Telefoonnummer: string</li>
+            <li>Wachtwoord: string</li>
+            <li>Adres: string</li>
+            <li>Geslacht: string</li>
+            <li>Vervoer: string</li>
+            <li>birthdate: date</li>
+        </ul>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <p>Tickets</p>
+        <ul>
+            <li>id: number</li>
+            <li>Naam: string</li>
+            <li>Prijs: number</li>
+            <li>Status: status</li>
+        </ul>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <p>Voetbal Club</p>
+        <ul>
+            <li>id: number</li>
+            <li>Naam: string</li>
+            <li>OprichtingsDatum: date</li>
+            <li>Stadion: string</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h3>Userstories</h3>
+        <p>
+            Voor deze applicaties zijn enkele userstories opgesteld. Deze zijn hieronder te lezen. 
+        </p>
+
+        <table class="table table-bordered">
+            <thead>
+                <th>Nr</th>
+                <th class="col-6">Userstory</th>
+                <th>Toelichting</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        Als gebruiker wil ik een overzicht van tickets kunnen zien, 
+                        zodat ik kan zien welke tickets er beschikbaar zijn.
+                    </td>
+                    <td>Overzicht is een grid.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>
+                        Als admin wil ik een ticket kunnen toevoegen, zodat er altijd
+                        tickets beschikbaar zijn.
+                    </td>
+                    <td>Knop en schema om ticket toe te voegen, die alleen beschikbaar is met rechten.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>
+                        Als admin wil ik tickets kunnen aanpassen en verwijderen, zodat ze 
+                        altijd up to date zijn.
+                    </td>
+                    <td>Schema om te verwijderen en aan te passen</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>
+                        <p>Als gebruiker wil ik kunnen zien of mijn vrienden vervoer hebben, zodat ze met mijn mee kunnen rijden, 
+                            of ik met hun als dit nodig mocht zijn.
+                        </p>
+                    </td>
+                    <td>Overzicht met vrienden en een knop om aan te passen of je vervoer hebt.</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>
+                        <p>Als gebruiker wil ik een overzicht van de spelers van de club kunnen zien, zodat ik 
+                            weet welke spelers er spelen.
+                        </p>
+                    </td>
+                    <td>Schema met spelers van club inclusief hun rugnummers</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>
+                        <p>Als admin wil ik de spelers van de club kunnen aanpassen, zodat ik de spelers up to date kan houden.
+                        </p>
+                    </td>
+                    <td>Scherm om spelers te verwijderen of toe te voegen</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>
+                        <p>Als gebruiker wil ik een vriendschap kunnen aangaan met een andere gebruiker,
+                            zodat ik kan zien of ik met iemand mee kan rijden.
+                        </p>
+                    </td>
+                    <td>Scherm om vriendschappen te kunnen beheren</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
