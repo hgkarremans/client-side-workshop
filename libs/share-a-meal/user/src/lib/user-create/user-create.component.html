@@ -1,6 +1,8 @@
 <div *ngIf="user">
-  <h2 class="text-center mt-3 mb-4">Edit {{user.firstName}} {{user.lastName}}</h2>
-    <div class="card-details shadow mx-auto m-3 bg-light " style="width: 60rem; position: relative; border: none;">
+
+    <h2 class="text-center mt-3 mb-4">Create User</h2>
+  
+    <div class="card-details shadow mx-auto m-3 bg-light" style="width: 60rem; position: relative; border: none;">
       <div class="row no-gutters">
         <div class="col-md-4">
           <img [src]="user.image" class="card-img" alt="User Image">
@@ -9,24 +11,23 @@
           <div class="card-body">
             <div>
               <label for="firstName">First Name</label>
-              <input type="text" class="form-control" value="{{ user.firstName }}">
+              <input type="text" class="form-control" placeholder="Enter first name" value="">
             </div>
             <div>
-              <label for="firstName">Last Name</label>
-              <input type="text" class="form-control" value="{{ user.lastName }}">
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" placeholder="Enter last name" value="">
             </div>
             <div>
-                <label for="birthdate">Date of birth</label>
-                <!-- Use Angular date pipe to format the date -->
-                <input type="date" class="form-control" [value]="user.dateOfBirth | date:'yyyy-MM-dd'">
-              </div>    
+              <label for="birthdate">Date of birth</label>
+              <input type="date" class="form-control" placeholder="Select date of birth" value="">
+            </div>
             <div>
               <label for="Email">Email</label>
-              <input type="email" class="form-control" value="{{ user.emailAdress }}">
+              <input type="email" class="form-control" placeholder="Enter email address" value="">
             </div>
             <div>
-                <label for="image">Image Url</label>
-                <input type="text" class="form-control" value="{{ user.image }}">
+              <label for="image">Image Url</label>
+              <input type="text" class="form-control" placeholder="Enter image URL" value="">
             </div>
             <div>
               <label for="role">Role</label>
@@ -52,5 +53,4 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!user">User not found</div>
   

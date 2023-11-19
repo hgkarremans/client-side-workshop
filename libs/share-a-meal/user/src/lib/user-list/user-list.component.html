@@ -1,5 +1,12 @@
 <div class="container">
   <div class="row">
+    <div class="col-md-12 d-flex justify-content-center mb-3">
+      <!-- Button to create users -->
+      <button class="btn btn-primary" [routerLink]="'create'">Create User</button>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-md-3" *ngFor="let user of users">
       <a [routerLink]="'../users/' + user.id" class="card-link" style="text-decoration: none;">
         <div class="card m-3 shadow position-relative" style="width: 18rem; border: none;">

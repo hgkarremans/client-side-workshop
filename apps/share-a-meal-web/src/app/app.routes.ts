@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { UserDetailsComponent, UserEditComponent, UserListComponent } from '@avans-nx-workshop/user';
+import { UserCreateComponent, UserDetailsComponent, UserEditComponent, UserListComponent } from '@avans-nx-workshop/user';
 import { AboutComponent, HomepageComponent } from '@avans-nx-workshop/share-a-meal/features';
 
 export const appRoutes: Route[] = [
@@ -11,6 +11,10 @@ export const appRoutes: Route[] = [
     {
         path: 'users',
         component: UserListComponent,
+    },
+    {
+        path: 'users/create',
+        component: UserCreateComponent
     },
     {
         path: 'users/:id',

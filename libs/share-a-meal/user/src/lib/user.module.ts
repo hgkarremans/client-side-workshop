@@ -6,6 +6,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { DeleteConformationModalComponent } from './delete-conformation-modal/delete-conformation-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserCreateComponent } from './user-create/user-create.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
@@ -14,7 +15,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     UserEditComponent,
     UserDetailsComponent,
     DeleteConformationModalComponent,
+    UserCreateComponent,
   ],
-  exports: [UserListComponent, UserEditComponent, DeleteConformationModalComponent],
+  exports: [
+    UserListComponent,
+    UserEditComponent,
+    DeleteConformationModalComponent,
+  ],
 })
 export class UserModule {}
