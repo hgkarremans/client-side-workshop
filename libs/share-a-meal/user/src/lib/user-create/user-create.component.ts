@@ -30,10 +30,6 @@ export class UserCreateComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const userId = Number(params.get('id'));
-      this.user = this.userService.getUserById(userId);
-
-      // Update the 'gender' field in the form with the user's gender
       this.userForm.patchValue({
         gender: this.user.gender,
         role: this.user.role,
