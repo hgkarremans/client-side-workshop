@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-center mb-3">
+      <button class="btn btn-primary" [routerLink]="'create'">Create Ticket</button>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-3 col-sm-6 col-12" *ngFor="let ticket of tickets">
+      <a [routerLink]="" class="card-link" style="text-decoration: none;">
+        <div class="card m-3 shadow position-relative" style="width: 18rem; border: none; margin-right: 10px; margin-bottom: 10px;">
+          <img src="../assets/soccer_player.avif" class="card-img-top shadow-sm" alt="Soccer player">
+          <div class="card-body">
+            <h5 class="card-title">{{ ticket.title}}</h5>
+            <p class="card-text">Match date: {{ ticket.date | date }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
