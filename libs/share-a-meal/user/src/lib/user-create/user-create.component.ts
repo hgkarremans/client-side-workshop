@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../user.service';
 import { User } from '@avans-nx-workshop/shared/api';
-import { UserGender } from '@avans-nx-workshop/shared/api';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserRole } from '@avans-nx-workshop/shared/api';
+import { DeleteConformationModalComponent } from '../delete-conformation-modal/delete-conformation-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'clientside-nx-workshop-user-create',
@@ -12,28 +11,25 @@ import { UserRole } from '@avans-nx-workshop/shared/api';
   styles: [],
 })
 export class UserCreateComponent {
-  user!: User;
-  userForm!: FormGroup;
-  genderOptions = Object.values(UserGender);
-  rolesOptions = Object.values(UserRole);
+  user!: User; // Add definite assignment assertion
 
-  constructor(
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private fb: FormBuilder
-  ) {
-    this.userForm = this.fb.group({
-      gender: [''], 
-      role: [''],
-    });
-  }
+  constructor(private route: ActivatedRoute, private userService: UserService, private modalService: NgbModal) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.userForm.patchValue({
-        gender: this.user.gender,
-        role: this.user.role,
-      });
+    this.route.paramMap.subscribe(params => {
+      const userId = Number(params.get('id'));
+      this.user = this.userService.getUserById(userId);
+    });
+  }
+  openDeleteConfirmationModal() {
+    const modalRef = this.modalService.open(DeleteConformationModalComponent);
+
+    // Handle the result when the modal is closed (e.g., user clicked Delete)
+    modalRef.result.then((result) => {
+      if (result === 'Delete') {
+        // Perform the delete action here
+        console.log('Item deleted!');
+      }
     });
   }
 }
