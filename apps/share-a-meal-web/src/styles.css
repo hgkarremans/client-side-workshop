@@ -16,3 +16,21 @@
     transform: scale(1.05); 
   }
   
+
+.card-create {
+  width: 60rem;
+}
+
+@media (max-width: 767px) {
+  /* Styles for screens smaller than 768 pixels wide (typical mobile devices) */
+  .card-create .col-md-4 {
+    display: none !important; /* Use !important to increase specificity */
+  }
+
+  .card-create .col-md-8 {
+    width: 100% !important; /* Use !important to increase specificity */
+  }
+}
+
+
+  
