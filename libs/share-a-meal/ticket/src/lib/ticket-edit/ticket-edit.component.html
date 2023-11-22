@@ -1,0 +1,49 @@
+<div *ngIf="ticket">
+    <h2 class="text-center mt-3 mb-4">Edit {{ ticket.title }}</h2>
+    <div class="card-details shadow mx-auto m-3 bg-light" style="width: 75rem; position: relative; border: none;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="../assets/soccer_player.avif" class="card-img" alt="User Image">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <div>
+              <label for="title">Title</label>
+              <input type="text" class="form-control" value="{{ ticket.title }}">
+            </div>
+            <div>
+              <label for="price">Price</label>
+              <input type="number" class="form-control" value="{{ ticket.price }}">
+            </div>
+            <div>
+              <label for="date">Date</label>
+              <input type="date" class="form-control" [value]="ticket.date | date:'yyyy-MM-dd'">
+            </div>
+            <div>
+              <label for="status">Status</label>
+              <select class="form-select" name="type" id="type" required>
+                <option [selected]="ticket.status === 'Active'" value="1">
+                  Active
+                </option>
+                <option [selected]="ticket.status === 'Inactive'" value="2">
+                  Inactive
+                </option>
+                <option [selected]="ticket.status === 'Pending'" value="3">
+                  Pending
+                </option>
+              </select>
+            </div>
+            <div>
+              <label for="seat">Seat</label>
+              <input type="number" class="form-control" value="{{ ticket.seat }}">
+            </div>
+            <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
+              <button class="btn btn-primary" style="border: 1px solid #000;" routerLink="/tickets/{{ ticket.id }}">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!ticket">Ticket not found</div>
+  

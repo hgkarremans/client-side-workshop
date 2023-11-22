@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { UserCreateComponent, UserDetailsComponent, UserEditComponent, UserListComponent } from '@avans-nx-workshop/user';
 import { AboutComponent, HomepageComponent } from '@avans-nx-workshop/share-a-meal/features';
-import { TicketListComponent } from '@avans-nx-workshop/tickets';
+import { TicketCreateComponent, TicketDetailComponent, TicketEditComponent, TicketListComponent } from '@avans-nx-workshop/tickets';
 
 export const appRoutes: Route[] = [
     {
@@ -32,6 +32,18 @@ export const appRoutes: Route[] = [
     {
         path: 'tickets',
         component: TicketListComponent
+    },
+    {
+        path: 'tickets/create',
+        component: TicketCreateComponent
+    },
+    {
+        path: 'tickets/:id',
+        component: TicketDetailComponent
+    },
+    {
+        path: 'tickets/:id/edit',
+        component: TicketEditComponent
     },
     {
         path: 'about',
