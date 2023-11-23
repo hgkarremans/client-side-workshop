@@ -1,65 +1,70 @@
+<!-- user-create.component.html -->
 <div *ngIf="user">
-
   <h2 class="text-center mt-3 mb-4">Create User</h2>
 
-  <div class="card-create shadow mx-auto m-3 bg-light" style="width: 70em; position: relative; border: none;">
+  <div class="card-create shadow mx-auto m-3 bg-light" style="width: 80em; position: relative; border: none;">
     <div class="row no-gutters">
       <div class="col-md-4">
-        <img [src]="user.image" class="card-img" alt="User Image">
+        <img [src]="user?.image" class="card-img" alt="User Image">
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <div>
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" placeholder="Enter first name" value="">
-          </div>
-          <div>
-            <label for="lastName">Last Name</label>
-            <input type="text" class="form-control" placeholder="Enter last name" value="">
-          </div>
-          <div>
-            <label for="birthdate">Date of birth</label>
-            <input type="date" class="form-control" placeholder="Select date of birth" value="">
-          </div>
-          <div>
-            <label for="Email">Email</label>
-            <input type="email" class="form-control" placeholder="Enter email address" value="">
-          </div>
-          <div>
-            <label for="image">Image Url</label>
-            <input type="text" class="form-control" placeholder="Enter image URL" value="">
-          </div>
-          <div>
-            <label for="role">Role</label>
-            <select class="form-select" name="type" id="type" required>
-              <option value="1" [ngValue]="user.role === 'Admin' ? null : undefined">
-                Admin
-              </option>
-              <option value="2" [ngValue]="user.role === 'Editor' ? null : undefined">
-                Editor
-              </option>
-              <option value="3" [ngValue]="user.role === 'Guest' ? null : undefined">
-                Guest
-              </option>
-            </select>
-          </div>
-          <div>
-            <label for="gender">Gender</label>
-            <select class="form-select" name="type" id="type" required>
-              <option value="1" [ngValue]="user.gender === 'Male' ? null : undefined">
-                Male
-              </option>
-              <option value="2" [ngValue]="user.gender === 'Female' ? null : undefined">
-                Female
-              </option>
-              <option value="3" [ngValue]="user.gender === 'Other' ? null : undefined">
-                Other
-              </option>
-            </select>
-          </div>
-          <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
-            <button class="btn btn-primary" style="border: 1px solid #000;" routerLink="/users">Save</button>
-          </div>
+          <form [formGroup]="userForm">
+            <div>
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control" placeholder="Enter first name" formControlName="firstName"
+                [ngClass]="{'is-invalid': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}">
+              <div *ngIf="userForm.get('firstName')?.hasError('required') && userForm.get('firstName')?.touched">First Name is required.</div>
+            </div>
+            <div>
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" placeholder="Enter last name" formControlName="lastName"
+                [ngClass]="{'is-invalid': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}">
+              <div *ngIf="userForm.get('lastName')?.hasError('required') && userForm.get('lastName')?.touched">Last Name is required.</div>
+            </div>
+            <div>
+              <label for="birthdate">Date of birth</label>
+              <input type="date" class="form-control" placeholder="Select date of birth" formControlName="dateOfBirth"
+                [ngClass]="{'is-invalid': userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched}">
+              <div *ngIf="userForm.get('dateOfBirth')?.hasError('required') && userForm.get('dateOfBirth')?.touched">Date of Birth is required.</div>
+            </div>
+            <div>
+              <label for="Email">Email</label>
+              <input type="email" class="form-control" placeholder="Enter email address" formControlName="email"
+                [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
+              <div *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.touched">Email is required.</div>
+              <div *ngIf="userForm.get('email')?.hasError('email') && userForm.get('email')?.touched">Invalid email format.</div>
+            </div>
+            <div>
+              <label for="image">Image Url</label>
+              <input type="text" class="form-control" placeholder="Enter image URL" formControlName="image">
+            </div>
+            <div>
+              <label for="role">Role</label>
+              <select class="form-select" name="role" id="role" formControlName="role"
+                [ngClass]="{'is-invalid': userForm.get('role')?.invalid && userForm.get('role')?.touched}">
+                <option value="" disabled>Select role</option>
+                <option value="Admin">Admin</option>
+                <option value="Editor">Editor</option>
+                <option value="Guest">Guest</option>
+              </select>
+              <div *ngIf="userForm.get('role')?.hasError('required') && userForm.get('role')?.touched">Role is required.</div>
+            </div>
+            <div>
+              <label for="gender">Gender</label>
+              <select class="form-select" name="gender" id="gender" formControlName="gender"
+                [ngClass]="{'is-invalid': userForm.get('gender')?.invalid && userForm.get('gender')?.touched}">
+                <option value="" disabled>Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <div *ngIf="userForm.get('gender')?.hasError('required') && userForm.get('gender')?.touched">Gender is required.</div>
+            </div>
+            <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
+              <button routerLink="../../users" class="btn btn-primary" style="border: 1px solid #000;" (click)="saveUser()" [disabled]="userForm.invalid">Save</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

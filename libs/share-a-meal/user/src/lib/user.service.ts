@@ -89,18 +89,26 @@ export class UserService {
       role: UserRole.editor,
       gender: UserGender.other,
       image: "https://images.pexels.com/photos/7047197/pexels-photo-7047197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-
     },
   ];
 
   constructor() {
-    console.log('Service constructor aangeroepen');
+   console.log('Service constructor aangeroepen');
   }
 
   getUsers(): User[] {
     console.log('getUsers aangeroepen');
     return this.users;
   }
+  addUser(newUser: User): void {
+    console.log('addUser aangeroepen');
+    this.users.push(newUser);
+  }
+  getLength(): number {
+    return this.users.length;
+  }
+  
+  
 
   getUsersAsObservable(): Observable<User[]> {
     console.log('getUsersAsObservable aangeroepen');
