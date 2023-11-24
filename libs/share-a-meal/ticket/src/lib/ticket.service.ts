@@ -54,4 +54,17 @@ export class TicketService {
     console.log('getTicketById aangeroepen');
     return this.tickets.filter((ticket) => ticket.id === id)[0];
   }
+
+  updateTicket(id: number, updatedTicketsData: any): void {
+    console.log('updateTicket aangeroepen');
+    const index = this.tickets.findIndex((ticket) => ticket.id === id);
+
+    if (index !== -1) {
+      const updatedTickets = {...updatedTicketsData, id};
+      this.tickets[index] = updatedTickets;
+
+    } else {
+      console.error(`Ticket met id ${id} niet gevonden`);
+    }
+  }
 }

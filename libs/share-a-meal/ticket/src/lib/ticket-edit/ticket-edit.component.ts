@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Ticket, TicketStatus } from '@avans-nx-workshop/shared/api';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
 
 @Component({
@@ -11,17 +11,21 @@ import { TicketService } from '../ticket.service';
 })
 export class TicketEditComponent implements OnInit {
   ticket!: Ticket;
-  ticketForm!: FormGroup
-;
+  ticketForm!: FormGroup;
   statusOptions = Object.values(TicketStatus);
 
   constructor(
     private route: ActivatedRoute,
+    private router : Router,
     private ticketService: TicketService,
     private fb: FormBuilder
   ) {
     this.ticketForm = this.fb.group({
-      status: [''], 
+      title: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      date: ['', Validators.required],
+      status: ['', Validators.required],
+      seat: ['', [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -32,9 +36,22 @@ export class TicketEditComponent implements OnInit {
 
 
       this.ticketForm.patchValue({
+        title: this.ticket.title,
+        price: this.ticket.price,
+        date: this.ticket.date,
         status: this.ticket.status,
+        seat: this.ticket.seat,
       });
     });
   }
+  saveTicket(): void {
+    if (this.ticketForm.valid) {
+      this.ticketService.updateTicket(this.ticket.id,this.ticketForm.value);
+      this.router.navigate(['tickets/', this.ticket.id]);
+    } else {
+      console.log('Form is invalid');
+    }
+  }
+    
 }
 
