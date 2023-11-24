@@ -29,11 +29,11 @@
               <div *ngIf="userForm.get('dateOfBirth')?.hasError('required') && userForm.get('dateOfBirth')?.touched">Date of Birth is required.</div>
             </div>
             <div>
-              <label for="Email">Email</label>
-              <input type="email" class="form-control" placeholder="Enter email address" formControlName="email"
-                [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
-              <div *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.touched">Email is required.</div>
-              <div *ngIf="userForm.get('email')?.hasError('email') && userForm.get('email')?.touched">Invalid email format.</div>
+              <label for="emailAdress">Email</label>
+              <input type="emailAdress" class="form-control" placeholder="Enter email address" formControlName="emailAdress"
+                [ngClass]="{'is-invalid': userForm.get('emailAdress')?.invalid && userForm.get('emailAdress')?.touched}">
+              <div *ngIf="userForm.get('emailAdress')?.hasError('required') && userForm.get('emailAdress')?.touched">Email is required.</div>
+              <div *ngIf="userForm.get('emailAdress')?.hasError('emailAdress') && userForm.get('emailAdress')?.touched">Invalid email format.</div>
             </div>
             <div>
               <label for="image">Image Url</label>

@@ -27,7 +27,7 @@ export class UserCreateComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      emailAdress: ['', [Validators.required, Validators.email]],
       image: [''],
       role: ['', Validators.required],
       gender: ['', Validators.required],
@@ -38,7 +38,7 @@ export class UserCreateComponent implements OnInit {
       this.user = this.userService.getUserById(userId);
     });
 
-    this.patchFormWithUserData();
+    
   }
 
   saveUser(): void {
@@ -59,11 +59,6 @@ export class UserCreateComponent implements OnInit {
 
 
 
-  private patchFormWithUserData(): void {
-    if (this.user) {
-      this.userForm.patchValue({
-
-      });
-    }
-  }
+  
+  
 }

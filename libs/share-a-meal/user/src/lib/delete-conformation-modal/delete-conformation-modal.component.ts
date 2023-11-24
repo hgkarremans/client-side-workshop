@@ -24,7 +24,6 @@ export class DeleteConformationModalComponent implements OnInit {
   async confirmDelete() {
     try {
       if (this.userId !== undefined) {
-        // Implement your delete logic here
         console.log('Deleting user with id:', this.userId);
         this.userService.deleteUser(this.userId);
         // Uncomment the above line when you are ready to perform the actual delete
