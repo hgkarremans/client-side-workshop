@@ -49,8 +49,8 @@ export const appRoutes: Route[] = [
         path: 'about',
         component: AboutComponent
     },
-    {
-        path: '**',
-        redirectTo: '',
-    }
+    // {
+    //     path: '**',
+    //     redirectTo: '',
+    // }
 ];

@@ -107,6 +107,21 @@ export class UserService {
   getLength(): number {
     return this.users.length;
   }
+  updateUser(id: number, updatedUserData: any): void {
+    console.log('updateUser called');
+    const index = this.users.findIndex((user) => user.id === id);
+  
+    if (index !== -1) {
+      // Ensure 'id' is present in the updated data
+      const updatedUser = { ...updatedUserData, id };
+  
+      this.users[index] = updatedUser;
+      console.log(this.users);
+    } else {
+      console.log('User not found');
+    }
+  }
+  
   
   
 

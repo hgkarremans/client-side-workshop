@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { User } from '@avans-nx-workshop/shared/api';
 import { UserGender } from '@avans-nx-workshop/shared/api';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserRole } from '@avans-nx-workshop/shared/api';
 
 @Component({
@@ -11,6 +11,8 @@ import { UserRole } from '@avans-nx-workshop/shared/api';
   templateUrl: './user-edit.component.html',
   styles: [],
 })
+// ... (imports and component decorator)
+
 export class UserEditComponent implements OnInit {
   user!: User;
   userForm!: FormGroup;
@@ -19,12 +21,19 @@ export class UserEditComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService,
     private fb: FormBuilder
   ) {
+    // Initialize the form with default values or empty strings
     this.userForm = this.fb.group({
-      gender: [''], 
-      role: [''],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      emailAdress: ['', [Validators.required, Validators.email]],
+      image: ['', Validators.required],
+      gender: ['', Validators.required],
+      role: ['', Validators.required],
     });
   }
 
@@ -33,11 +42,32 @@ export class UserEditComponent implements OnInit {
       const userId = Number(params.get('id'));
       this.user = this.userService.getUserById(userId);
 
-      // Update the 'gender' field in the form with the user's gender
+      // Update the form controls with the user's values
       this.userForm.patchValue({
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        dateOfBirth: this.user.dateOfBirth,
+        emailAdress: this.user.emailAdress,
+        image: this.user.image,
         gender: this.user.gender,
         role: this.user.role,
       });
     });
+  }
+
+  // Method to handle form submission
+  onSubmit(): void {
+    if (this.userForm.valid) {
+      console.log('Form is valid');
+      console.log('Form values:',this.user.id, this.userForm.value);
+      // Assuming you have a method in your UserService to save the updated user
+      this.userService.updateUser(this.user.id, this.userForm.value);
+
+      // Optionally, you can navigate back to the user details page or any other page
+      this.router.navigate(['users/', this.user.id]);
+    } else {
+      // Handle form validation errors or display a message to the user
+      console.log('Form is invalid');
+    }
   }
 }

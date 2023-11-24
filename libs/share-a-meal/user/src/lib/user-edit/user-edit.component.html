@@ -1,56 +1,73 @@
 <div *ngIf="user">
   <h2 class="text-center mt-3 mb-4">Edit {{user.firstName}} {{user.lastName}}</h2>
-    <div class="card-details shadow mx-auto m-3 bg-light " style="width: 60rem; position: relative; border: none;">
-      <div class="row no-gutters">
-        <div class="col-md-4">
-          <img [src]="user.image" class="card-img" alt="User Image">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <div>
+  <div class="card-details shadow mx-auto m-3 bg-light" style="width: 65rem; position: relative; border: none;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img [src]="user.image" class="card-img" alt="User Image">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <form [formGroup]="userForm" (submit)="onSubmit()">
+            <div class="form-group">
               <label for="firstName">First Name</label>
-              <input type="text" class="form-control" value="{{ user.firstName }}">
+              <input type="text" class="form-control" formControlName="firstName" [value]="user.firstName">
+              <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="text-danger">
+                First Name is required.
+              </div>
             </div>
-            <div>
-              <label for="firstName">Last Name</label>
-              <input type="text" class="form-control" value="{{ user.lastName }}">
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" formControlName="lastName" [value]="user.lastName">
+              <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="text-danger">
+                Last Name is required.
+              </div>
             </div>
-            <div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" formControlName="emailAdress" [value]="user.emailAdress">
+              <div *ngIf="userForm.get('emailAdress')?.invalid && userForm.get('emailAdress')?.touched" class="text-danger">
+                Invalid Email.
+              </div>
+            </div>
+            <div class="form-group">
                 <label for="birthdate">Date of birth</label>
-                <!-- Use Angular date pipe to format the date -->
                 <input type="date" class="form-control" [value]="user.dateOfBirth | date:'yyyy-MM-dd'">
+                <div *ngIf="userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched" class="text-danger">
+                  Date of Birth is required.
+                </div>
               </div>    
-            <div>
-              <label for="Email">Email</label>
-              <input type="email" class="form-control" value="{{ user.emailAdress }}">
+            <div class="form-group">
+              <label for="image">Image Url</label>
+              <input type="text" class="form-control" formControlName="image" [value]="user.image">
+              <div *ngIf="userForm.get('image')?.invalid && userForm.get('image')?.touched" class="text-danger">
+                Image URL is required.
+              </div>
             </div>
-            <div>
-                <label for="image">Image Url</label>
-                <input type="text" class="form-control" value="{{ user.image }}">
-            </div>
-            <div>
+            <div class="form-group">
               <label for="role">Role</label>
-              <form [formGroup]="userForm">
-                <select id="role" formControlName="role">
-                  <option *ngFor="let role of rolesOptions" [value]="role">{{ role }}</option>
-                </select>
-              </form>
+              <select id="role" class="form-control" formControlName="role" [value]="user.role">
+                <option *ngFor="let role of rolesOptions" [value]="role">{{ role }}</option>
+              </select>
+              <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger">
+                Role is required.
+              </div>
             </div>
-            <div>
+            <div class="form-group">
               <label for="gender">Gender</label>
-              <form [formGroup]="userForm">
-                <select id="gender" formControlName="gender">
-                  <option *ngFor="let gender of genderOptions" [value]="gender">{{ gender }}</option>
-                </select>
-              </form>
+              <select id="gender" class="form-control" formControlName="gender" [value]="user.gender">
+                <option *ngFor="let gender of genderOptions" [value]="gender">{{ gender }}</option>
+              </select>
+              <div *ngIf="userForm.get('gender')?.invalid && userForm.get('gender')?.touched" class="text-danger">
+                Gender is required.
+              </div>
             </div>
             <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
-              <button class="btn btn-primary" style="border: 1px solid #000;" routerLink="/users/{{user.id}}">Save</button>
+              <button type="submit" class="btn btn-primary" style="border: 1px solid #000;">Save</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="!user">User not found</div>
-  
+</div>
+<div *ngIf="!user">User not found</div>
