@@ -18,7 +18,6 @@ export class UserCreateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
-    private modalService: NgbModal,
     private fb: FormBuilder
   ) {}
 
