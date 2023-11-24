@@ -5,6 +5,7 @@ import { Ticket, TicketStatus } from '@avans-nx-workshop/shared/api';
   providedIn: 'root',
 })
 export class TicketService {
+  private currentTicketId: number | undefined;
 
   readonly tickets: Ticket[] = [
     { id: 1, title: 'Ticket 1', price: 10, date: new Date(), status: TicketStatus.active, seat: 1, },
@@ -27,6 +28,26 @@ export class TicketService {
   getLenght(): number {
     console.log('getLenght aangeroepen');
     return this.tickets.length;
+  }
+  deleteTicket(id: number): void {
+    const index = this.tickets.findIndex((ticket) => ticket.id === id);
+    if (index !== -1) {
+      this.tickets.splice(index, 1);
+    } else {
+      console.error(`Ticket met id ${id} niet gevonden`);
+    }
+  }
+  setCurrentTicketId(id: number): void {
+    console.log('setCurrentTicketId aangeroepen');
+    this.currentTicketId = id;
+  }
+  getCurrentTicketId(): number | undefined {
+    console.log('getCurrentTicketId aangeroepen');
+    return this.currentTicketId;
+  }
+  clearCurrentTicketId(): void {
+    console.log('clearCurrentTicketId aangeroepen');
+    this.currentTicketId = undefined;
   }
 
   getTicketById(id: number): Ticket {

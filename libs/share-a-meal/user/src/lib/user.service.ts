@@ -113,7 +113,6 @@ export class UserService {
     const index = this.users.findIndex((user) => user.id === id);
   
     if (index !== -1) {
-      // Ensure 'id' is present in the updated data
       const updatedUser = { ...updatedUserData, id };
   
       this.users[index] = updatedUser;

@@ -19,6 +19,7 @@ export class TicketDetailComponent {
     this.route.paramMap.subscribe(params => {
       const ticketId = Number(params.get('id'));
       this.ticket = this.ticketService.getTicketById(ticketId);
+      this.ticketService.setCurrentTicketId(ticketId);
     });
   }
   openDeleteConfirmationModal() {
