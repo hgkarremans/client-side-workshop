@@ -13,12 +13,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class UserDetailsComponent {
   user!: User; // Add definite assignment assertion
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private modalService: NgbModal) {}
+  constructor(private route: ActivatedRoute, 
+    private userService: UserService, 
+    private modalService: NgbModal) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const userId = Number(params.get('id'));
-      this.user = this.userService.getUserById(userId);
+      this.user = this.userService.getUserById(userId); /* get the user id from somewhere */;
+      this.userService.setCurrentUserId(userId);
+      
     });
   }
   openDeleteConfirmationModal() {

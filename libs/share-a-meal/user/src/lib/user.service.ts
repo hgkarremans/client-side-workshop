@@ -6,6 +6,7 @@ import { User, UserGender, UserRole } from '@avans-nx-workshop/shared/api';
   providedIn: 'root',
 })
 export class UserService {
+  private currentUserId: number | undefined;
   readonly users: User[] = [
     {
       id: 0,
@@ -121,6 +122,14 @@ export class UserService {
       console.log('User not found');
     }
   }
+  deleteUser(id: number): void {
+    const index = this.users.findIndex((user) => user.id === id);
+    if (index !== -1) {
+      this.users.splice(index, 1);
+    } else {
+      console.error('User not found for deletion.');
+    }
+  }
   
   
   
@@ -130,6 +139,16 @@ export class UserService {
     // 'of' is een rxjs operator die een Observable
     // maakt van de gegeven data.
     return of(this.users);
+  }
+  setCurrentUserId(userId: number): void {
+    this.currentUserId = userId;
+  }
+
+  getCurrentUserId(): number | undefined {
+    return this.currentUserId;
+  }
+  clearCurrentUserId(): void {
+    this.currentUserId = undefined;
   }
 
   getUserById(id: number): User {
