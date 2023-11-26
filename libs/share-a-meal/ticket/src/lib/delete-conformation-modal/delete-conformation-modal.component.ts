@@ -14,6 +14,8 @@ export class DeleteConformationModalComponent implements OnInit {
     ) {}
   ngOnInit(): void {
     this.ticketId = this.ticketService.getCurrentTicketId();
+    console.log('Ticket ID:', this.ticketService.getCurrentTicketId());
+    console.log('Ticket ID:', this.ticketId);
   }
   async confirmDelete() {
     try {
@@ -24,6 +26,7 @@ export class DeleteConformationModalComponent implements OnInit {
         this.activeModal.close('Delete');
       } else {
         console.error('Ticket ID not provided for deletion.');
+        console.error('Ticket ID:', this.ticketId);
       }
     } catch (error) {
       console.error('Error deleting ticket:', error);

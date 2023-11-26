@@ -19,7 +19,7 @@ export class TicketDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private ticketService: TicketService,
-    private userService: UserService, // Inject your user service
+    private userService: UserService, 
     private modalService: NgbModal
   ) {}
 
@@ -27,10 +27,9 @@ export class TicketDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const ticketId = Number(params.get('id'));
       this.ticket = this.ticketService.getTicketById(ticketId);
-
-      // Fetch owner details using the user service
       if (this.ticket && this.ticket.owner) {
-        const owner = this.userService.getUserById(this.ticket.owner.id); // Use the user ID here
+        const owner = this.userService.getUserById(this.ticket.owner.id);
+        this.ticketService.setCurrentTicketId(this.ticket.id);
         this.ownerFirstName = owner?.firstName;
       }
       console.log('Owner:', this.ownerFirstName);
@@ -40,11 +39,8 @@ export class TicketDetailComponent implements OnInit {
 
   openDeleteConfirmationModal() {
     const modalRef = this.modalService.open(DeleteConformationModalComponent);
-
-    // Handle the result when the modal is closed (e.g., user clicked Delete)
     modalRef.result.then((result) => {
       if (result === 'Delete') {
-        // Perform the delete action here
         console.log('Item deleted!');
       }
     });
