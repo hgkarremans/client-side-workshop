@@ -1,8 +1,11 @@
+// ticket-edit.component.ts
+
 import { Component, OnInit } from '@angular/core';
-import { Ticket, TicketStatus } from '@avans-nx-workshop/shared/api';
+import { Ticket, TicketStatus, User } from '@avans-nx-workshop/shared/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
+import { UserService } from '@avans-nx-workshop/user';
 
 @Component({
   selector: 'clientside-nx-workshop-ticket-edit',
@@ -12,12 +15,14 @@ import { TicketService } from '../ticket.service';
 export class TicketEditComponent implements OnInit {
   ticket!: Ticket;
   ticketForm!: FormGroup;
+  users: User[] = [];
   statusOptions = Object.values(TicketStatus);
 
   constructor(
     private route: ActivatedRoute,
-    private router : Router,
+    private router: Router,
     private ticketService: TicketService,
+    private userService: UserService,
     private fb: FormBuilder
   ) {
     this.ticketForm = this.fb.group({
@@ -26,14 +31,17 @@ export class TicketEditComponent implements OnInit {
       date: ['', Validators.required],
       status: ['', Validators.required],
       seat: ['', [Validators.required, Validators.min(1)]],
+      owner: [null],
     });
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const userId = Number(params.get('id'));
-      this.ticket = this.ticketService.getTicketById(userId);
+      const ticketId = Number(params.get('id'));
+      this.ticket = this.ticketService.getTicketById(ticketId);
 
+      // Fetch users from the user service
+      this.users = this.userService.getUsers();
 
       this.ticketForm.patchValue({
         title: this.ticket.title,
@@ -41,17 +49,17 @@ export class TicketEditComponent implements OnInit {
         date: this.ticket.date,
         status: this.ticket.status,
         seat: this.ticket.seat,
+        owner: this.ticket.owner?.id,
       });
     });
   }
+
   saveTicket(): void {
     if (this.ticketForm.valid) {
-      this.ticketService.updateTicket(this.ticket.id,this.ticketForm.value);
+      this.ticketService.updateTicket(this.ticket.id, this.ticketForm.value);
       this.router.navigate(['tickets/', this.ticket.id]);
     } else {
       console.log('Form is invalid');
     }
   }
-    
 }
-

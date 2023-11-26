@@ -14,4 +14,5 @@ export interface Ticket {
     date: Date;
     status: TicketStatus;
     seat: number;
+    owner?: User;
 }
