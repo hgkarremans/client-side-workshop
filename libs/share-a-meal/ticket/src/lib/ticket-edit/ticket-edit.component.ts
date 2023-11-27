@@ -39,20 +39,25 @@ export class TicketEditComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const ticketId = Number(params.get('id'));
       this.ticket = this.ticketService.getTicketById(ticketId);
-
+  
       // Fetch users from the user service
       this.users = this.userService.getUsers();
-
+      console.log(this.ticket.date);
+  
+      // Format the date using toISOString
+      const formattedDate = this.ticket.date?.toISOString().split('T')[0];
+  
       this.ticketForm.patchValue({
         title: this.ticket.title,
         price: this.ticket.price,
-        date: this.ticket.date,
+        date: formattedDate,
         status: this.ticket.status,
         seat: this.ticket.seat,
         owner: this.ticket.owner?.id,
       });
     });
   }
+  
 
   saveTicket(): void {
     if (this.ticketForm.valid) {
