@@ -25,11 +25,12 @@ const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
 const app_controller_1 = __webpack_require__(21);
 const app_service_1 = __webpack_require__(22);
+const mongoose_1 = __webpack_require__(23);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.MealModule],
+        imports: [features_1.MealModule, mongoose_1.MongooseModule.forRoot('mongodb://localhost/avans-nx-workshop')],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -502,6 +503,12 @@ exports.AppService = AppService = tslib_1.__decorate([
     (0, common_1.Injectable)()
 ], AppService);
 
+
+/***/ }),
+/* 23 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
 
 /***/ })
 /******/ 	]);
