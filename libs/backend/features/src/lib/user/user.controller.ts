@@ -1,5 +1,5 @@
 import { User } from '@avans-nx-workshop/shared/api';
-import { UserService } from '@avans-nx-workshop/user';
+import { UserService } from './user.service';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 
 @Controller('user')
@@ -8,13 +8,14 @@ export class UserController {
 
   @Get('')
   getAll(): User[] {
+    console.log('getAll aangeroepen in backend');
     return this.userService.getUsers();
   }
 
-  @Get(':id')
-  getOne(@Param('id') id: number): User {
-    return this.userService.getUserById(id);
-  }
+//   @Get(':id')
+//   getOne(@Param('id') id: number): User {
+//     return this.userService.getUserById(id);
+//   }
 
 //   @Post('')
 //   create(@Body() data: CreateUserDto): User {
