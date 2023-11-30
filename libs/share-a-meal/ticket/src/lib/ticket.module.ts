@@ -7,9 +7,6 @@ import { TicketCreateComponent } from './ticket-create/ticket-create.component';
 import { TicketEditComponent } from './ticket-edit/ticket-edit.component';
 import { DeleteConformationModalComponent } from './delete-conformation-modal/delete-conformation-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MongooseModule } from '@nestjs/mongoose';
-import { TicketController } from './ticket.controller';
-
 @NgModule({
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   declarations: [

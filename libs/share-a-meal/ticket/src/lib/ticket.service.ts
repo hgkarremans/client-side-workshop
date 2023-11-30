@@ -23,7 +23,7 @@ export class TicketService {
     console.log('getTickets aangeroepen');
     return this.tickets;
   }
-  addTicket(ticket: Ticket):void{
+  addTicket(ticket: Ticket): void {
     console.log('addTicket aangeroepen');
     this.tickets.push(ticket);
   }
