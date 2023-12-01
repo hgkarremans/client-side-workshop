@@ -9,7 +9,7 @@ import { IsMongoId } from 'class-validator';
 export type TicketDocument = ITicket & Document;
 
 @Schema()
-export class TicketSchema implements ITicket {
+export class Ticket implements ITicket {
     @IsMongoId()
     id!: number;
 
@@ -49,3 +49,4 @@ export class TicketSchema implements ITicket {
     owner?: User;
     
 }
+export const TicketSchema = SchemaFactory.createForClass(Ticket);

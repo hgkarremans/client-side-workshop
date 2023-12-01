@@ -26,11 +26,12 @@ const features_1 = __webpack_require__(5);
 const app_controller_1 = __webpack_require__(27);
 const app_service_1 = __webpack_require__(28);
 const mongoose_1 = __webpack_require__(24);
+const features_2 = __webpack_require__(5);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.MealModule, mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/avans-nx-workshop')],
+        imports: [features_1.MealModule, features_2.backendendFeaturesModule, mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/avans-nx-workshop')],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -461,23 +462,23 @@ module.exports = require("rxjs/operators");
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.TicketModule = void 0;
+exports.backendendFeaturesModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const ticket_controller_1 = __webpack_require__(22);
 const ticket_service_1 = __webpack_require__(23);
 const ticket_schema_1 = __webpack_require__(26); // Corrected import
 const mongoose_1 = __webpack_require__(24);
-let TicketModule = exports.TicketModule = class TicketModule {
+let backendendFeaturesModule = exports.backendendFeaturesModule = class backendendFeaturesModule {
 };
-exports.TicketModule = TicketModule = tslib_1.__decorate([
+exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }])],
         controllers: [ticket_controller_1.TicketController],
         providers: [ticket_service_1.TicketService],
         exports: [ticket_service_1.TicketService],
     })
-], TicketModule);
+], backendendFeaturesModule);
 
 
 /***/ }),
@@ -500,13 +501,13 @@ let TicketController = exports.TicketController = class TicketController {
     }
 };
 tslib_1.__decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)(''),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], TicketController.prototype, "getTickets", null);
 exports.TicketController = TicketController = tslib_1.__decorate([
-    (0, common_1.Controller)('api/tickets'),
+    (0, common_1.Controller)('ticket'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
 ], TicketController);
 
@@ -523,7 +524,7 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const mongoose_1 = __webpack_require__(24);
 const mongoose_2 = __webpack_require__(25);
-const ticket_schema_1 = __webpack_require__(26);
+const ticket_schema_1 = __webpack_require__(26); // Import the correct types
 let TicketService = exports.TicketService = class TicketService {
     constructor(ticketModel) {
         this.ticketModel = ticketModel;
@@ -535,7 +536,7 @@ let TicketService = exports.TicketService = class TicketService {
 };
 exports.TicketService = TicketService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
-    tslib_1.__param(0, (0, mongoose_1.InjectModel)(ticket_schema_1.TicketSchema.name)),
+    tslib_1.__param(0, (0, mongoose_1.InjectModel)(ticket_schema_1.Ticket.name)),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
 ], TicketService);
 
@@ -559,39 +560,39 @@ module.exports = require("mongoose");
 
 var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.TicketSchema = void 0;
+exports.TicketSchema = exports.Ticket = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(24);
 const mongoose_2 = __webpack_require__(25);
 const api_1 = __webpack_require__(10);
 const class_validator_1 = __webpack_require__(18);
-let TicketSchema = exports.TicketSchema = class TicketSchema {
+let Ticket = exports.Ticket = class Ticket {
 };
 tslib_1.__decorate([
     (0, class_validator_1.IsMongoId)(),
     tslib_1.__metadata("design:type", Number)
-], TicketSchema.prototype, "id", void 0);
+], Ticket.prototype, "id", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         required: true,
         type: String
     }),
     tslib_1.__metadata("design:type", String)
-], TicketSchema.prototype, "title", void 0);
+], Ticket.prototype, "title", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         required: true,
         type: Number
     }),
     tslib_1.__metadata("design:type", Number)
-], TicketSchema.prototype, "price", void 0);
+], Ticket.prototype, "price", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         required: true,
         type: Date
     }),
     tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
-], TicketSchema.prototype, "date", void 0);
+], Ticket.prototype, "date", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         required: true,
@@ -599,24 +600,25 @@ tslib_1.__decorate([
         default: api_1.TicketStatus.pending
     }),
     tslib_1.__metadata("design:type", typeof (_b = typeof api_1.TicketStatus !== "undefined" && api_1.TicketStatus) === "function" ? _b : Object)
-], TicketSchema.prototype, "status", void 0);
+], Ticket.prototype, "status", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         required: true,
         type: Number
     }),
     tslib_1.__metadata("design:type", Number)
-], TicketSchema.prototype, "seat", void 0);
+], Ticket.prototype, "seat", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         type: mongoose_2.Schema.Types.ObjectId,
         ref: 'User'
     }),
     tslib_1.__metadata("design:type", typeof (_c = typeof api_1.User !== "undefined" && api_1.User) === "function" ? _c : Object)
-], TicketSchema.prototype, "owner", void 0);
-exports.TicketSchema = TicketSchema = tslib_1.__decorate([
+], Ticket.prototype, "owner", void 0);
+exports.Ticket = Ticket = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
-], TicketSchema);
+], Ticket);
+exports.TicketSchema = mongoose_1.SchemaFactory.createForClass(Ticket);
 
 
 /***/ }),
