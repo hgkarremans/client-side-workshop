@@ -23,9 +23,9 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(21);
-const app_service_1 = __webpack_require__(22);
-const mongoose_1 = __webpack_require__(23);
+const app_controller_1 = __webpack_require__(27);
+const app_service_1 = __webpack_require__(28);
+const mongoose_1 = __webpack_require__(24);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
@@ -51,6 +51,7 @@ module.exports = require("tslib");
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(6), exports);
+tslib_1.__exportStar(__webpack_require__(21), exports);
 
 
 /***/ }),
@@ -459,12 +460,175 @@ module.exports = require("rxjs/operators");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TicketModule = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const ticket_controller_1 = __webpack_require__(22);
+const ticket_service_1 = __webpack_require__(23);
+const ticket_schema_1 = __webpack_require__(26); // Corrected import
+const mongoose_1 = __webpack_require__(24);
+let TicketModule = exports.TicketModule = class TicketModule {
+};
+exports.TicketModule = TicketModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }])],
+        controllers: [ticket_controller_1.TicketController],
+        providers: [ticket_service_1.TicketService],
+        exports: [ticket_service_1.TicketService],
+    })
+], TicketModule);
+
+
+/***/ }),
+/* 22 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TicketController = void 0;
+const tslib_1 = __webpack_require__(4);
+const ticket_service_1 = __webpack_require__(23);
+const common_1 = __webpack_require__(1);
+let TicketController = exports.TicketController = class TicketController {
+    constructor(ticketService) {
+        this.ticketService = ticketService;
+    }
+    getTickets() {
+        return this.ticketService.getTickets();
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], TicketController.prototype, "getTickets", null);
+exports.TicketController = TicketController = tslib_1.__decorate([
+    (0, common_1.Controller)('tickets'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
+], TicketController);
+
+
+/***/ }),
+/* 23 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TicketService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const mongoose_1 = __webpack_require__(24);
+const mongoose_2 = __webpack_require__(25);
+const ticket_schema_1 = __webpack_require__(26);
+let TicketService = exports.TicketService = class TicketService {
+    constructor(ticketModel) {
+        this.ticketModel = ticketModel;
+    }
+    async getTickets() {
+        return this.ticketModel.find().exec();
+    }
+};
+exports.TicketService = TicketService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_1.InjectModel)(ticket_schema_1.TicketSchema.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], TicketService);
+
+
+/***/ }),
+/* 24 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
+
+/***/ }),
+/* 25 */
+/***/ ((module) => {
+
+module.exports = require("mongoose");
+
+/***/ }),
+/* 26 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.TicketSchema = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(24);
+const mongoose_2 = __webpack_require__(25);
+const api_1 = __webpack_require__(10);
+const class_validator_1 = __webpack_require__(18);
+let TicketSchema = exports.TicketSchema = class TicketSchema {
+};
+tslib_1.__decorate([
+    (0, class_validator_1.IsMongoId)(),
+    tslib_1.__metadata("design:type", Number)
+], TicketSchema.prototype, "id", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], TicketSchema.prototype, "title", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: Number
+    }),
+    tslib_1.__metadata("design:type", Number)
+], TicketSchema.prototype, "price", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: Date
+    }),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], TicketSchema.prototype, "date", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String,
+        default: api_1.TicketStatus.pending
+    }),
+    tslib_1.__metadata("design:type", typeof (_b = typeof api_1.TicketStatus !== "undefined" && api_1.TicketStatus) === "function" ? _b : Object)
+], TicketSchema.prototype, "status", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: Number
+    }),
+    tslib_1.__metadata("design:type", Number)
+], TicketSchema.prototype, "seat", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        type: mongoose_2.Schema.Types.ObjectId,
+        ref: 'User'
+    }),
+    tslib_1.__metadata("design:type", typeof (_c = typeof api_1.User !== "undefined" && api_1.User) === "function" ? _c : Object)
+], TicketSchema.prototype, "owner", void 0);
+exports.TicketSchema = TicketSchema = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], TicketSchema);
+
+
+/***/ }),
+/* 27 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(22);
+const app_service_1 = __webpack_require__(28);
 let AppController = exports.AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -486,7 +650,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 22 */
+/* 28 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -503,12 +667,6 @@ exports.AppService = AppService = tslib_1.__decorate([
     (0, common_1.Injectable)()
 ], AppService);
 
-
-/***/ }),
-/* 23 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/mongoose");
 
 /***/ })
 /******/ 	]);

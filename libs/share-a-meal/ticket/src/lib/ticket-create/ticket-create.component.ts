@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
+import { UserService } from '@avans-nx-workshop/user';
 import { ITicket } from '@avans-nx-workshop/shared/api';
+import { User } from '@avans-nx-workshop/shared/api';
 
 @Component({
   selector: 'clientside-nx-workshop-ticket-create',
@@ -12,14 +14,21 @@ import { ITicket } from '@avans-nx-workshop/shared/api';
 export class TicketCreateComponent implements OnInit {
   ticketForm!: FormGroup;
   ticket!: ITicket;
+  users: User[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private ticketService: TicketService,
+    private userService: UserService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    // Fetch users from the user service
+    this.userService.getUsers().subscribe((users) => {
+      this.users = users;
+    });
+
     this.ticketForm = this.fb.group({
       title: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
