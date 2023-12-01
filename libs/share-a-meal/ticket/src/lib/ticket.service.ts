@@ -19,10 +19,13 @@ export class TicketService {
     { id: 7, title: 'Ticket 7', price: 70, date: new Date(), status: TicketStatus.inactive, seat: 7, owner: this.userService.getUserById(6)},
     { id: 8, title: 'Ticket 8', price: 80, date: new Date(), status: TicketStatus.active, seat: 8, owner: this.userService.getUserById(7)},
   ];
+  //working on mongoose
   getTickets(): Ticket[] {
     console.log('getTickets aangeroepen');
     return this.tickets;
   }
+
+
   addTicket(ticket: Ticket): void {
     console.log('addTicket aangeroepen');
     this.tickets.push(ticket);

@@ -30,7 +30,7 @@ let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.MealModule, mongoose_1.MongooseModule.forRoot('mongodb://localhost/avans-nx-workshop')],
+        imports: [features_1.MealModule, mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/avans-nx-workshop')],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
