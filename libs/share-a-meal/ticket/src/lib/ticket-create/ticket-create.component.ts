@@ -34,7 +34,7 @@ export class TicketCreateComponent implements OnInit {
     });
 
     // Fetch users from the user service
-    this.users = this.userService.getUsers();
+    this.users= this.userService.getUsers();
 
     this.route.paramMap.subscribe((params) => {
       const ticketId = Number(params.get('id'));
