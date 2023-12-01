@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Ticket } from '@avans-nx-workshop/shared/api';
+import { Component, OnInit } from '@angular/core';
+import { ITicket } from '@avans-nx-workshop/shared/api';
 import { TicketService } from '../ticket.service';
 
 @Component({
@@ -7,12 +7,14 @@ import { TicketService } from '../ticket.service';
   templateUrl: './ticket-list.component.html',
   styles: [],
 })
-export class TicketListComponent {
-  tickets: Ticket[] = [];
+export class TicketListComponent implements OnInit {
+  tickets: ITicket[] = [];
 
   constructor(private ticketService: TicketService) {}
 
   ngOnInit(): void {
-    this.tickets = this.ticketService.getTickets();
+    this.ticketService.getTickets().subscribe((tickets) => {
+      this.tickets = tickets;
+    });
   }
 }

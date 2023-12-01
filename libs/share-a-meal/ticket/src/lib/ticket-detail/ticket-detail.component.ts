@@ -1,7 +1,6 @@
-// ticket-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Ticket, User } from '@avans-nx-workshop/shared/api';
+import { ITicket, User } from '@avans-nx-workshop/shared/api';
 import { DeleteConformationModalComponent } from '../delete-conformation-modal/delete-conformation-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TicketService } from '../ticket.service';
@@ -13,7 +12,7 @@ import { UserService } from '@avans-nx-workshop/user';
   styles: [],
 })
 export class TicketDetailComponent implements OnInit {
-  ticket!: Ticket;
+  ticket!: ITicket;
   ownerFirstName: string | undefined;
 
   constructor(
@@ -26,14 +25,21 @@ export class TicketDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const ticketId = Number(params.get('id'));
-      this.ticket = this.ticketService.getTicketById(ticketId);
-      if (this.ticket && this.ticket.owner) {
-        const owner = this.userService.getUserById(this.ticket.owner.id);
+      
+      this.ticketService.getTicketById(ticketId).subscribe((ticket) => {
+        this.ticket = ticket;
+        
+        if (this.ticket.owner) {
+          this.userService.getUserById(this.ticket.owner.id).subscribe((owner) => {
+            this.ownerFirstName = owner?.firstName;
+          });
+        }
+        
         this.ticketService.setCurrentTicketId(this.ticket.id);
-        this.ownerFirstName = owner?.firstName;
-      }
-      console.log('Owner:', this.ownerFirstName);
-      console.log(this.ticket.owner);
+        
+        console.log('Owner:', this.ownerFirstName);
+        console.log(this.ticket.owner);
+      });
     });
   }
 
@@ -41,7 +47,12 @@ export class TicketDetailComponent implements OnInit {
     const modalRef = this.modalService.open(DeleteConformationModalComponent);
     modalRef.result.then((result) => {
       if (result === 'Delete') {
-        console.log('Item deleted!');
+        // Perform delete operation using the TicketService
+        this.ticketService.deleteTicket(this.ticket.id).subscribe(() => {
+          console.log('Item deleted!');
+        }, (error) => {
+          console.error('Error deleting item:', error);
+        });
       }
     });
   }

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Ticket, User } from '@avans-nx-workshop/shared/api';
-import { TicketService } from '../ticket.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '@avans-nx-workshop/user';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TicketService } from '../ticket.service';
+import { ITicket } from '@avans-nx-workshop/shared/api';
 
 @Component({
   selector: 'clientside-nx-workshop-ticket-create',
@@ -13,13 +11,11 @@ import { UserService } from '@avans-nx-workshop/user';
 })
 export class TicketCreateComponent implements OnInit {
   ticketForm!: FormGroup;
-  ticket!: Ticket;
-  users: User[] = [];  // Replace 'any[]' with the actual type of your user objects
+  ticket!: ITicket;
 
   constructor(
     private route: ActivatedRoute,
     private ticketService: TicketService,
-    private userService: UserService,  // Replace with your actual user service
     private fb: FormBuilder
   ) {}
 
@@ -30,28 +26,38 @@ export class TicketCreateComponent implements OnInit {
       date: ['', Validators.required],
       status: ['Active', Validators.required],
       seat: ['', [Validators.required, Validators.min(1)]],
-      owner: ['', Validators.required],  // Add a control for the owner
+      owner: [null, Validators.required],  // Set up a default value or null for the owner
     });
-
-    // Fetch users from the user service
-    this.users= this.userService.getUsers();
 
     this.route.paramMap.subscribe((params) => {
       const ticketId = Number(params.get('id'));
-      this.ticket = this.ticketService.getTicketById(ticketId);
+      // Check if ticketId is provided and fetch ticket details from the service
+      if (ticketId) {
+        this.ticketService.getTicketById(ticketId).subscribe((ticket) => {
+          this.ticket = ticket;
+          // Patch the ticket details to the form
+          this.ticketForm.patchValue(ticket);
+        });
+      }
     });
   }
 
   saveTicket(): void {
-    console.log('Form:', this.ticketForm.value);
     if (this.ticketForm.valid) {
-      const newTicket = {
-        id: this.ticketService.getTickets().length + 1,
-        ...this.ticketForm.value,
-      };
-  
-      console.log('New Ticket:', newTicket);
-      this.ticketService.addTicket(newTicket);
+      // If the ticket already exists, update it; otherwise, add a new ticket
+      if (this.ticket) {
+        const updatedTicket = {
+          ...this.ticket,
+          ...this.ticketForm.value,
+        };
+        this.ticketService.updateTicket(updatedTicket.id, updatedTicket).subscribe(() => {
+          console.log('Ticket updated successfully');
+        });
+      } else {
+        this.ticketService.addTicket(this.ticketForm.value).subscribe(() => {
+          console.log('Ticket added successfully');
+        });
+      }
     } else {
       console.log('Form is invalid');
     }

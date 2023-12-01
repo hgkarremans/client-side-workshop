@@ -7,7 +7,7 @@ export enum TicketStatus {
 }
 
 
-export interface Ticket {
+export interface ITicket {
     id: number;
     title: string,
     price: number;

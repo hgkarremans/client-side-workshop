@@ -1,15 +1,15 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document, Schema as MongooseSchema} from 'mongoose';
 import { 
-    Ticket,
+    ITicket,
     User,
     TicketStatus
  } from '@avans-nx-workshop/shared/api';
 import { IsMongoId } from 'class-validator';
-export type TicketDocument = Ticket & Document;
+export type TicketDocument = ITicket & Document;
 
 @Schema()
-export class TicketSchema implements Ticket {
+export class TicketSchema implements ITicket {
     @IsMongoId()
     id!: number;
 
