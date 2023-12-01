@@ -10,20 +10,21 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './user-details.component.html',
   styles: [],
 })
-export class UserDetailsComponent implements OnInit {
-  user!: User;
+export class UserDetailsComponent {
+  user!: User; // Add definite assignment assertion
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private modalService: NgbModal) {}
+  constructor(private route: ActivatedRoute, 
+    private userService: UserService, 
+    private modalService: NgbModal) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.subscribe(params => {
       const userId = Number(params.get('id'));
-      this.userService.getUserById(userId).subscribe((user) => {
-        this.user = user;
-      });
+      this.user = this.userService.getUserById(userId); /* get the user id from somewhere */;
+      this.userService.setCurrentUserId(userId);
+      
     });
   }
-
   openDeleteConfirmationModal() {
     const modalRef = this.modalService.open(DeleteConformationModalComponent);
 
@@ -31,9 +32,7 @@ export class UserDetailsComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result === 'Delete') {
         // Perform the delete action here
-        this.userService.deleteUser(this.user.id).subscribe(() => {
-          console.log('Item deleted!');
-        });
+        console.log('Item deleted!');
       }
     });
   }

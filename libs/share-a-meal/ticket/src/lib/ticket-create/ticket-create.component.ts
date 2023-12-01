@@ -1,59 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
+import { ITicket, User } from '@avans-nx-workshop/shared/api';
 import { UserService } from '@avans-nx-workshop/user';
-import { ITicket } from '@avans-nx-workshop/shared/api';
-import { User } from '@avans-nx-workshop/shared/api';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'clientside-nx-workshop-ticket-create',
   templateUrl: './ticket-create.component.html',
   styles: [],
 })
-export class TicketCreateComponent implements OnInit {
+export class TicketCreateComponent implements OnInit, OnDestroy {
   ticketForm!: FormGroup;
   ticket!: ITicket;
   users: User[] = [];
+  private ticketSubscription: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
     private ticketService: TicketService,
-    private userService: UserService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    // Fetch users from the user service
-    this.userService.getUsers().subscribe((users) => {
-      this.users = users;
-    });
-
     this.ticketForm = this.fb.group({
       title: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
       date: ['', Validators.required],
       status: ['Active', Validators.required],
       seat: ['', [Validators.required, Validators.min(1)]],
-      owner: [null, Validators.required],  // Set up a default value or null for the owner
+      owner: [null, Validators.required],
     });
 
     this.route.paramMap.subscribe((params) => {
       const ticketId = Number(params.get('id'));
-      // Check if ticketId is provided and fetch ticket details from the service
       if (ticketId) {
-        this.ticketService.getTicketById(ticketId).subscribe((ticket) => {
+        this.ticketSubscription = this.ticketService.getTicketById(ticketId).subscribe((ticket) => {
           this.ticket = ticket;
-          // Patch the ticket details to the form
           this.ticketForm.patchValue(ticket);
         });
       }
     });
+
+    // Fetch the list of users
+    this.users = this.userService.getUsers();
   }
 
   saveTicket(): void {
     if (this.ticketForm.valid) {
-      // If the ticket already exists, update it; otherwise, add a new ticket
       if (this.ticket) {
         const updatedTicket = {
           ...this.ticket,
@@ -69,6 +65,13 @@ export class TicketCreateComponent implements OnInit {
       }
     } else {
       console.log('Form is invalid');
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from the ticket subscription to prevent memory leaks
+    if (this.ticketSubscription) {
+      this.ticketSubscription.unsubscribe();
     }
   }
 }

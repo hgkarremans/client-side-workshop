@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ITicket, TicketStatus, User } from '@avans-nx-workshop/shared/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
 import { UserService } from '@avans-nx-workshop/user';
 import { switchMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'clientside-nx-workshop-ticket-edit',
   templateUrl: './ticket-edit.component.html',
   styles: [],
 })
-export class TicketEditComponent implements OnInit {
+export class TicketEditComponent implements OnInit, OnDestroy {
   ticket!: ITicket;
   ticketForm!: FormGroup;
   users: User[] = [];
   statusOptions = Object.values(TicketStatus);
+  private ticketSubscription: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +37,7 @@ export class TicketEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap
+    this.ticketSubscription = this.route.paramMap
       .pipe(
         switchMap((params) => {
           const ticketId = Number(params.get('id'));
@@ -45,32 +47,39 @@ export class TicketEditComponent implements OnInit {
       .subscribe((ticket) => {
         this.ticket = ticket;
 
-        // Fetch users from the user service
-        this.userService.getUsers().subscribe((users) => {
-          this.users = users;
-          
-          this.ticketForm.patchValue({
-            title: this.ticket.title,
-            price: this.ticket.price,
-            date: this.ticket.date,
-            status: this.ticket.status,
-            seat: this.ticket.seat,
-            owner: this.ticket.owner?.id,
-          });
+        this.users = this.userService.getUsers();
+
+        this.ticketForm.patchValue({
+          title: this.ticket.title,
+          price: this.ticket.price,
+          date: this.ticket.date,
+          status: this.ticket.status,
+          seat: this.ticket.seat,
+          owner: this.ticket.owner?.id,
         });
       });
   }
 
   saveTicket(): void {
     if (this.ticketForm.valid) {
-      this.ticketService.updateTicket(this.ticket.id, this.ticketForm.value).subscribe(() => {
-        console.log('Ticket updated successfully');
-        this.router.navigate(['tickets/', this.ticket.id]);
-      }, (error) => {
-        console.error('Error updating ticket:', error);
-      });
+      this.ticketService.updateTicket(this.ticket.id, this.ticketForm.value).subscribe(
+        () => {
+          console.log('Ticket updated successfully');
+          this.router.navigate(['tickets/', this.ticket.id]);
+        },
+        (error) => {
+          console.error('Error updating ticket:', error);
+        }
+      );
     } else {
       console.log('Form is invalid');
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from the ticket subscription to prevent memory leaks
+    if (this.ticketSubscription) {
+      this.ticketSubscription.unsubscribe();
     }
   }
 }
