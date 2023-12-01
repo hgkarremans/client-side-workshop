@@ -3,7 +3,7 @@ import { TicketService } from './ticket.service';
 import { ITicket } from '@avans-nx-workshop/shared/api';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 
-@Controller('tickets')
+@Controller('api/tickets')
 export class TicketController {
     constructor(private ticketService: TicketService) {}
 
@@ -12,5 +12,3 @@ export class TicketController {
       return this.ticketService.getTickets();
     }
 }
-
-

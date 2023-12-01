@@ -8,11 +8,12 @@ import { Observable } from 'rxjs';
 })
 export class TicketService {
 
-  private readonly apiUrl = 'http://localhost:3000/api/tickets';
+  private readonly apiUrl = 'http://localhost:3000/tickets';
 
   constructor(private readonly http: HttpClient) {}
 
   getTickets(): Observable<ITicket[]> {
+    console.log('getTickets aangeroepen in service frontend');
     return this.http.get<ITicket[]>(this.apiUrl);
   }
 

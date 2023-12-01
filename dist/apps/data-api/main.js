@@ -506,7 +506,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], TicketController.prototype, "getTickets", null);
 exports.TicketController = TicketController = tslib_1.__decorate([
-    (0, common_1.Controller)('tickets'),
+    (0, common_1.Controller)('api/tickets'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
 ], TicketController);
 
@@ -529,6 +529,7 @@ let TicketService = exports.TicketService = class TicketService {
         this.ticketModel = ticketModel;
     }
     async getTickets() {
+        console.log('getTickets aangeroepen in service backend');
         return this.ticketModel.find().exec();
     }
 };

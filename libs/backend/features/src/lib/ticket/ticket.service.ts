@@ -7,6 +7,7 @@ import { TicketSchema, TicketDocument } from './ticket.schema';
 export class TicketService {
   constructor(@InjectModel(TicketSchema.name) private readonly ticketModel: Model<TicketDocument>) {}
   async getTickets(): Promise<TicketDocument[]> {
+    console.log('getTickets aangeroepen in service backend');
     return this.ticketModel.find().exec();
   }
 }
