@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   styles: [],
 })
 export class TicketDetailComponent implements OnInit, OnDestroy {
-  ticket!: ITicket;
+  ticket: ITicket | undefined;
   ownerFirstName: string | undefined;
   private ticketSubscription: Subscription | undefined;
 
@@ -25,29 +25,34 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
+    this.ticketSubscription = this.route.paramMap.subscribe((params) => {
       const ticketId = Number(params.get('id'));
 
-      this.ticketSubscription = this.ticketService.getTicketById(ticketId).subscribe((ticket) => {
-        this.ticket = ticket;
+      this.ticketService.getTicketById(ticketId).subscribe(
+        (ticket) => {
+          this.ticket = ticket;
 
-        if (this.ticket.owner) {
-          const owner = this.userService.getUserById(this.ticket.owner.id);
-          this.ownerFirstName = owner?.firstName;
+          if (this.ticket?.owner) {
+            const owner = this.userService.getUserById(this.ticket.owner.id);
+            this.ownerFirstName = owner?.firstName;
+          }
+
+          this.ticketService.setCurrentTicketId(ticketId);
+
+          console.log('Owner:', this.ownerFirstName);
+          console.log(this.ticket?.owner);
+        },
+        (error) => {
+          console.error('Error fetching ticket:', error);
         }
-
-        this.ticketService.setCurrentTicketId(this.ticket.id);
-
-        console.log('Owner:', this.ownerFirstName);
-        console.log(this.ticket.owner);
-      });
+      );
     });
   }
 
   openDeleteConfirmationModal() {
     const modalRef = this.modalService.open(DeleteConformationModalComponent);
     modalRef.result.then((result) => {
-      if (result === 'Delete') {
+      if (result === 'Delete' && this.ticket) {
         this.ticketService.deleteTicket(this.ticket.id).subscribe(
           () => {
             console.log('Item deleted!');
