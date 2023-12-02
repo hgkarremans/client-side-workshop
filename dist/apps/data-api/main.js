@@ -486,11 +486,12 @@ exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketController = void 0;
 const tslib_1 = __webpack_require__(4);
 const ticket_service_1 = __webpack_require__(23);
+const api_1 = __webpack_require__(10);
 const common_1 = __webpack_require__(1);
 let TicketController = exports.TicketController = class TicketController {
     constructor(ticketService) {
@@ -499,6 +500,15 @@ let TicketController = exports.TicketController = class TicketController {
     getTickets() {
         return this.ticketService.getTickets();
     }
+    getTicketById(id) {
+        return this.ticketService.getTicketById(id);
+    }
+    addTicket(ticketData) {
+        return this.ticketService.addTicket(ticketData);
+    }
+    deleteTicket(id) {
+        return this.ticketService.deleteTicket(id);
+    }
 };
 tslib_1.__decorate([
     (0, common_1.Get)(''),
@@ -506,6 +516,27 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], TicketController.prototype, "getTickets", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], TicketController.prototype, "getTicketById", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(''),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_1.ITicket !== "undefined" && api_1.ITicket) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], TicketController.prototype, "addTicket", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], TicketController.prototype, "deleteTicket", null);
 exports.TicketController = TicketController = tslib_1.__decorate([
     (0, common_1.Controller)('ticket'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
@@ -532,6 +563,17 @@ let TicketService = exports.TicketService = class TicketService {
     async getTickets() {
         console.log('getTickets aangeroepen in service backend');
         return this.ticketModel.find().exec();
+    }
+    async getTicketById(id) {
+        console.log(`getTicketById invoked with id: ${id}`);
+        return this.ticketModel.findById(id).exec();
+    }
+    async addTicket(ticketData) {
+        const createdTicket = new this.ticketModel(ticketData);
+        return createdTicket.save();
+    }
+    async deleteTicket(id) {
+        await this.ticketModel.findByIdAndDelete(id).exec();
     }
 };
 exports.TicketService = TicketService = tslib_1.__decorate([
@@ -570,8 +612,8 @@ let Ticket = exports.Ticket = class Ticket {
 };
 tslib_1.__decorate([
     (0, class_validator_1.IsMongoId)(),
-    tslib_1.__metadata("design:type", Number)
-], Ticket.prototype, "id", void 0);
+    tslib_1.__metadata("design:type", String)
+], Ticket.prototype, "_id", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
         required: true,

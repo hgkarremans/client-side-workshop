@@ -8,7 +8,7 @@ export enum TicketStatus {
 
 
 export interface ITicket {
-    id: number;
+    _id: string;
     title: string,
     price: number;
     date: Date;

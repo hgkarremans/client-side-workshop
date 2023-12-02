@@ -26,20 +26,18 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ticketSubscription = this.route.paramMap.subscribe((params) => {
-      const ticketId = Number(params.get('id'));
+      const ticketId = (params.get('_id'));
+      console.log('Ticket ID:', ticketId);
 
-      this.ticketService.getTicketById(ticketId).subscribe(
+      this.ticketService.getTicketById(ticketId ?? '').subscribe(
         (ticket) => {
           this.ticket = ticket;
+          console.log('Ticket:', this.ticket);
 
           if (this.ticket?.owner) {
             const owner = this.userService.getUserById(this.ticket.owner.id);
             this.ownerFirstName = owner?.firstName;
           }
-
-          this.ticketService.setCurrentTicketId(ticketId);
-
-          console.log('Owner:', this.ownerFirstName);
           console.log(this.ticket?.owner);
         },
         (error) => {
@@ -50,19 +48,19 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   openDeleteConfirmationModal() {
-    const modalRef = this.modalService.open(DeleteConformationModalComponent);
-    modalRef.result.then((result) => {
-      if (result === 'Delete' && this.ticket) {
-        this.ticketService.deleteTicket(this.ticket.id).subscribe(
-          () => {
-            console.log('Item deleted!');
-          },
-          (error) => {
-            console.error('Error deleting item:', error);
-          }
-        );
-      }
-    });
+    // const modalRef = this.modalService.open(DeleteConformationModalComponent);
+    // modalRef.result.then((result) => {
+    //   if (result === 'Delete' && this.ticket) {
+    //     this.ticketService.deleteTicket((this.ticket._id)).subscribe(
+    //       () => {
+    //         console.log('Item deleted!');
+    //       },
+    //       (error) => {
+    //         console.error('Error deleting item:', error);
+    //       }
+    //     );
+    //   }
+    // });
   }
 
   ngOnDestroy(): void {

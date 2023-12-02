@@ -19,6 +19,7 @@ export class TicketListComponent implements OnInit, OnDestroy {
     this.ticketService.getTickets().pipe(takeUntil(this.destroy$)).subscribe(
       (response) => {
         this.tickets = response;
+        console.log('Tickets:', this.tickets);
       },
       (error) => {
         console.error('Error fetching tickets:', error);

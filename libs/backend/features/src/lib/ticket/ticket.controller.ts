@@ -11,4 +11,21 @@ export class TicketController {
     getTickets(): Promise<ITicket[]> {
       return this.ticketService.getTickets();
     }
+
+    @Get(':id')
+    getTicketById(@Param('id') id: string): Promise<ITicket | null> {
+      return this.ticketService.getTicketById(id);
+    }
+
+    @Post('')
+    addTicket(@Body() ticketData: ITicket): Promise<ITicket> {
+      return this.ticketService.addTicket(ticketData);
+    }
+
+    @Delete(':id')
+    deleteTicket(@Param('id') id: string): Promise<void> {
+      return this.ticketService.deleteTicket(id);
+    }
+
+    // You can add other methods like updateTicket, etc.
 }

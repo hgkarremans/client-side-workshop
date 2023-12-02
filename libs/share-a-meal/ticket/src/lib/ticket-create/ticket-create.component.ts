@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class TicketCreateComponent implements OnInit, OnDestroy {
   ticketForm!: FormGroup;
-  ticket!: ITicket;
+  ticket: ITicket | undefined;
   users: User[] = [];
   private ticketSubscription: Subscription | undefined;
 
@@ -35,7 +35,7 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
     });
 
     this.route.paramMap.subscribe((params) => {
-      const ticketId = Number(params.get('id'));
+      const ticketId = params.get('id');
       if (ticketId) {
         this.ticketSubscription = this.ticketService.getTicketById(ticketId).subscribe((ticket) => {
           this.ticket = ticket;
@@ -50,16 +50,28 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
 
   saveTicket(): void {
     if (this.ticketForm.valid) {
+      const ticketData = this.ticketForm.value;
+  
+      // Extract ObjectId from owner data
+      const ownerId = ticketData.owner ? ticketData.owner._id : null;
+  
+      // Check if ownerId is a number, indicating it's an ID
+      if (typeof ownerId === 'number') {
+        // Set owner as ObjectId
+        ticketData.owner = String(ownerId);
+      }
+  
       if (this.ticket) {
         const updatedTicket = {
           ...this.ticket,
-          ...this.ticketForm.value,
+          ...ticketData,
         };
+  
         this.ticketService.updateTicket(updatedTicket.id, updatedTicket).subscribe(() => {
           console.log('Ticket updated successfully');
         });
       } else {
-        this.ticketService.addTicket(this.ticketForm.value).subscribe(() => {
+        this.ticketService.addTicket(ticketData).subscribe(() => {
           console.log('Ticket added successfully');
         });
       }
@@ -67,6 +79,10 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
       console.log('Form is invalid');
     }
   }
+  
+  
+  
+  
 
   ngOnDestroy(): void {
     // Unsubscribe from the ticket subscription to prevent memory leaks

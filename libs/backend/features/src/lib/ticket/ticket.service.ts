@@ -10,4 +10,16 @@ export class TicketService {
     console.log('getTickets aangeroepen in service backend');
     return this.ticketModel.find().exec();
   }
+  async getTicketById(id: string): Promise<Ticket | null> {
+    console.log(`getTicketById invoked with id: ${id}`);
+    return this.ticketModel.findById(id).exec();
+  }
+  async addTicket(ticketData: Ticket): Promise<Ticket> {
+    const createdTicket = new this.ticketModel(ticketData);
+    return createdTicket.save();
+  }
+
+  async deleteTicket(id: string): Promise<void> {
+    await this.ticketModel.findByIdAndDelete(id).exec();
+  }
 }

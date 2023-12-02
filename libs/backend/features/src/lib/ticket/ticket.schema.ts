@@ -11,7 +11,7 @@ export type TicketDocument = ITicket & Document;
 @Schema()
 export class Ticket implements ITicket {
     @IsMongoId()
-    id!: number;
+    _id!: string;
 
     @Prop({
         required: true,

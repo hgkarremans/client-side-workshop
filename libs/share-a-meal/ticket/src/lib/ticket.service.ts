@@ -22,14 +22,19 @@ export class TicketService implements OnDestroy {
       );
   }
 
+  getTicketById(id: string): Observable<ITicket> {
+    return this.http
+      .get<ApiResponse<ITicket>>(`${this.apiUrl}/${id}`)
+      .pipe(
+        takeUntil(this.destroy$),
+        map((response) => (response.results as ITicket[])[0] || null)
+      );
+  }
   addTicket(ticket: ITicket): Observable<ITicket> {
+    console.log(ticket);
     return this.http.post<ITicket>(this.apiUrl, ticket).pipe(takeUntil(this.destroy$));
   }
-
-  getLength(): Observable<number> {
-    return this.http.get<number>(`${this.apiUrl}/length`).pipe(takeUntil(this.destroy$));
-  }
-
+  
   deleteTicket(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(takeUntil(this.destroy$));
   }
@@ -50,9 +55,6 @@ export class TicketService implements OnDestroy {
     // You may perform local operations if needed
   }
 
-  getTicketById(id: number): Observable<ITicket> {
-    return this.http.get<ITicket>(`${this.apiUrl}/${id}`).pipe(takeUntil(this.destroy$));
-  }
 
   updateTicket(id: number, updatedTicketsData: Partial<ITicket>): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, updatedTicketsData).pipe(takeUntil(this.destroy$));
