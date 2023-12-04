@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil, map, tap } from 'rxjs/operators';
 import { ITicket, ApiResponse } from '@avans-nx-workshop/shared/api';
 
 @Injectable({
@@ -23,28 +23,37 @@ export class TicketService implements OnDestroy {
   }
 
   getTicketById(id: string): Observable<ITicket> {
+    const url = `${this.apiUrl}/${id}`;
+    console.log('API URL:', url);
+  
     return this.http
-      .get<ApiResponse<ITicket>>(`${this.apiUrl}/${id}`)
+      .get<ApiResponse<ITicket>>(url)
       .pipe(
         takeUntil(this.destroy$),
-        map((response) => (response.results as ITicket[])[0] || null)
+        tap((response: ApiResponse<ITicket>) => console.log('Raw API Response:', response)),
+        map((response) => (response.results as ITicket) || null)
       );
   }
+  
+  
+
+  
+  
   addTicket(ticket: ITicket): Observable<ITicket> {
     console.log(ticket);
     return this.http.post<ITicket>(this.apiUrl, ticket).pipe(takeUntil(this.destroy$));
   }
   
-  deleteTicket(id: number): Observable<void> {
+  deleteTicket(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(takeUntil(this.destroy$));
   }
 
-  setCurrentTicketId(id: number): void {
+  setCurrentTicketId(id: string): void {
     console.log('setCurrentTicketId invoked');
     // You may perform local operations if needed
   }
 
-  getCurrentTicketId(): number | undefined {
+  getCurrentTicketId(): string | undefined {
     console.log('getCurrentTicketId invoked');
     // You may perform local operations if needed
     return undefined;
