@@ -52,26 +52,26 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
     if (this.ticketForm.valid) {
       const ticketData = this.ticketForm.value;
   
-      // Extract ObjectId from owner data
-      const ownerId = ticketData.owner ? ticketData.owner._id : null;
-  
-      // Check if ownerId is a number, indicating it's an ID
-      if (typeof ownerId === 'number') {
-        // Set owner as ObjectId
-        ticketData.owner = String(ownerId);
-      }
+      // Extract user object from owner data
+      const owner = ticketData.owner;
   
       if (this.ticket) {
         const updatedTicket = {
           ...this.ticket,
           ...ticketData,
+          owner: owner, // Assign the whole user object
         };
   
         this.ticketService.updateTicket(updatedTicket.id, updatedTicket).subscribe(() => {
           console.log('Ticket updated successfully');
         });
       } else {
-        this.ticketService.addTicket(ticketData).subscribe(() => {
+        const newTicket = {
+          ...ticketData,
+          owner: owner, // Assign the whole user object
+        };
+  
+        this.ticketService.addTicket(newTicket).subscribe(() => {
           console.log('Ticket added successfully');
         });
       }
@@ -79,6 +79,7 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
       console.log('Form is invalid');
     }
   }
+  
     
   
   

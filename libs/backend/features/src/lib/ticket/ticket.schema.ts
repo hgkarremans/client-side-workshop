@@ -43,8 +43,7 @@ export class Ticket implements ITicket {
     })
     seat!: number;
     @Prop({
-        type: MongooseSchema.Types.ObjectId,
-        ref: 'User'
+        type: MongooseSchema
     })
     owner?: User;
     

@@ -652,8 +652,7 @@ tslib_1.__decorate([
 ], Ticket.prototype, "seat", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
-        type: mongoose_2.Schema.Types.ObjectId,
-        ref: 'User'
+        type: mongoose_2.Schema
     }),
     tslib_1.__metadata("design:type", typeof (_c = typeof api_1.User !== "undefined" && api_1.User) === "function" ? _c : Object)
 ], Ticket.prototype, "owner", void 0);
