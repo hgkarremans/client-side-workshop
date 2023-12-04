@@ -22,4 +22,15 @@ export class TicketService {
   async deleteTicket(id: string): Promise<void> {
     await this.ticketModel.findByIdAndDelete(id).exec();
   }
+  async updateTicket(id: string, updatedTicketData: Partial<Ticket>): Promise<Ticket | null> {
+    // Find the ticket by ID and update its data
+    const updatedTicket = await this.ticketModel.findByIdAndUpdate(
+      id,
+      { $set: updatedTicketData },
+      { new: true } // Return the updated document
+    ).exec();
+  
+    return updatedTicket;
+  }
+  
 }

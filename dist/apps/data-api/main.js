@@ -486,7 +486,7 @@ exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -508,6 +508,9 @@ let TicketController = exports.TicketController = class TicketController {
     }
     deleteTicket(id) {
         return this.ticketService.deleteTicket(id);
+    }
+    updateTicket(id, updatedTicketData) {
+        return this.ticketService.updateTicket(id, updatedTicketData);
     }
 };
 tslib_1.__decorate([
@@ -537,6 +540,14 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], TicketController.prototype, "deleteTicket", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_g = typeof Partial !== "undefined" && Partial) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], TicketController.prototype, "updateTicket", null);
 exports.TicketController = TicketController = tslib_1.__decorate([
     (0, common_1.Controller)('ticket'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
@@ -574,6 +585,12 @@ let TicketService = exports.TicketService = class TicketService {
     }
     async deleteTicket(id) {
         await this.ticketModel.findByIdAndDelete(id).exec();
+    }
+    async updateTicket(id, updatedTicketData) {
+        // Find the ticket by ID and update its data
+        const updatedTicket = await this.ticketModel.findByIdAndUpdate(id, { $set: updatedTicketData }, { new: true } // Return the updated document
+        ).exec();
+        return updatedTicket;
     }
 };
 exports.TicketService = TicketService = tslib_1.__decorate([

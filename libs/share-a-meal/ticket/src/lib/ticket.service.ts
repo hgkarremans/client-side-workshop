@@ -65,7 +65,7 @@ export class TicketService implements OnDestroy {
   }
 
 
-  updateTicket(id: number, updatedTicketsData: Partial<ITicket>): Observable<void> {
+  updateTicket(id: string, updatedTicketsData: Partial<ITicket>): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, updatedTicketsData).pipe(takeUntil(this.destroy$));
   }
 

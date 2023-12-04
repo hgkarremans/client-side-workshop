@@ -27,5 +27,8 @@ export class TicketController {
       return this.ticketService.deleteTicket(id);
     }
 
-    // You can add other methods like updateTicket, etc.
+    @Put(':id') 
+    updateTicket(@Param('id') id: string, @Body() updatedTicketData: Partial<ITicket>): Promise<ITicket | null> {
+      return this.ticketService.updateTicket(id, updatedTicketData);
+    }
 }

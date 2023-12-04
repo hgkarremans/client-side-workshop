@@ -40,8 +40,8 @@ export class TicketEditComponent implements OnInit, OnDestroy {
     this.ticketSubscription = this.route.paramMap
       .pipe(
         switchMap((params) => {
-          const ticketId = (params.get('id'));
-          return this.ticketService.getTicketById(ticketId ?? '' );
+          const ticketId = params.get('id');
+          return this.ticketService.getTicketById(ticketId || '');
         })
       )
       .subscribe((ticket) => {
@@ -61,19 +61,20 @@ export class TicketEditComponent implements OnInit, OnDestroy {
   }
 
   saveTicket(): void {
-    // if (this.ticketForm.valid) {
-    //   this.ticketService.updateTicket(this.ticket.id, this.ticketForm.value).subscribe(
-    //     () => {
-    //       console.log('Ticket updated successfully');
-    //       this.router.navigate(['tickets/', this.ticket.id]);
-    //     },
-    //     (error) => {
-    //       console.error('Error updating ticket:', error);
-    //     }
-    //   );
-    // } else {
-    //   console.log('Form is invalid');
-    // }
+    if (this.ticketForm.valid) {
+      const ticketId = this.ticket._id; // Assuming _id is the correct property
+      this.ticketService.updateTicket(ticketId, this.ticketForm.value).subscribe(
+        () => {
+          console.log('Ticket updated successfully');
+          this.router.navigate(['tickets/', this.ticket._id]);
+        },
+        (error) => {
+          console.error('Error updating ticket:', error);
+        }
+      );
+    } else {
+      console.log('Form is invalid');
+    }
   }
 
   ngOnDestroy(): void {
