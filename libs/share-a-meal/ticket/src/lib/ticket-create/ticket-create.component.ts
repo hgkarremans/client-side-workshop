@@ -79,7 +79,7 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
       console.log('Form is invalid');
     }
   }
-  
+    
   
   
   
