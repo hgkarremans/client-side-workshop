@@ -21,6 +21,8 @@ export class UserService {
       role: UserRole.admin,
       gender: UserGender.female,
       image: "https://images.pexels.com/photos/8059137/pexels-photo-8059137.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      friends: []
+    
     },
     {
       id: 1,
@@ -30,6 +32,7 @@ export class UserService {
       emailAdress: 'usertwee@host.com',
       role: UserRole.guest,
       gender: UserGender.female,
+      friends: [],
       image: "https://images.pexels.com/photos/4656725/pexels-photo-4656725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     },
     {
@@ -40,6 +43,7 @@ export class UserService {
       emailAdress: 'userdrie@host.com',
       role: UserRole.editor,
       gender: UserGender.female,
+      friends: [],
       image: "https://images.pexels.com/photos/7047197/pexels-photo-7047197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 
     },
@@ -51,6 +55,7 @@ export class UserService {
       emailAdress: 'userdrie@host.com',
       role: UserRole.editor,
       gender: UserGender.male,
+      friends: [],
       image: "https://images.pexels.com/photos/7047197/pexels-photo-7047197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 
     },
@@ -62,6 +67,7 @@ export class UserService {
       emailAdress: 'usereen@host.com',
       role: UserRole.admin,
       gender: UserGender.male,
+      friends: [],
       image: "https://images.pexels.com/photos/8059137/pexels-photo-8059137.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     },
     {
@@ -72,6 +78,7 @@ export class UserService {
       emailAdress: 'usertwee@host.com',
       role: UserRole.guest,
       gender: UserGender.male,
+      friends: [],
       image: "https://images.pexels.com/photos/4656725/pexels-photo-4656725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     },
     {
@@ -82,6 +89,7 @@ export class UserService {
       emailAdress: 'userdrie@host.com',
       role: UserRole.editor,
       gender: UserGender.female,
+      friends: [],
       image: "https://images.pexels.com/photos/7047197/pexels-photo-7047197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 
     },
@@ -93,6 +101,7 @@ export class UserService {
       emailAdress: 'userdrie@host.com',
       role: UserRole.editor,
       gender: UserGender.other,
+      friends: [],
       image: "https://images.pexels.com/photos/7047197/pexels-photo-7047197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
     },
   ];
@@ -133,10 +142,6 @@ export class UserService {
       console.error('User not found for deletion.');
     }
   }
-  
-  
-  
-
   getUsersAsObservable(): Observable<User[]> {
     console.log('getUsersAsObservable aangeroepen',);
     
