@@ -28,11 +28,22 @@ const app_service_1 = __webpack_require__(28);
 const mongoose_1 = __webpack_require__(24);
 const features_2 = __webpack_require__(5);
 const util_env_1 = __webpack_require__(29);
+const dist_1 = __webpack_require__(32);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.MealModule, features_2.backendendFeaturesModule, mongoose_1.MongooseModule.forRoot(util_env_1.environment.apiUrl)],
+        imports: [features_1.MealModule,
+            features_2.backendendFeaturesModule,
+            mongoose_1.MongooseModule.forRoot(util_env_1.environment.apiUrl),
+            dist_1.Neo4jModule.forRoot({
+                scheme: util_env_1.environment.NEO4J_SCHEME,
+                host: util_env_1.environment.NEO4J_HOST,
+                port: util_env_1.environment.NEO4J_PORT,
+                username: util_env_1.environment.NEO4J_USERNAME,
+                password: util_env_1.environment.NEO4J_PASSWORD,
+            }),
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -470,6 +481,7 @@ const ticket_controller_1 = __webpack_require__(22);
 const ticket_service_1 = __webpack_require__(23);
 const ticket_schema_1 = __webpack_require__(26); // Corrected import
 const mongoose_1 = __webpack_require__(24);
+const Neo4jUser_service_1 = __webpack_require__(33);
 let backendendFeaturesModule = exports.backendendFeaturesModule = class backendendFeaturesModule {
 };
 exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate([
@@ -477,7 +489,7 @@ exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate
         imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }])],
         controllers: [ticket_controller_1.TicketController],
         providers: [ticket_service_1.TicketService],
-        exports: [ticket_service_1.TicketService],
+        exports: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
     })
 ], backendendFeaturesModule);
 
@@ -772,13 +784,124 @@ exports.environment = {
     production: false,
     apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
     MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
-    // NEO4J_SCHEME: 'Client-Side',
-    // NEO4J_HOST: 'localhost',
-    // NEO4J_PORT: '7687',
-    // NEO4J_USERNAME: 'neo4j',
-    // NEO4J_PASSWORD: 'ticket',
-    // NEO4J_DATABASE: 'F1BloggerUsers',
+    NEO4J_SCHEME: 'neo4j',
+    NEO4J_HOST: 'localhost',
+    NEO4J_PORT: '7687',
+    NEO4J_USERNAME: 'neo4j',
+    NEO4J_PASSWORD: 'ticketshop2003',
+    NEO4J_DATABASE: 'TicketShopUsers',
 };
+
+
+/***/ }),
+/* 32 */
+/***/ ((module) => {
+
+module.exports = require("nest-neo4j/dist");
+
+/***/ }),
+/* 33 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Neo4jUserService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const api_1 = __webpack_require__(10);
+const common_2 = __webpack_require__(1);
+const dist_1 = __webpack_require__(32);
+let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
+    constructor(neo4jService) {
+        this.neo4jService = neo4jService;
+        this.TAG = 'Neo4jUserService';
+    }
+    async getAll() {
+        common_2.Logger.log('getAll', this.TAG);
+        const query = `MATCH (user:User) RETURN user`;
+        const result = await this.neo4jService.read(query, {});
+        common_2.Logger.log(`result: ${JSON.stringify(result)}`);
+        return result?.records;
+    }
+    async getOne(id) {
+        common_2.Logger.log(`getOne(${id})`, this.TAG);
+        const query = `MATCH (n) WHERE n.Id = $id RETURN n`;
+        const result = await this.neo4jService.write(query, { id: id });
+        return result;
+    }
+    async create(newUser) {
+        common_2.Logger.log('create', this.TAG);
+        const query = `
+      MERGE (user:User {Id: $id})
+      ON CREATE SET 
+        user.firstName = $firstName,
+        user.lastName = $lastName, 
+        user.image = $image,
+        user.emailAdress = $emailAdress,
+        user.dateOfBirth = $dateOfBirth,
+        user.role = $role,
+        user.friends = $friends
+      ON MATCH SET 
+        user.firstName = $firstName,
+        user.lastName = $lastName, 
+        user.image = $image,
+        user.emailAdress = $emailAdress,
+        user.dateOfBirth = $dateOfBirth,
+        user.role = $role,
+        user.friends = $friends
+      RETURN user
+    `;
+        const result = await this.neo4jService.write(query, {
+            id: Math.floor(Math.random() * 10000),
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            image: newUser.image,
+            emailAdress: newUser.emailAdress,
+            dateOfBirth: newUser.dateOfBirth,
+            role: api_1.UserRole.guest,
+            friends: newUser.friends || [],
+        });
+        common_2.Logger.log(`result:${JSON.stringify(result)}`);
+        return result;
+    }
+    async update(id, user) {
+        common_2.Logger.log(`Update(${id})`, this.TAG);
+        const query = `
+      MATCH (user:User {Id: $id})
+      SET
+        user.firstName = $firstName,
+        user.lastName = $lastName,
+        user.image = $image,
+        user.emailAdress = $emailAdress,
+        user.dateOfBirth = $dateOfBirth,
+        user.role = $role,
+        user.friends = $friends
+      RETURN user
+    `;
+        const result = await this.neo4jService.write(query, {
+            id: id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            image: user.image,
+            emailAdress: user.emailAdress,
+            dateOfBirth: user.dateOfBirth,
+            role: user.role,
+            friends: user.friends || [],
+        });
+        return result;
+    }
+    async delete(id) {
+        common_2.Logger.log(`Delete(${id})`, this.TAG);
+        const query = `MATCH (n) WHERE n.Id = $id DETACH DELETE n`;
+        const result = await this.neo4jService.write(query, { id: id });
+        return result;
+    }
+};
+exports.Neo4jUserService = Neo4jUserService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof dist_1.Neo4jService !== "undefined" && dist_1.Neo4jService) === "function" ? _a : Object])
+], Neo4jUserService);
 
 
 /***/ })

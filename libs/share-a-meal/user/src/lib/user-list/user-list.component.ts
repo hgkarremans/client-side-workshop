@@ -8,14 +8,19 @@ import { UserService } from '../user.service';
   styles: [],
 })
 export class UserListComponent implements OnInit {
-
   users: User[] = [];
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.users = this.userService.getUsers();
+    // Subscribe to the observable to get the data
+    this.userService.getUsers().subscribe(
+      (data) => {
+        this.users = data;
+      },
+      (error) => {
+        console.error('Error fetching users:', error);
+      }
+    );
   }
-
-  
 }
