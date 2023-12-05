@@ -22,7 +22,9 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private ticketService: TicketService,
     private userService: UserService,
     private modalService: NgbModal
-  ) {}
+   
+  ) {
+  }
 
   ngOnInit(): void {
     this.ticketSubscription = this.route.paramMap.subscribe((params) => {
@@ -36,11 +38,24 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         (ticket) => {
           this.ticket = ticket;
           console.log('Ticket:', this.ticket);
-    
+          // console.log('Owner:', this.ticket?.owner);
+          // console.log('Owner ID:', this.ticket?.owner?.id);
           if (this.ticket?.owner) {
-            const owner = this.userService.getUserById(this.ticket.owner.id);
-            this.ownerFirstName = owner?.firstName;
+            console.log('Owner:', this.ticket?.owner);
+            this.ownerFirstName = this.ticket?.owner?.firstName;
+            
+
+
+            // console.log("We here?")
+            // const ownerId = this.ticket?.owner as unknown as number;
+            // console.log('Owner ID:', ownerId);
+            // const owner = this.userService.getUserById(ownerId);
+            // console.log('Owner:', owner);
+            // this.ownerFirstName = owner.firstName;
+            
           }
+
+         
         },
         (error) => {
           console.error('Error fetching ticket:', error);

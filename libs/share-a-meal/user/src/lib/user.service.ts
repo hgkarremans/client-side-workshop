@@ -138,9 +138,8 @@ export class UserService {
   
 
   getUsersAsObservable(): Observable<User[]> {
-    console.log('getUsersAsObservable aangeroepen');
-    // 'of' is een rxjs operator die een Observable
-    // maakt van de gegeven data.
+    console.log('getUsersAsObservable aangeroepen',);
+    
     return of(this.users);
   }
   setCurrentUserId(userId: number): void {
@@ -156,6 +155,8 @@ export class UserService {
 
   getUserById(id: number): User {
     console.log('getUserById aangeroepen');
+    console.log('id in getUserById:', id)
+    console.log("user in getUserById", this.users.filter((user) => user.id === id)[0]);
     return this.users.filter((user) => user.id === id)[0];
   }
 }
