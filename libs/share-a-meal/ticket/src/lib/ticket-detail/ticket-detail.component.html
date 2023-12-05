@@ -8,7 +8,7 @@
       <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">{{ ticket.title }}</h5>
-          <p class="card-text">Date {{ ticket.date | date }}</p>
+          <p class="card-text">Date: {{ ticket.date | date }}</p>
           <p>Price: {{ ticket.price | currency:'EUR':'symbol':'1.2-2' }}</p>
           <p>Seat: {{ ticket.seat }}</p>
           <p class="card-text">Status: {{ ticket.status }}</p>
