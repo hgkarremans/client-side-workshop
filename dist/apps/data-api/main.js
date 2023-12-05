@@ -27,11 +27,12 @@ const app_controller_1 = __webpack_require__(27);
 const app_service_1 = __webpack_require__(28);
 const mongoose_1 = __webpack_require__(24);
 const features_2 = __webpack_require__(5);
+const util_env_1 = __webpack_require__(29);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.MealModule, features_2.backendendFeaturesModule, mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017/avans-nx-workshop')],
+        imports: [features_1.MealModule, features_2.backendendFeaturesModule, mongoose_1.MongooseModule.forRoot(util_env_1.environment.apiUrl)],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -727,6 +728,57 @@ let AppService = exports.AppService = class AppService {
 exports.AppService = AppService = tslib_1.__decorate([
     (0, common_1.Injectable)()
 ], AppService);
+
+
+/***/ }),
+/* 29 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(30), exports);
+tslib_1.__exportStar(__webpack_require__(31), exports);
+
+
+/***/ }),
+/* 30 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EnvModule = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+let EnvModule = exports.EnvModule = class EnvModule {
+};
+exports.EnvModule = EnvModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        controllers: [],
+        providers: [],
+        exports: [],
+    })
+], EnvModule);
+
+
+/***/ }),
+/* 31 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.environment = void 0;
+exports.environment = {
+    production: false,
+    apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
+    MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
+    // NEO4J_SCHEME: 'Client-Side',
+    // NEO4J_HOST: 'localhost',
+    // NEO4J_PORT: '7687',
+    // NEO4J_USERNAME: 'neo4j',
+    // NEO4J_PASSWORD: 'ticket',
+    // NEO4J_DATABASE: 'F1BloggerUsers',
+};
 
 
 /***/ })
