@@ -7,9 +7,11 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { DeleteConformationModalComponent } from './delete-conformation-modal/delete-conformation-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserCreateComponent } from './user-create/user-create.component';
+import { HttpClientModule } from '@angular/common/http';
+import { UserService } from './user.service';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
   declarations: [
     UserListComponent,
     UserEditComponent,
@@ -17,6 +19,7 @@ import { UserCreateComponent } from './user-create/user-create.component';
     DeleteConformationModalComponent,
     UserCreateComponent,
   ],
+  providers: [UserService],
   exports: [
     UserListComponent,
     UserEditComponent,

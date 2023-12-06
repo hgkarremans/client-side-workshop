@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import { User as IUser } from '@avans-nx-workshop/shared/api';
+import { ApiResponse, User as IUser } from '@avans-nx-workshop/shared/api';
 
 
 @Injectable({
@@ -15,11 +15,14 @@ export class UserService {
 
   getUsers(): Observable<IUser[]> {
     console.log('getUsers called');
-    return this.http.get<IUser[]>(this.apiUrl).pipe(
+    return this.http.get<ApiResponse<IUser[]>>(this.apiUrl).pipe(
+      map(response => response.results || []), // Use empty array if results is falsy
       tap(console.log),
       catchError(this.handleError)
     );
   }
+  
+  
 
   getUserById(id: number): Observable<IUser> {
     console.log(`getUserById called for id: ${id}`);

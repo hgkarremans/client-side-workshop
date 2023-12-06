@@ -65,14 +65,22 @@ export class UserEditComponent implements OnInit {
     if (this.userForm.valid && this.user) {
       console.log('Form is valid');
       console.log('Form values:', this.user.id, this.userForm.value);
+  
       // Assuming you have a method in your UserService to save the updated user
-      this.userService.updateUser(this.user.id, this.userForm.value);
-
-      // Optionally, you can navigate back to the user details page or any other page
-      this.router.navigate(['users/', this.user.id]);
+      this.userService.updateUser(this.user.id, this.userForm.value).subscribe(
+        () => {
+          // Optionally, you can navigate back to the user details page or any other page
+          this.router.navigate(['users/', this.user.id]);
+        },
+        (error) => {
+          // Handle the error, log it, or display a user-friendly message
+          console.error('Error updating user:', error);
+        }
+      );
     } else {
       // Handle form validation errors or display a message to the user
       console.log('Form is invalid');
     }
   }
+  
 }
