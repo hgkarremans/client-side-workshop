@@ -22,4 +22,5 @@ export interface User {
     gender : UserGender;
     image: string;
     friends: User[];
+    ticketsId: string[];
 }
