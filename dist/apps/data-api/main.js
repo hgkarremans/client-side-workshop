@@ -711,16 +711,18 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         common_2.Logger.log(`result: ${JSON.stringify(result)}`);
         return result?.records;
     }
-    async getOne(id) {
-        common_2.Logger.log(`getOne(${id})`, this.TAG);
-        const query = `MATCH (n) WHERE n.Id = $id RETURN n`;
-        const result = await this.neo4jService.write(query, { id: id });
-        return result;
+    async getOne(Id) {
+        common_2.Logger.log(`getOne(${Id})`, this.TAG);
+        const query = `MATCH (n) WHERE n.Id = $Id RETURN n`;
+        console.log('Parameters:', { Id }); // Log the query parameters for debugging
+        const result = await this.neo4jService.write(query, { Id: parseInt(Id) });
+        console.log('Result:', result); // Log the result for debugging
+        return result.records;
     }
     async create(newUser) {
         common_2.Logger.log('create', this.TAG);
         const query = `
-      MERGE (user:User {Id: $id})
+      MERGE (user:User {Id: $Id})
       ON CREATE SET 
         user.firstName = $firstName,
         user.lastName = $lastName, 
@@ -740,7 +742,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
       RETURN user
     `;
         const result = await this.neo4jService.write(query, {
-            id: Math.floor(Math.random() * 10000),
+            Id: Math.floor(Math.random() * 10000),
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             image: newUser.image,
@@ -752,10 +754,10 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         common_2.Logger.log(`result:${JSON.stringify(result)}`);
         return result;
     }
-    async update(id, user) {
-        common_2.Logger.log(`Update(${id})`, this.TAG);
+    async update(Id, user) {
+        common_2.Logger.log(`Update(${Id})`, this.TAG);
         const query = `
-      MATCH (user:User {Id: $id})
+      MATCH (user:User {Id: $Id})
       SET
         user.firstName = $firstName,
         user.lastName = $lastName,
@@ -767,7 +769,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
       RETURN user
     `;
         const result = await this.neo4jService.write(query, {
-            id: id,
+            Id: parseInt(Id),
             firstName: user.firstName,
             lastName: user.lastName,
             image: user.image,
@@ -776,12 +778,12 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             role: user.role,
             friends: user.friends || [],
         });
-        return result;
+        return result.records;
     }
-    async delete(id) {
-        common_2.Logger.log(`Delete(${id})`, this.TAG);
-        const query = `MATCH (n) WHERE n.Id = $id DETACH DELETE n`;
-        const result = await this.neo4jService.write(query, { id: id });
+    async delete(Id) {
+        common_2.Logger.log(`Delete(${Id})`, this.TAG);
+        const query = `MATCH (n) WHERE n.Id = $Id DETACH DELETE n`;
+        const result = await this.neo4jService.write(query, { Id: parseInt(Id) });
         return result;
     }
 };
@@ -816,20 +818,22 @@ let UserController = exports.UserController = class UserController {
         const users = await this.neo4jService.getAll();
         return users;
     }
-    async getOneUser(id) {
-        const user = await this.neo4jService.getOne(id);
+    async getOneUser(Id) {
+        const user = await this.neo4jService.getOne(Id);
+        console.log("Id in controller: ", Id);
+        console.log("controller user: ", user);
         return user;
     }
     async createUser(newUser) {
         const createdUser = await this.neo4jService.create(newUser);
         return createdUser;
     }
-    async updateUser(id, updatedUser) {
-        const result = await this.neo4jService.update(id, updatedUser);
+    async updateUser(Id, updatedUser) {
+        const result = await this.neo4jService.update(Id, updatedUser);
         return result;
     }
-    async deleteUser(id) {
-        const result = await this.neo4jService.delete(id);
+    async deleteUser(Id) {
+        const result = await this.neo4jService.delete(Id);
         return result;
     }
 };
@@ -840,8 +844,8 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "getAllUsers", null);
 tslib_1.__decorate([
-    (0, common_1.Get)(':id'),
-    tslib_1.__param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)(':Id'),
+    tslib_1.__param(0, (0, common_1.Param)('Id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", Promise)
@@ -854,16 +858,16 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "createUser", null);
 tslib_1.__decorate([
-    (0, common_1.Put)(':id'),
-    tslib_1.__param(0, (0, common_1.Param)('id')),
+    (0, common_1.Put)(':Id'),
+    tslib_1.__param(0, (0, common_1.Param)('Id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String, typeof (_c = typeof Pick !== "undefined" && Pick) === "function" ? _c : Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUser", null);
 tslib_1.__decorate([
-    (0, common_1.Delete)(':id'),
-    tslib_1.__param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)(':Id'),
+    tslib_1.__param(0, (0, common_1.Param)('Id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", Promise)

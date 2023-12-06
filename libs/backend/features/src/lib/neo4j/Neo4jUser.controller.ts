@@ -12,9 +12,11 @@ export class UserController {
     return users;
   }
 
-  @Get(':id')
-  async getOneUser(@Param('id') id: string) {
-    const user = await this.neo4jService.getOne(id);
+  @Get(':Id')
+  async getOneUser(@Param('Id') Id: string) {
+    const user = await this.neo4jService.getOne(Id);
+    console.log("Id in controller: ", Id);
+    console.log("controller user: ", user);
     return user;
   }
 
@@ -24,15 +26,15 @@ export class UserController {
     return createdUser;
   }
 
-  @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'role' | 'friends'>) {
-    const result = await this.neo4jService.update(id, updatedUser);
+  @Put(':Id')
+  async updateUser(@Param('Id') Id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'role' | 'friends'>) {
+    const result = await this.neo4jService.update(Id, updatedUser);
     return result;
   }
 
-  @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
-    const result = await this.neo4jService.delete(id);
+  @Delete(':Id')
+  async deleteUser(@Param('Id') Id: string) {
+    const result = await this.neo4jService.delete(Id);
     return result;
   }
 }

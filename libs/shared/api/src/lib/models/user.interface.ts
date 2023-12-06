@@ -1,3 +1,5 @@
+import { Id } from "./id.type";
+
 export enum UserRole {
     admin = 'Admin',
     editor = 'Editor',
@@ -11,7 +13,7 @@ export enum UserGender {
 
 
 export interface User {
-    id: number;
+    Id: Id;
     firstName: string;
     lastName: string;
     emailAdress: string;

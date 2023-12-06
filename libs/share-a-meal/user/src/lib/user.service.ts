@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { ApiResponse, User as IUser } from '@avans-nx-workshop/shared/api';
 
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,22 +17,21 @@ export class UserService {
   getUsers(): Observable<IUser[]> {
     console.log('getUsers called');
     return this.http.get<ApiResponse<IUser[]>>(this.apiUrl).pipe(
-      map(response => response.results || []), // Use empty array if results is falsy
-      tap(console.log),
+      map(response => (response.results || []).map(result => (result as any)._fields[0].properties as IUser)),
       catchError(this.handleError)
     );
   }
-  
-  
-
-  getUserById(id: number): Observable<IUser> {
+  getUserById(id: string): Observable<IUser> {
     console.log(`getUserById called for id: ${id}`);
-    return this.http.get<IUser>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<ApiResponse<IUser>>(`${this.apiUrl}/${id}`).pipe(
+      // Assuming it's a single user
       tap(console.log),
       catchError(this.handleError)
     );
   }
-
+  
+  
+  
   addUser(newUser: IUser): Observable<IUser> {
     console.log('addUser called');
     return this.http.post<IUser>(this.apiUrl, newUser).pipe(
@@ -40,7 +40,7 @@ export class UserService {
     );
   }
 
-  updateUser(id: number, updatedUserData: IUser): Observable<IUser> {
+  updateUser(id: string, updatedUserData: IUser): Observable<IUser> {
     console.log(`updateUser called for id: ${id}`);
     return this.http.put<IUser>(`${this.apiUrl}/${id}`, updatedUserData).pipe(
       tap(console.log),
@@ -48,7 +48,7 @@ export class UserService {
     );
   }
 
-  deleteUser(id: number): Observable<IUser> {
+  deleteUser(id: string): Observable<IUser> {
     console.log(`deleteUser called for id: ${id}`);
     return this.http.delete<IUser>(`${this.apiUrl}/${id}`).pipe(
       tap(console.log),

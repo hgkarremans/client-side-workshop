@@ -19,19 +19,27 @@ export class Neo4jUserService {
     return result?.records;
   }
 
-  async getOne(id: string) {
-    Logger.log(`getOne(${id})`, this.TAG);  
-    const query = `MATCH (n) WHERE n.Id = $id RETURN n`;
-    const result = await this.neo4jService.write(query, { id: id });
-    
-    return result;
+  async getOne(Id: string) {
+    Logger.log(`getOne(${Id})`, this.TAG);
+  
+    const query = `MATCH (n) WHERE n.Id = $Id RETURN n`;
+  
+    console.log('Parameters:', { Id }); // Log the query parameters for debugging
+  
+    const result = await this.neo4jService.write(query, { Id: parseInt(Id) });
+    console.log('Result:', result); // Log the result for debugging
+  
+    return result.records;
   }
+  
+  
+  
 
   async create(newUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'friends'>) {
     Logger.log('create', this.TAG);
 
     const query = `
-      MERGE (user:User {Id: $id})
+      MERGE (user:User {Id: $Id})
       ON CREATE SET 
         user.firstName = $firstName,
         user.lastName = $lastName, 
@@ -52,7 +60,7 @@ export class Neo4jUserService {
     `;
     
     const result = await this.neo4jService.write(query, {
-      id: Math.floor(Math.random() * 10000),
+      Id: Math.floor(Math.random() * 10000),
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       image: newUser.image,
@@ -66,11 +74,11 @@ export class Neo4jUserService {
     return result;
   }
 
-  async update(id: string, user: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'role' | 'friends'>) {
-    Logger.log(`Update(${id})`, this.TAG);
-
+  async update(Id: string, user: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'role' | 'friends'>) {
+    Logger.log(`Update(${Id})`, this.TAG);
+  
     const query = `
-      MATCH (user:User {Id: $id})
+      MATCH (user:User {Id: $Id})
       SET
         user.firstName = $firstName,
         user.lastName = $lastName,
@@ -81,9 +89,9 @@ export class Neo4jUserService {
         user.friends = $friends
       RETURN user
     `;
-
+  
     const result = await this.neo4jService.write(query, {
-      id: id,
+      Id: parseInt(Id),
       firstName: user.firstName,
       lastName: user.lastName,
       image: user.image,
@@ -92,16 +100,17 @@ export class Neo4jUserService {
       role: user.role,
       friends: user.friends || [],
     });
-
+  
+    return result.records;
+  }
+  
+  async delete(Id: string) {
+    Logger.log(`Delete(${Id})`, this.TAG);
+  
+    const query = `MATCH (n) WHERE n.Id = $Id DETACH DELETE n`;
+    const result = await this.neo4jService.write(query, { Id: parseInt(Id) });
+  
     return result;
   }
-
-  async delete(id: string) {
-    Logger.log(`Delete(${id})`, this.TAG);
-
-    const query = `MATCH (n) WHERE n.Id = $id DETACH DELETE n`;
-    const result = await this.neo4jService.write(query, { id: id });
-
-    return result;
-  }
+  
 }

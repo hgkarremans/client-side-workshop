@@ -37,7 +37,7 @@ export class UserEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const userId = Number(params.get('id'));
+      const userId = String(params.get('id'));
       this.userService.getUserById(userId).subscribe(
         (user) => {
           this.user = user;
@@ -64,13 +64,13 @@ export class UserEditComponent implements OnInit {
   onSubmit(): void {
     if (this.userForm.valid && this.user) {
       console.log('Form is valid');
-      console.log('Form values:', this.user.id, this.userForm.value);
+      console.log('Form values:', this.user.Id, this.userForm.value);
   
       // Assuming you have a method in your UserService to save the updated user
-      this.userService.updateUser(this.user.id, this.userForm.value).subscribe(
+      this.userService.updateUser(this.user.Id, this.userForm.value).subscribe(
         () => {
           // Optionally, you can navigate back to the user details page or any other page
-          this.router.navigate(['users/', this.user.id]);
+          this.router.navigate(['users/', this.user.Id]);
         },
         (error) => {
           // Handle the error, log it, or display a user-friendly message
