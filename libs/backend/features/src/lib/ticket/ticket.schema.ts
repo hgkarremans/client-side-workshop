@@ -42,10 +42,7 @@ export class Ticket implements ITicket {
         type: Number
     })
     seat!: number;
-    @Prop({
-        type: MongooseSchema
-    })
-    owner?: User;
+
     
 }
 export const TicketSchema = SchemaFactory.createForClass(Ticket);

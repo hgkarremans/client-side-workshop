@@ -3,13 +3,13 @@ import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { User as IUser } from '@avans-nx-workshop/shared/api';
-import { environment } from '@avans-nx-workshop/shared/util-env';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private readonly apiUrl = environment.apiUrl + 'user';
+  private readonly apiUrl = 'http://localhost:3000/api/users';
 
   constructor(private readonly http: HttpClient) {}
 

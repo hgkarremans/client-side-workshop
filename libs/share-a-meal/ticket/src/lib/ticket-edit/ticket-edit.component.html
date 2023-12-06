@@ -32,15 +32,6 @@
               <label for="seat">Seat</label>
               <input type="number" class="form-control" formControlName="seat">
             </div>
-            <div>
-              <label for="owner">Owner</label>
-              <select class="form-select" name="owner" formControlName="owner">
-                <option [value]="null">Not Assigned</option>
-                <option *ngFor="let user of users" [value]="user.id" [selected]="user.id === ticketForm.value.owner">
-                  {{ user.firstName }}
-                </option>
-              </select>
-            </div>
             <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
               <button class="btn btn-primary" style="border: 1px solid #000;" (click)="saveTicket()">Save</button>
             </div>

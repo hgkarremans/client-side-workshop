@@ -3,7 +3,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ITicket, User } from '@avans-nx-workshop/shared/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TicketService } from '../ticket.service';
-import { UserService } from '@avans-nx-workshop/user';
 import { Subscription } from 'rxjs';
 import { DeleteConformationModalComponent } from '../delete-conformation-modal/delete-conformation-modal.component';
 
@@ -20,7 +19,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private ticketService: TicketService,
-    private userService: UserService,
     private modalService: NgbModal
    
   ) {
@@ -38,22 +36,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         (ticket) => {
           this.ticket = ticket;
           console.log('Ticket:', this.ticket);
-          // console.log('Owner:', this.ticket?.owner);
-          // console.log('Owner ID:', this.ticket?.owner?.id);
-          if (this.ticket?.owner) {
-            console.log('Owner:', this.ticket?.owner);
-            this.ownerFirstName = this.ticket?.owner?.firstName;
-            
 
-
-            // console.log("We here?")
-            // const ownerId = this.ticket?.owner as unknown as number;
-            // console.log('Owner ID:', ownerId);
-            // const owner = this.userService.getUserById(ownerId);
-            // console.log('Owner:', owner);
-            // this.ownerFirstName = owner.firstName;
-            
-          }
 
          
         },

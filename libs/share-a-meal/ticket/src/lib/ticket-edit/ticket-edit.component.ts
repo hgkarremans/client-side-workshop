@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ITicket, TicketStatus, User } from '@avans-nx-workshop/shared/api';
+import { ITicket, TicketStatus } from '@avans-nx-workshop/shared/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
-import { UserService } from '@avans-nx-workshop/user';
 import { switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +14,6 @@ import { Subscription } from 'rxjs';
 export class TicketEditComponent implements OnInit, OnDestroy {
   ticket!: ITicket;
   ticketForm!: FormGroup;
-  users: User[] = [];
   statusOptions = Object.values(TicketStatus);
   private ticketSubscription: Subscription | undefined;
 
@@ -23,7 +21,6 @@ export class TicketEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private ticketService: TicketService,
-    private userService: UserService,
     private fb: FormBuilder
   ) {
     this.ticketForm = this.fb.group({
@@ -32,7 +29,6 @@ export class TicketEditComponent implements OnInit, OnDestroy {
       date: ['', Validators.required],
       status: ['', Validators.required],
       seat: ['', [Validators.required, Validators.min(1)]],
-      owner: [null],
     });
   }
 
@@ -47,23 +43,12 @@ export class TicketEditComponent implements OnInit, OnDestroy {
       .subscribe((ticket) => {
         this.ticket = ticket;
 
-        // Fetch the list of users using the service
-        this.userService.getUsers().subscribe(
-          (users) => {
-            this.users = users;
-          },
-          (error) => {
-            console.error('Error fetching users:', error);
-          }
-        );
-
         this.ticketForm.patchValue({
           title: this.ticket.title,
           price: this.ticket.price,
           date: this.ticket.date,
           status: this.ticket.status,
           seat: this.ticket.seat,
-          owner: this.ticket.owner?.id,
         });
       });
   }

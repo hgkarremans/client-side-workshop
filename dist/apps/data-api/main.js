@@ -479,7 +479,7 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const ticket_controller_1 = __webpack_require__(22);
 const ticket_service_1 = __webpack_require__(23);
-const ticket_schema_1 = __webpack_require__(26); // Corrected import
+const ticket_schema_1 = __webpack_require__(26);
 const mongoose_1 = __webpack_require__(24);
 const Neo4jUser_service_1 = __webpack_require__(27);
 const Neo4jUser_controller_1 = __webpack_require__(29);
@@ -631,12 +631,11 @@ module.exports = require("mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketSchema = exports.Ticket = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(24);
-const mongoose_2 = __webpack_require__(25);
 const api_1 = __webpack_require__(10);
 const class_validator_1 = __webpack_require__(18);
 let Ticket = exports.Ticket = class Ticket {
@@ -681,12 +680,6 @@ tslib_1.__decorate([
     }),
     tslib_1.__metadata("design:type", Number)
 ], Ticket.prototype, "seat", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)({
-        type: mongoose_2.Schema
-    }),
-    tslib_1.__metadata("design:type", typeof (_c = typeof api_1.User !== "undefined" && api_1.User) === "function" ? _c : Object)
-], Ticket.prototype, "owner", void 0);
 exports.Ticket = Ticket = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Ticket);
@@ -938,12 +931,11 @@ exports.AppService = AppService = tslib_1.__decorate([
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(34), exports);
+tslib_1.__exportStar(__webpack_require__(33), exports);
 
 
 /***/ }),
-/* 33 */,
-/* 34 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports) => {
 
 

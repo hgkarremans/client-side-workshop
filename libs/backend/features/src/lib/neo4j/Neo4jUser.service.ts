@@ -20,8 +20,7 @@ export class Neo4jUserService {
   }
 
   async getOne(id: string) {
-    Logger.log(`getOne(${id})`, this.TAG);
-    
+    Logger.log(`getOne(${id})`, this.TAG);  
     const query = `MATCH (n) WHERE n.Id = $id RETURN n`;
     const result = await this.neo4jService.write(query, { id: id });
     

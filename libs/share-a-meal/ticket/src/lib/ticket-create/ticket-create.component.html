@@ -21,12 +21,6 @@
               <label for="date">Date</label>
               <input type="date" class="form-control" placeholder="Select date" formControlName="date">
             </div>
-            <div>
-              <label for="owner">Owner</label>
-              <select class="form-select" name="owner" id="owner" formControlName="owner">
-                <option *ngFor="let user of users" [ngValue]="user">{{ user.firstName }} {{ user.lastName }}</option>
-              </select>
-            </div>
             
             <div>
               <label for="status">Status</label>
