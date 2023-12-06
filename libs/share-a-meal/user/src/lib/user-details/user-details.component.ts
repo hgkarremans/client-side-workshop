@@ -35,14 +35,14 @@ export class UserDetailsComponent implements OnInit {
   }
 
   openDeleteConfirmationModal() {
-    const modalRef = this.modalService.open(DeleteConformationModalComponent);
-
-    // Handle the result when the modal is closed (e.g., user clicked Delete)
-    modalRef.result.then((result) => {
-      if (result === 'Delete') {
-        // Perform the delete action here
-        console.log('Item deleted!');
+    this.userService.deleteUser(this.user!.Id).subscribe(
+      (user) => {
+        console.log('User deleted:', user);
+        this.user = null;
+      },
+      (error) => {
+        console.error('Error deleting user:', error);
       }
-    });
+    );
   }
 }
