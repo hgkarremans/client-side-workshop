@@ -21,16 +21,17 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  getUserById(id: string): Observable<IUser> {
+  getUserById(id: string): Observable<IUser | null> {
     console.log(`getUserById called for id: ${id}`);
     return this.http.get<ApiResponse<IUser>>(`${this.apiUrl}/${id}`).pipe(
-      // Assuming it's a single user
-      tap(console.log),
+      map(response => {
+        const resultArray = response.results as IUser[] || [];
+        const firstResult = resultArray.length > 0 ? resultArray[0] : null;
+        return firstResult ? (firstResult as any)._fields[0].properties as IUser : null;
+      }),
       catchError(this.handleError)
     );
   }
-  
-  
   
   addUser(newUser: IUser): Observable<IUser> {
     console.log('addUser called');

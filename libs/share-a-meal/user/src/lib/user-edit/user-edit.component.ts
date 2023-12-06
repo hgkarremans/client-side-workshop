@@ -40,8 +40,8 @@ export class UserEditComponent implements OnInit {
       const userId = String(params.get('id'));
       this.userService.getUserById(userId).subscribe(
         (user) => {
-          this.user = user;
-
+          this.user = user!; // Use the non-null assertion operator
+  
           // Update the form controls with the user's values
           this.userForm.patchValue({
             firstName: this.user.firstName,
@@ -59,6 +59,7 @@ export class UserEditComponent implements OnInit {
       );
     });
   }
+  
 
   // Method to handle form submission
   onSubmit(): void {

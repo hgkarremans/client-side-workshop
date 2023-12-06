@@ -729,6 +729,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.image = $image,
         user.emailAdress = $emailAdress,
         user.dateOfBirth = $dateOfBirth,
+        user.gender = $gender,
         user.role = $role,
         user.friends = $friends
       ON MATCH SET 
@@ -737,6 +738,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.image = $image,
         user.emailAdress = $emailAdress,
         user.dateOfBirth = $dateOfBirth,
+        user.gender = $gender,
         user.role = $role,
         user.friends = $friends
       RETURN user
@@ -748,6 +750,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             image: newUser.image,
             emailAdress: newUser.emailAdress,
             dateOfBirth: newUser.dateOfBirth,
+            gender: newUser.gender,
             role: api_1.UserRole.guest,
             friends: newUser.friends || [],
         });
@@ -764,6 +767,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.image = $image,
         user.emailAdress = $emailAdress,
         user.dateOfBirth = $dateOfBirth,
+        user.gender = $gender,
         user.role = $role,
         user.friends = $friends
       RETURN user
@@ -775,6 +779,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             image: user.image,
             emailAdress: user.emailAdress,
             dateOfBirth: user.dateOfBirth,
+            gender: user.gender,
             role: user.role,
             friends: user.friends || [],
         });

@@ -11,7 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styles: [],
 })
 export class UserDetailsComponent implements OnInit {
-  user: User | undefined; // Use User or undefined
+  user: User | null = null; // Use User or null
 
   constructor(
     private route: ActivatedRoute,

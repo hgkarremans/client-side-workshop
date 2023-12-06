@@ -21,13 +21,13 @@ export class UserController {
   }
 
   @Post()
-  async createUser(@Body() newUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'friends'>) {
+  async createUser(@Body() newUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'gender' | 'friends'>) {
     const createdUser = await this.neo4jService.create(newUser);
     return createdUser;
   }
 
   @Put(':Id')
-  async updateUser(@Param('Id') Id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'role' | 'friends'>) {
+  async updateUser(@Param('Id') Id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'>) {
     const result = await this.neo4jService.update(Id, updatedUser);
     return result;
   }
