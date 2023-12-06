@@ -47,7 +47,15 @@ export class TicketEditComponent implements OnInit, OnDestroy {
       .subscribe((ticket) => {
         this.ticket = ticket;
 
-        this.users = this.userService.getUsers();
+        // Fetch the list of users using the service
+        this.userService.getUsers().subscribe(
+          (users) => {
+            this.users = users;
+          },
+          (error) => {
+            console.error('Error fetching users:', error);
+          }
+        );
 
         this.ticketForm.patchValue({
           title: this.ticket.title,

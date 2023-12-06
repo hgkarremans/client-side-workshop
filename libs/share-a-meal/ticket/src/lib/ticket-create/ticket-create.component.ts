@@ -1,3 +1,4 @@
+// Import the necessary modules
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -45,23 +46,30 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
     });
 
     // Fetch the list of users
-    this.users = this.userService.getUsers();
+    this.userService.getUsers().subscribe(
+      (users) => {
+        this.users = users;
+      },
+      (error) => {
+        console.error('Error fetching users:', error);
+      }
+    );
   }
 
   saveTicket(): void {
     if (this.ticketForm.valid) {
       const ticketData = this.ticketForm.value;
-  
+
       // Extract user object from owner data
       const owner = ticketData.owner;
-  
+
       if (this.ticket) {
         const updatedTicket = {
           ...this.ticket,
           ...ticketData,
           owner: owner, // Assign the whole user object
         };
-  
+
         this.ticketService.updateTicket(updatedTicket.id, updatedTicket).subscribe(() => {
           console.log('Ticket updated successfully');
         });
@@ -70,7 +78,7 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
           ...ticketData,
           owner: owner, // Assign the whole user object
         };
-  
+
         this.ticketService.addTicket(newTicket).subscribe(() => {
           console.log('Ticket added successfully');
         });
@@ -79,11 +87,6 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
       console.log('Form is invalid');
     }
   }
-  
-    
-  
-  
-  
 
   ngOnDestroy(): void {
     // Unsubscribe from the ticket subscription to prevent memory leaks

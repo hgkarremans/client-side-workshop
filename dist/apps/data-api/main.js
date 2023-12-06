@@ -23,12 +23,12 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(27);
-const app_service_1 = __webpack_require__(28);
+const app_controller_1 = __webpack_require__(30);
+const app_service_1 = __webpack_require__(31);
 const mongoose_1 = __webpack_require__(24);
 const features_2 = __webpack_require__(5);
-const util_env_1 = __webpack_require__(29);
-const dist_1 = __webpack_require__(32);
+const util_env_1 = __webpack_require__(32);
+const dist_1 = __webpack_require__(28);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
@@ -481,14 +481,15 @@ const ticket_controller_1 = __webpack_require__(22);
 const ticket_service_1 = __webpack_require__(23);
 const ticket_schema_1 = __webpack_require__(26); // Corrected import
 const mongoose_1 = __webpack_require__(24);
-const Neo4jUser_service_1 = __webpack_require__(33);
+const Neo4jUser_service_1 = __webpack_require__(27);
+const Neo4jUser_controller_1 = __webpack_require__(29);
 let backendendFeaturesModule = exports.backendendFeaturesModule = class backendendFeaturesModule {
 };
 exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }])],
-        controllers: [ticket_controller_1.TicketController],
-        providers: [ticket_service_1.TicketService],
+        controllers: [ticket_controller_1.TicketController, Neo4jUser_controller_1.UserController],
+        providers: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
         exports: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
     })
 ], backendendFeaturesModule);
@@ -699,119 +700,12 @@ exports.TicketSchema = mongoose_1.SchemaFactory.createForClass(Ticket);
 
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppController = void 0;
-const tslib_1 = __webpack_require__(4);
-const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(28);
-let AppController = exports.AppController = class AppController {
-    constructor(appService) {
-        this.appService = appService;
-    }
-    getData() {
-        return this.appService.getData();
-    }
-};
-tslib_1.__decorate([
-    (0, common_1.Get)(),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", void 0)
-], AppController.prototype, "getData", null);
-exports.AppController = AppController = tslib_1.__decorate([
-    (0, common_1.Controller)(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
-], AppController);
-
-
-/***/ }),
-/* 28 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppService = void 0;
-const tslib_1 = __webpack_require__(4);
-const common_1 = __webpack_require__(1);
-let AppService = exports.AppService = class AppService {
-    getData() {
-        return { message: 'Hello API' };
-    }
-};
-exports.AppService = AppService = tslib_1.__decorate([
-    (0, common_1.Injectable)()
-], AppService);
-
-
-/***/ }),
-/* 29 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(30), exports);
-tslib_1.__exportStar(__webpack_require__(31), exports);
-
-
-/***/ }),
-/* 30 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EnvModule = void 0;
-const tslib_1 = __webpack_require__(4);
-const common_1 = __webpack_require__(1);
-let EnvModule = exports.EnvModule = class EnvModule {
-};
-exports.EnvModule = EnvModule = tslib_1.__decorate([
-    (0, common_1.Module)({
-        controllers: [],
-        providers: [],
-        exports: [],
-    })
-], EnvModule);
-
-
-/***/ }),
-/* 31 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.environment = void 0;
-exports.environment = {
-    production: false,
-    apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
-    MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
-    NEO4J_SCHEME: 'neo4j',
-    NEO4J_HOST: 'localhost',
-    NEO4J_PORT: '7687',
-    NEO4J_USERNAME: 'neo4j',
-    NEO4J_PASSWORD: 'ticketshop2003',
-    NEO4J_DATABASE: 'TicketShopUsers',
-};
-
-
-/***/ }),
-/* 32 */
-/***/ ((module) => {
-
-module.exports = require("nest-neo4j/dist");
-
-/***/ }),
-/* 33 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Neo4jUserService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const api_1 = __webpack_require__(10);
 const common_2 = __webpack_require__(1);
-const dist_1 = __webpack_require__(32);
+const dist_1 = __webpack_require__(28);
 let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -902,6 +796,170 @@ exports.Neo4jUserService = Neo4jUserService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof dist_1.Neo4jService !== "undefined" && dist_1.Neo4jService) === "function" ? _a : Object])
 ], Neo4jUserService);
+
+
+/***/ }),
+/* 28 */
+/***/ ((module) => {
+
+module.exports = require("nest-neo4j/dist");
+
+/***/ }),
+/* 29 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UserController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const Neo4jUser_service_1 = __webpack_require__(27);
+let UserController = exports.UserController = class UserController {
+    constructor(neo4jService) {
+        this.neo4jService = neo4jService;
+    }
+    async getAllUsers() {
+        const users = await this.neo4jService.getAll();
+        return users;
+    }
+    async getOneUser(id) {
+        const user = await this.neo4jService.getOne(id);
+        return user;
+    }
+    async createUser(newUser) {
+        const createdUser = await this.neo4jService.create(newUser);
+        return createdUser;
+    }
+    async updateUser(id, updatedUser) {
+        const result = await this.neo4jService.update(id, updatedUser);
+        return result;
+    }
+    async deleteUser(id) {
+        const result = await this.neo4jService.delete(id);
+        return result;
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "getAllUsers", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "getOneUser", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof Pick !== "undefined" && Pick) === "function" ? _b : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "createUser", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_c = typeof Pick !== "undefined" && Pick) === "function" ? _c : Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "updateUser", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUser", null);
+exports.UserController = UserController = tslib_1.__decorate([
+    (0, common_1.Controller)('users'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof Neo4jUser_service_1.Neo4jUserService !== "undefined" && Neo4jUser_service_1.Neo4jUserService) === "function" ? _a : Object])
+], UserController);
+
+
+/***/ }),
+/* 30 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const app_service_1 = __webpack_require__(31);
+let AppController = exports.AppController = class AppController {
+    constructor(appService) {
+        this.appService = appService;
+    }
+    getData() {
+        return this.appService.getData();
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppController.prototype, "getData", null);
+exports.AppController = AppController = tslib_1.__decorate([
+    (0, common_1.Controller)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
+], AppController);
+
+
+/***/ }),
+/* 31 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+let AppService = exports.AppService = class AppService {
+    getData() {
+        return { message: 'Hello API' };
+    }
+};
+exports.AppService = AppService = tslib_1.__decorate([
+    (0, common_1.Injectable)()
+], AppService);
+
+
+/***/ }),
+/* 32 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(34), exports);
+
+
+/***/ }),
+/* 33 */,
+/* 34 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.environment = void 0;
+exports.environment = {
+    production: false,
+    apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
+    MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
+    NEO4J_SCHEME: 'neo4j',
+    NEO4J_HOST: 'localhost',
+    NEO4J_PORT: '7687',
+    NEO4J_USERNAME: 'neo4j',
+    NEO4J_PASSWORD: 'ticketshop2003',
+    NEO4J_DATABASE: 'TicketShopUsers',
+};
 
 
 /***/ })

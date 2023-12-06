@@ -1,10 +1,9 @@
+// user-create.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
 import { User, UserGender, UserRole } from '@avans-nx-workshop/shared/api';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DeleteConformationModalComponent } from '../delete-conformation-modal/delete-conformation-modal.component';
 
 @Component({
   selector: 'clientside-nx-workshop-user-create',
@@ -13,7 +12,6 @@ import { DeleteConformationModalComponent } from '../delete-conformation-modal/d
 })
 export class UserCreateComponent implements OnInit {
   userForm!: FormGroup;
-  user!: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,33 +29,29 @@ export class UserCreateComponent implements OnInit {
       role: ['', Validators.required],
       gender: ['', Validators.required],
     });
-
-    this.route.paramMap.subscribe((params) => {
-      const userId = Number(params.get('id'));
-      this.user = this.userService.getUserById(userId);
-    });
-
-    
   }
 
   saveUser(): void {
     if (this.userForm.valid) {
-      const newUser = {
-        id: this.userService.getUsers().length + 1, // Generate ID based on array length
+      const newUser: User = {
         ...this.userForm.value,
+        id: 0, // Assigning a temporary value, assuming the backend will assign a proper ID
+        friends: [],
       };
-      
+
       console.log('New User:', newUser);
-      
+
       // Add the new user to the array
-      this.userService.addUser(newUser);
+      this.userService.addUser(newUser).subscribe(
+        (addedUser) => {
+          console.log('User added successfully:', addedUser);
+        },
+        (error) => {
+          console.error('Error adding user:', error);
+        }
+      );
     } else {
       console.log('Form is invalid');
     }
   }
-
-
-
-  
-  
 }

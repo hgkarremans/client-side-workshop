@@ -9,7 +9,9 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './delete-conformation-modal.component.html',
   styles: [],
 })
-export class DeleteConformationModalComponent implements OnInit {
+export class DeleteConformationModalComponent 
+//implements OnInit 
+{
   userId: number | undefined;
 
   constructor(
@@ -17,25 +19,25 @@ export class DeleteConformationModalComponent implements OnInit {
     private userService: UserService
   ) {}
 
-  ngOnInit(): void {
-    this.userId = this.userService.getCurrentUserId();
-  }
+  // ngOnInit(): void {
+  //   this.userId = this.userService.getCurrentUserId();
+  // }
 
   async confirmDelete() {
-    try {
-      if (this.userId !== undefined) {
-        console.log('Deleting user with id:', this.userId);
-        this.userService.deleteUser(this.userId);
-        // Uncomment the above line when you are ready to perform the actual delete
-        this.activeModal.close('Delete');
-      } else {
-        console.error('User ID not provided for deletion.');
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    } finally {
-      // Clear the current user ID after deletion
-      this.userService.clearCurrentUserId();
-    }
+    // try {
+    //   if (this.userId !== undefined) {
+    //     console.log('Deleting user with id:', this.userId);
+    //     this.userService.deleteUser(this.userId);
+    //     // Uncomment the above line when you are ready to perform the actual delete
+    //     this.activeModal.close('Delete');
+    //   } else {
+    //     console.error('User ID not provided for deletion.');
+    //   }
+    // } catch (error) {
+    //   console.error('Error deleting user:', error);
+    // } finally {
+    //   // Clear the current user ID after deletion
+    //   this.userService.clearCurrentUserId();
+    // }
   }
 }

@@ -11,8 +11,6 @@ import { UserRole } from '@avans-nx-workshop/shared/api';
   templateUrl: './user-edit.component.html',
   styles: [],
 })
-// ... (imports and component decorator)
-
 export class UserEditComponent implements OnInit {
   user!: User;
   userForm!: FormGroup;
@@ -40,26 +38,33 @@ export class UserEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       const userId = Number(params.get('id'));
-      this.user = this.userService.getUserById(userId);
+      this.userService.getUserById(userId).subscribe(
+        (user) => {
+          this.user = user;
 
-      // Update the form controls with the user's values
-      this.userForm.patchValue({
-        firstName: this.user.firstName,
-        lastName: this.user.lastName,
-        dateOfBirth: this.user.dateOfBirth,
-        emailAdress: this.user.emailAdress,
-        image: this.user.image,
-        gender: this.user.gender,
-        role: this.user.role,
-      });
+          // Update the form controls with the user's values
+          this.userForm.patchValue({
+            firstName: this.user.firstName,
+            lastName: this.user.lastName,
+            dateOfBirth: this.user.dateOfBirth,
+            emailAdress: this.user.emailAdress,
+            image: this.user.image,
+            gender: this.user.gender,
+            role: this.user.role,
+          });
+        },
+        (error) => {
+          console.error('Error fetching user:', error);
+        }
+      );
     });
   }
 
   // Method to handle form submission
   onSubmit(): void {
-    if (this.userForm.valid) {
+    if (this.userForm.valid && this.user) {
       console.log('Form is valid');
-      console.log('Form values:',this.user.id, this.userForm.value);
+      console.log('Form values:', this.user.id, this.userForm.value);
       // Assuming you have a method in your UserService to save the updated user
       this.userService.updateUser(this.user.id, this.userForm.value);
 
