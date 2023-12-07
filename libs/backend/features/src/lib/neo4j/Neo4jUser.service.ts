@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User, UserGender, UserRole } from '@avans-nx-workshop/shared/api';
 import { Logger } from '@nestjs/common';
 import { Neo4jService } from 'nest-neo4j/dist';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class Neo4jUserService {
@@ -31,10 +32,19 @@ export class Neo4jUserService {
 
     return result.records;
   }
+  async findOne(emailAdress: string): Promise<User> {
+    const query = `MATCH (user:User {emailAdress: $emailAdress}) RETURN user`;
+    const result = await this.neo4jService.read(query, { emailAdress });
+    return result?.records[0]?.get('user').properties;
+  }
+    
 
-  async create(newUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'gender' | 'friends'>) {
+  async create(newUser: User) {
     Logger.log('create', this.TAG);
-
+  
+    // Assuming you want to hash the password before storing it
+    const hashedPassword = await this.generateHash(newUser.passwordHash);
+  
     const query = `
       MERGE (user:User {Id: $Id})
       ON CREATE SET 
@@ -45,7 +55,9 @@ export class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends
+        user.friends = $friends,
+        user.hasTransportation = $hasTransportation,
+        user.passwordHash = $passwordHash
       ON MATCH SET 
         user.firstName = $firstName,
         user.lastName = $lastName, 
@@ -54,10 +66,12 @@ export class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends
+        user.friends = $friends,
+        user.hasTransportation = $hasTransportation,
+        user.passwordHash = $passwordHash
       RETURN user
     `;
-
+  
     const result = await this.neo4jService.write(query, {
       Id: Math.floor(Math.random() * 10000),
       firstName: newUser.firstName,
@@ -66,13 +80,17 @@ export class Neo4jUserService {
       emailAdress: newUser.emailAdress,
       dateOfBirth: newUser.dateOfBirth,
       gender: newUser.gender,
-      role: UserRole.guest,
+      role: newUser.role || UserRole.guest, // Provide a default value if not specified
       friends: newUser.friends || [],
+      hasTransportation: newUser.hasTransportation || false, // Provide a default value if not specified
+      passwordHash: hashedPassword,
     });
-
+  
     Logger.log(`result:${JSON.stringify(result)}`);
     return result;
   }
+  
+  
 
   async update(Id: string, user: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'>) {
     Logger.log(`Update(${Id})`, this.TAG);
@@ -114,4 +132,11 @@ export class Neo4jUserService {
 
     return result;
   }
+  async validatePassword (password: string, passwordHash: string): Promise<boolean> {
+    return bcrypt.compare(password, passwordHash);
+  }
+  async generateHash (password: string): Promise<string> {
+    return bcrypt.hash(password, 10);
+  }
+
 }

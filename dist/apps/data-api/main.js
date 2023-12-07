@@ -23,11 +23,11 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(30);
-const app_service_1 = __webpack_require__(31);
+const app_controller_1 = __webpack_require__(31);
+const app_service_1 = __webpack_require__(32);
 const mongoose_1 = __webpack_require__(24);
 const features_2 = __webpack_require__(5);
-const util_env_1 = __webpack_require__(32);
+const util_env_1 = __webpack_require__(33);
 const dist_1 = __webpack_require__(28);
 let AppModule = exports.AppModule = class AppModule {
 };
@@ -482,7 +482,7 @@ const ticket_service_1 = __webpack_require__(23);
 const ticket_schema_1 = __webpack_require__(26);
 const mongoose_1 = __webpack_require__(24);
 const Neo4jUser_service_1 = __webpack_require__(27);
-const Neo4jUser_controller_1 = __webpack_require__(29);
+const Neo4jUser_controller_1 = __webpack_require__(30);
 let backendendFeaturesModule = exports.backendendFeaturesModule = class backendendFeaturesModule {
 };
 exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate([
@@ -699,6 +699,7 @@ const common_1 = __webpack_require__(1);
 const api_1 = __webpack_require__(10);
 const common_2 = __webpack_require__(1);
 const dist_1 = __webpack_require__(28);
+const bcrypt = tslib_1.__importStar(__webpack_require__(29));
 let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -719,8 +720,15 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         console.log('Result:', result); // Log the result for debugging
         return result.records;
     }
+    async findOne(emailAdress) {
+        const query = `MATCH (user:User {emailAdress: $emailAdress}) RETURN user`;
+        const result = await this.neo4jService.read(query, { emailAdress });
+        return result?.records[0]?.get('user').properties;
+    }
     async create(newUser) {
         common_2.Logger.log('create', this.TAG);
+        // Assuming you want to hash the password before storing it
+        const hashedPassword = await this.generateHash(newUser.passwordHash);
         const query = `
       MERGE (user:User {Id: $Id})
       ON CREATE SET 
@@ -731,7 +739,9 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends
+        user.friends = $friends,
+        user.hasTransportation = $hasTransportation,
+        user.passwordHash = $passwordHash
       ON MATCH SET 
         user.firstName = $firstName,
         user.lastName = $lastName, 
@@ -740,7 +750,9 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends
+        user.friends = $friends,
+        user.hasTransportation = $hasTransportation,
+        user.passwordHash = $passwordHash
       RETURN user
     `;
         const result = await this.neo4jService.write(query, {
@@ -751,8 +763,10 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             emailAdress: newUser.emailAdress,
             dateOfBirth: newUser.dateOfBirth,
             gender: newUser.gender,
-            role: api_1.UserRole.guest,
+            role: newUser.role || api_1.UserRole.guest,
             friends: newUser.friends || [],
+            hasTransportation: newUser.hasTransportation || false,
+            passwordHash: hashedPassword,
         });
         common_2.Logger.log(`result:${JSON.stringify(result)}`);
         return result;
@@ -791,6 +805,12 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         const result = await this.neo4jService.write(query, { Id: parseInt(Id) });
         return result;
     }
+    async validatePassword(password, passwordHash) {
+        return bcrypt.compare(password, passwordHash);
+    }
+    async generateHash(password) {
+        return bcrypt.hash(password, 10);
+    }
 };
 exports.Neo4jUserService = Neo4jUserService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
@@ -806,6 +826,12 @@ module.exports = require("nest-neo4j/dist");
 
 /***/ }),
 /* 29 */
+/***/ ((module) => {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+/* 30 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -815,6 +841,7 @@ exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const Neo4jUser_service_1 = __webpack_require__(27);
+const api_1 = __webpack_require__(10);
 let UserController = exports.UserController = class UserController {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -859,7 +886,7 @@ tslib_1.__decorate([
     (0, common_1.Post)(),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof Pick !== "undefined" && Pick) === "function" ? _b : Object]),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof api_1.User !== "undefined" && api_1.User) === "function" ? _b : Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "createUser", null);
 tslib_1.__decorate([
@@ -884,7 +911,7 @@ exports.UserController = UserController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -893,7 +920,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(31);
+const app_service_1 = __webpack_require__(32);
 let AppController = exports.AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -915,7 +942,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -934,17 +961,17 @@ exports.AppService = AppService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(33), exports);
+tslib_1.__exportStar(__webpack_require__(34), exports);
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports) => {
 
 

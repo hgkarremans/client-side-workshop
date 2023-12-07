@@ -17,10 +17,12 @@ export interface User {
     firstName: string;
     lastName: string;
     emailAdress: string;
+    passwordHash: string;
     dateOfBirth: Date;
     role: UserRole;
     gender : UserGender;
     image: string;
     friends: User[];
+    hasTransportation: boolean;
     ticketsId: string[];
 }

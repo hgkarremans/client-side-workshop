@@ -19,9 +19,11 @@ export class UserController {
     console.log("controller user: ", user);
     return user;
   }
+  
+
 
   @Post()
-  async createUser(@Body() newUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAdress' | 'dateOfBirth' | 'gender' | 'friends'>) {
+  async createUser(@Body() newUser: User) {
     const createdUser = await this.neo4jService.create(newUser);
     return createdUser;
   }
