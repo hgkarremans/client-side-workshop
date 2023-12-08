@@ -16,7 +16,7 @@ export interface User {
     Id: Id;
     firstName: string;
     lastName: string;
-    emailAdress: string;
+    emailAddress: string;
     passwordHash: string;
     dateOfBirth: Date;
     role: UserRole;

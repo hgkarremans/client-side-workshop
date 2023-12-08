@@ -3,13 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
-import { User, UserGender, UserRole } from '@avans-nx-workshop/shared/api';
+import { User } from '@avans-nx-workshop/shared/api';
 
 @Component({
   selector: 'clientside-nx-workshop-user-create',
   templateUrl: './user-create.component.html',
   styles: [],
 })
+// user-create.component.ts
+// ... (other imports and component metadata) ...
+
 export class UserCreateComponent implements OnInit {
   userForm!: FormGroup;
 
@@ -24,9 +27,9 @@ export class UserCreateComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      emailAdress: ['', [Validators.required, Validators.email]],
+      emailAddress: ['', [Validators.required, Validators.email]],
+      passwordHash: ['', Validators.required],
       image: [''],
-      role: ['', Validators.required],
       gender: ['', Validators.required],
     });
   }
@@ -39,7 +42,7 @@ export class UserCreateComponent implements OnInit {
         friends: [],
       };
 
-      console.log('New User:', newUser);
+      console.log('Form Values:', this.userForm.value); // Log the form values
 
       // Add the new user to the array
       this.userService.addUser(newUser).subscribe(
@@ -51,7 +54,10 @@ export class UserCreateComponent implements OnInit {
         }
       );
     } else {
+
       console.log('Form is invalid');
+      console.log('Form Values:', this.userForm.value);
     }
   }
 }
+

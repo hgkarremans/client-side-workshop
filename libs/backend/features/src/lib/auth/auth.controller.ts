@@ -21,6 +21,6 @@ export class AuthController {
   @Public()
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto['emailAdress'], signInDto['password']);
+    return this.authService.signIn(signInDto['emailAddress'], signInDto['password']);
   }
 }

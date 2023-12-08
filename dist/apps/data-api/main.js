@@ -23,18 +23,18 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(31);
-const app_service_1 = __webpack_require__(32);
-const mongoose_1 = __webpack_require__(24);
+const app_controller_1 = __webpack_require__(32);
+const app_service_1 = __webpack_require__(33);
+const mongoose_1 = __webpack_require__(23);
 const features_2 = __webpack_require__(5);
-const util_env_1 = __webpack_require__(33);
-const dist_1 = __webpack_require__(28);
+const util_env_1 = __webpack_require__(34);
+const dist_1 = __webpack_require__(29);
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [features_1.MealModule,
-            features_2.backendendFeaturesModule,
+            features_2.BackendFeaturesModule,
             mongoose_1.MongooseModule.forRoot(util_env_1.environment.apiUrl),
             dist_1.Neo4jModule.forRoot({
                 scheme: util_env_1.environment.NEO4J_SCHEME,
@@ -474,29 +474,48 @@ module.exports = require("rxjs/operators");
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.backendendFeaturesModule = void 0;
+exports.BackendFeaturesModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const ticket_controller_1 = __webpack_require__(22);
-const ticket_service_1 = __webpack_require__(23);
-const ticket_schema_1 = __webpack_require__(26);
-const mongoose_1 = __webpack_require__(24);
-const Neo4jUser_service_1 = __webpack_require__(27);
-const Neo4jUser_controller_1 = __webpack_require__(30);
-let backendendFeaturesModule = exports.backendendFeaturesModule = class backendendFeaturesModule {
+const jwt_1 = __webpack_require__(22); // Import JwtModule first
+const mongoose_1 = __webpack_require__(23);
+const ticket_controller_1 = __webpack_require__(24);
+const ticket_service_1 = __webpack_require__(25);
+const ticket_schema_1 = __webpack_require__(27);
+const Neo4jUser_service_1 = __webpack_require__(28);
+const Neo4jUser_controller_1 = __webpack_require__(31);
+let BackendFeaturesModule = exports.BackendFeaturesModule = class BackendFeaturesModule {
 };
-exports.backendendFeaturesModule = backendendFeaturesModule = tslib_1.__decorate([
+exports.BackendFeaturesModule = BackendFeaturesModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }])],
+        imports: [
+            jwt_1.JwtModule.register({
+                secret: 'yourSecretKey',
+                signOptions: { expiresIn: '3600s' },
+            }),
+            mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }]),
+        ],
         controllers: [ticket_controller_1.TicketController, Neo4jUser_controller_1.UserController],
         providers: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
         exports: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
     })
-], backendendFeaturesModule);
+], BackendFeaturesModule);
 
 
 /***/ }),
 /* 22 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/jwt");
+
+/***/ }),
+/* 23 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
+
+/***/ }),
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -504,7 +523,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketController = void 0;
 const tslib_1 = __webpack_require__(4);
-const ticket_service_1 = __webpack_require__(23);
+const ticket_service_1 = __webpack_require__(25);
 const api_1 = __webpack_require__(10);
 const common_1 = __webpack_require__(1);
 let TicketController = exports.TicketController = class TicketController {
@@ -569,7 +588,7 @@ exports.TicketController = TicketController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -578,9 +597,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const mongoose_1 = __webpack_require__(24);
-const mongoose_2 = __webpack_require__(25);
-const ticket_schema_1 = __webpack_require__(26); // Import the correct types
+const mongoose_1 = __webpack_require__(23);
+const mongoose_2 = __webpack_require__(26);
+const ticket_schema_1 = __webpack_require__(27); // Import the correct types
 let TicketService = exports.TicketService = class TicketService {
     constructor(ticketModel) {
         this.ticketModel = ticketModel;
@@ -615,19 +634,13 @@ exports.TicketService = TicketService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 24 */
-/***/ ((module) => {
-
-module.exports = require("@nestjs/mongoose");
-
-/***/ }),
-/* 25 */
+/* 26 */
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -635,7 +648,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketSchema = exports.Ticket = void 0;
 const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(24);
+const mongoose_1 = __webpack_require__(23);
 const api_1 = __webpack_require__(10);
 const class_validator_1 = __webpack_require__(18);
 let Ticket = exports.Ticket = class Ticket {
@@ -687,22 +700,24 @@ exports.TicketSchema = mongoose_1.SchemaFactory.createForClass(Ticket);
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Neo4jUserService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const api_1 = __webpack_require__(10);
 const common_2 = __webpack_require__(1);
-const dist_1 = __webpack_require__(28);
-const bcrypt = tslib_1.__importStar(__webpack_require__(29));
+const dist_1 = __webpack_require__(29);
+const bcrypt = tslib_1.__importStar(__webpack_require__(30));
+const jwt_1 = __webpack_require__(22);
 let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
-    constructor(neo4jService) {
+    constructor(neo4jService, jwtService) {
         this.neo4jService = neo4jService;
+        this.jwtService = jwtService;
         this.TAG = 'Neo4jUserService';
     }
     async getAll() {
@@ -720,9 +735,9 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         console.log('Result:', result); // Log the result for debugging
         return result.records;
     }
-    async findOne(emailAdress) {
-        const query = `MATCH (user:User {emailAdress: $emailAdress}) RETURN user`;
-        const result = await this.neo4jService.read(query, { emailAdress });
+    async findOne(emailAddress) {
+        const query = `MATCH (user:User {emailAddress: $emailAddress}) RETURN user`;
+        const result = await this.neo4jService.read(query, { emailAddress });
         return result?.records[0]?.get('user').properties;
     }
     async create(newUser) {
@@ -735,7 +750,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.firstName = $firstName,
         user.lastName = $lastName, 
         user.image = $image,
-        user.emailAdress = $emailAdress,
+        user.emailAddress = $emailAddress,
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
@@ -746,7 +761,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.firstName = $firstName,
         user.lastName = $lastName, 
         user.image = $image,
-        user.emailAdress = $emailAdress,
+        user.emailAddress = $emailAddress,
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
@@ -760,7 +775,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             image: newUser.image,
-            emailAdress: newUser.emailAdress,
+            emailAddress: newUser.emailAddress,
             dateOfBirth: newUser.dateOfBirth,
             gender: newUser.gender,
             role: newUser.role || api_1.UserRole.guest,
@@ -768,8 +783,14 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             hasTransportation: newUser.hasTransportation || false,
             passwordHash: hashedPassword,
         });
-        common_2.Logger.log(`result:${JSON.stringify(result)}`);
-        return result;
+        // Generate a JWT for the newly created user
+        const userProperties = result.records[0]?.get('user').properties;
+        const payload = { sub: userProperties.Id, username: userProperties.emailAddress };
+        const accessToken = await this.jwtService.signAsync(payload);
+        console.log('payload: ', payload);
+        console.log('accessToken:', accessToken); // Log the JWT for debugging
+        // Include the JWT in the response
+        return { user: userProperties, access_token: accessToken };
     }
     async update(Id, user) {
         common_2.Logger.log(`Update(${Id})`, this.TAG);
@@ -779,7 +800,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.firstName = $firstName,
         user.lastName = $lastName,
         user.image = $image,
-        user.emailAdress = $emailAdress,
+        user.emailAddress = $emailAddress,
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
@@ -791,7 +812,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             firstName: user.firstName,
             lastName: user.lastName,
             image: user.image,
-            emailAdress: user.emailAdress,
+            emailAddress: user.emailAddress,
             dateOfBirth: user.dateOfBirth,
             gender: user.gender,
             role: user.role,
@@ -814,24 +835,24 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
 };
 exports.Neo4jUserService = Neo4jUserService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof dist_1.Neo4jService !== "undefined" && dist_1.Neo4jService) === "function" ? _a : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof dist_1.Neo4jService !== "undefined" && dist_1.Neo4jService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
 ], Neo4jUserService);
 
-
-/***/ }),
-/* 28 */
-/***/ ((module) => {
-
-module.exports = require("nest-neo4j/dist");
 
 /***/ }),
 /* 29 */
 /***/ ((module) => {
 
-module.exports = require("bcrypt");
+module.exports = require("nest-neo4j/dist");
 
 /***/ }),
 /* 30 */
+/***/ ((module) => {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+/* 31 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -840,7 +861,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const Neo4jUser_service_1 = __webpack_require__(27);
+const Neo4jUser_service_1 = __webpack_require__(28);
 const api_1 = __webpack_require__(10);
 let UserController = exports.UserController = class UserController {
     constructor(neo4jService) {
@@ -911,7 +932,7 @@ exports.UserController = UserController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -920,7 +941,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(32);
+const app_service_1 = __webpack_require__(33);
 let AppController = exports.AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -942,7 +963,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -961,17 +982,17 @@ exports.AppService = AppService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(34), exports);
+tslib_1.__exportStar(__webpack_require__(35), exports);
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ ((__unused_webpack_module, exports) => {
 
 

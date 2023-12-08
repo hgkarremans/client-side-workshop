@@ -24,8 +24,8 @@
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" class="form-control" formControlName="emailAdress" [value]="user.emailAdress">
-              <div *ngIf="userForm.get('emailAdress')?.invalid && userForm.get('emailAdress')?.touched" class="text-danger">
+              <input type="email" class="form-control" formControlName="emailAddress" [value]="user.emailAddress">
+              <div *ngIf="userForm.get('emailAddress')?.invalid && userForm.get('emailAddress')?.touched" class="text-danger">
                 Invalid Email.
               </div>
             </div>

@@ -9,47 +9,55 @@
       <div class="col-md-8">
         <div class="card-body">
           <form [formGroup]="userForm">
+            
             <div>
               <label for="firstName">First Name</label>
               <input type="text" class="form-control" placeholder="Enter first name" formControlName="firstName"
-                [ngClass]="{'is-invalid': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}">
+              [ngClass]="{'is-invalid': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}">
               <div *ngIf="userForm.get('firstName')?.hasError('required') && userForm.get('firstName')?.touched">First Name is required.</div>
             </div>
             <div>
               <label for="lastName">Last Name</label>
               <input type="text" class="form-control" placeholder="Enter last name" formControlName="lastName"
-                [ngClass]="{'is-invalid': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}">
+              [ngClass]="{'is-invalid': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}">
               <div *ngIf="userForm.get('lastName')?.hasError('required') && userForm.get('lastName')?.touched">Last Name is required.</div>
             </div>
             <div>
               <label for="birthdate">Date of birth</label>
               <input type="date" class="form-control" placeholder="Select date of birth" formControlName="dateOfBirth"
-                [ngClass]="{'is-invalid': userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched}">
+              [ngClass]="{'is-invalid': userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched}">
               <div *ngIf="userForm.get('dateOfBirth')?.hasError('required') && userForm.get('dateOfBirth')?.touched">Date of Birth is required.</div>
             </div>
             <div>
-              <label for="emailAdress">Email</label>
-              <input type="emailAdress" class="form-control" placeholder="Enter email address" formControlName="emailAdress"
-                [ngClass]="{'is-invalid': userForm.get('emailAdress')?.invalid && userForm.get('emailAdress')?.touched}">
-              <div *ngIf="userForm.get('emailAdress')?.hasError('required') && userForm.get('emailAdress')?.touched">Email is required.</div>
-              <div *ngIf="userForm.get('emailAdress')?.hasError('emailAdress') && userForm.get('emailAdress')?.touched">Invalid email format.</div>
-            </div>
-            <div>
-              <label for="image">Image Url</label>
+              <label for="image">Profile picture Url</label>
               <input type="text" class="form-control" placeholder="Enter image URL" formControlName="image">
             </div>
             
             <div>
               <label for="gender">Gender</label>
               <select class="form-select" name="gender" id="gender" formControlName="gender"
-                [ngClass]="{'is-invalid': userForm.get('gender')?.invalid && userForm.get('gender')?.touched}">
-                <option value="" disabled>Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-              <div *ngIf="userForm.get('gender')?.hasError('required') && userForm.get('gender')?.touched">Gender is required.</div>
-            </div>
+              [ngClass]="{'is-invalid': userForm.get('gender')?.invalid && userForm.get('gender')?.touched}">
+              <option value="" disabled>Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <div *ngIf="userForm.get('gender')?.hasError('required') && userForm.get('gender')?.touched">Gender is required.</div>
+          </div>
+          <div>
+            <label for="emailAddress">Email</label>
+            <input type="email" class="form-control" placeholder="Enter email address" formControlName="emailAddress"
+              [ngClass]="{'is-invalid': userForm.get('emailAddress')?.invalid && userForm.get('emailAddress')?.touched}">
+            <div *ngIf="userForm.get('emailAddress')?.hasError('required') && userForm.get('emailAddress')?.touched">Email is required.</div>
+            <div *ngIf="userForm.get('emailAddress')?.hasError('email') && userForm.get('emailAddress')?.touched">Invalid email format.</div>
+          </div>
+          <div>
+            <label for="passwordHash">Password</label>
+            <input type="password" class="form-control" placeholder="Enter password" formControlName="passwordHash"
+              [ngClass]="{'is-invalid': userForm.get('passwordHash')?.invalid && userForm.get('passwordHash')?.touched}">
+            <div *ngIf="userForm.get('passwordHash')?.hasError('required') && userForm.get('passwordHash')?.touched">Password is required.</div>
+            <div *ngIf="userForm.get('passwordHash')?.hasError('minlength') && userForm.get('passwordHash')?.touched">Password must be at least 6 characters long.</div>
+          </div>          
             <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
               <button routerLink="../../users" class="btn btn-primary" style="border: 1px solid #000;" (click)="saveUser()" [disabled]="userForm.invalid">Save</button>
             </div>

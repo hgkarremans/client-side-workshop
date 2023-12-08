@@ -3,13 +3,13 @@ import { MealModule } from '@avans-nx-workshop/backend/features';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { backendendFeaturesModule} from '@avans-nx-workshop/backend/features';
+import { BackendFeaturesModule} from '@avans-nx-workshop/backend/features';
 import { environment } from '@avans-nx-workshop/shared/util-env';
 import { Neo4jModule, Neo4jScheme } from "nest-neo4j/dist";
 
 @Module({
   imports: [MealModule, 
-    backendendFeaturesModule, 
+    BackendFeaturesModule, 
     MongooseModule.forRoot(environment.apiUrl),
     Neo4jModule.forRoot({
       scheme : environment.NEO4J_SCHEME as Neo4jScheme,
