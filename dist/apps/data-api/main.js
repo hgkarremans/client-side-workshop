@@ -65,6 +65,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(6), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
+tslib_1.__exportStar(__webpack_require__(36), exports);
 // export * from './lib/auth/auth.guard';
 
 
@@ -1010,6 +1011,54 @@ exports.environment = {
     NEO4J_PASSWORD: 'ticketshop2003',
     NEO4J_DATABASE: 'TicketShopUsers',
 };
+
+
+/***/ }),
+/* 36 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var AuthService_1;
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const Neo4jUser_service_1 = __webpack_require__(28);
+const jwt_1 = __webpack_require__(22);
+let AuthService = exports.AuthService = AuthService_1 = class AuthService {
+    constructor(usersService, jwtService) {
+        this.usersService = usersService;
+        this.jwtService = jwtService;
+        this.logger = new common_1.Logger(AuthService_1.name);
+    }
+    async signIn(emailAddress, pass) {
+        const user = await this.usersService.findOne(emailAddress);
+        this.logger.log(`emailAddress: ${emailAddress} trying to authenticate...`);
+        if (!await this.usersService.validatePassword(pass, user.passwordHash)) {
+            throw new common_1.UnauthorizedException();
+        }
+        const payload = { sub: user.Id, username: user.emailAddress };
+        return {
+            access_token: await this.jwtService.signAsync(payload),
+        };
+    }
+    isLoggedIn(token) {
+        try {
+            // Verify the token and check if it's valid
+            const decodedToken = this.jwtService.verify(token);
+            return !!decodedToken;
+        }
+        catch (error) {
+            // Token verification failed
+            return false;
+        }
+    }
+};
+exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof Neo4jUser_service_1.Neo4jUserService !== "undefined" && Neo4jUser_service_1.Neo4jUserService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
+], AuthService);
 
 
 /***/ })

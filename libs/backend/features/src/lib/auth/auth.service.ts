@@ -24,4 +24,15 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
+
+  isLoggedIn(token: string): boolean {
+    try {
+      // Verify the token and check if it's valid
+      const decodedToken = this.jwtService.verify(token);
+      return !!decodedToken;
+    } catch (error) {
+      // Token verification failed
+      return false;
+    }
+  }
 }
