@@ -65,6 +65,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(6), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
+// export * from './lib/auth/auth.guard';
 
 
 /***/ }),

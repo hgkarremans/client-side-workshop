@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 import { UserCreateComponent, UserDetailsComponent, UserEditComponent, UserListComponent } from '@avans-nx-workshop/user';
 import { AboutComponent, HomepageComponent } from '@avans-nx-workshop/share-a-meal/features';
 import { TicketCreateComponent, TicketDetailComponent, TicketEditComponent, TicketListComponent } from '@avans-nx-workshop/tickets';
-// import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@avans-nx-workshop/backend/features';
 export const appRoutes: Route[] = [
     {
         path: '',
