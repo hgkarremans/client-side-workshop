@@ -1,0 +1,30 @@
+<div class="card-create shadow mx-auto m-3 bg-light" style="width: 80em; position: relative; border: none;">
+  <div class="row no-gutters align-items-center">
+    <div class="col-md-4">
+      <img src="https://images.pexels.com/photos/8059137/pexels-photo-8059137.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="card-img" alt="User Image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <form [formGroup]="loginForm" class="d-flex flex-column align-items-center">
+            <h2>Login</h2>
+          <div class="mb-3 w-75">
+            <label for="emailAddress">Email</label>
+            <input type="email" class="form-control" placeholder="Enter email address" formControlName="emailAddress"
+              [ngClass]="{'is-invalid': loginForm.get('emailAddress')?.invalid && loginForm.get('emailAddress')?.touched}">
+            <div *ngIf="loginForm.get('emailAddress')?.hasError('required') && loginForm.get('emailAddress')?.touched">Email is required.</div>
+            <div *ngIf="loginForm.get('emailAddress')?.hasError('email') && loginForm.get('emailAddress')?.touched">Invalid email format.</div>
+          </div>
+          <div class="mb-3 w-75">
+            <label for="passwordHash">Password</label>
+            <input type="password" class="form-control" placeholder="Enter password" formControlName="passwordHash"
+              [ngClass]="{'is-invalid': loginForm.get('passwordHash')?.invalid && loginForm.get('passwordHash')?.touched}">
+            <div *ngIf="loginForm.get('passwordHash')?.hasError('required') && loginForm.get('passwordHash')?.touched">Password is required.</div>
+          </div>
+          <div style="margin-top: 16px;">
+            <button class="btn btn-primary" style="border: 1px solid #000;" (click)="login()" [disabled]="loginForm.invalid">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

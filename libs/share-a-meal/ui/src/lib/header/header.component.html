@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="">
       <img src="assets/logo.png" alt="Logo" height="30" class="mr-2">
       Ticketshop
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
+    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+      <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link text-dark" routerLink="about">About</a>
         </li>
@@ -19,6 +19,10 @@
           <a class="nav-link text-dark" routerLink="tickets">Tickets</a>
         </li>
       </ul>
+      <div class="navbar-nav">
+        <a class="nav-link text-dark" routerLink="login">Login</a>
+        <a class="nav-link text-dark" routerLink="register">Register</a>
+      </div>
     </div>
   </div>
 </nav>

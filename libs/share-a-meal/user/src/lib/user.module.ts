@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './user.service';
+import { UserLoginComponent } from './user-login/user-login.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
@@ -18,12 +19,14 @@ import { UserService } from './user.service';
     UserDetailsComponent,
     DeleteConformationModalComponent,
     UserCreateComponent,
+    UserLoginComponent,
   ],
   providers: [UserService],
   exports: [
     UserListComponent,
     UserEditComponent,
     DeleteConformationModalComponent,
+    UserLoginComponent
   ],
 })
 export class UserModule {}
