@@ -1,6 +1,8 @@
-// user-login.component.ts
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import FormBuilder and Validators
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../user.service';
+import { AuthService } from '../auth.service';
+import { HttpErrorResponse } from '@angular/common/http'; // Import HttpErrorResponse
 
 @Component({
   selector: 'clientside-nx-workshop-user-login',
@@ -8,25 +10,34 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import F
   styles: [],
 })
 export class UserLoginComponent {
-  loginForm: FormGroup; // Declare a FormGroup for the login form
+  loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
-    // Initialize the login form in the constructor
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private authService: AuthService
+  ) {
     this.loginForm = this.fb.group({
       emailAddress: ['', [Validators.required, Validators.email]],
       passwordHash: ['', Validators.required],
     });
   }
 
-  // Function to handle login when the form is submitted
   login(): void {
     if (this.loginForm.valid) {
       const email = this.loginForm.value.emailAddress;
       const password = this.loginForm.value.passwordHash;
 
-      // Add your login logic here, for example, calling a service to authenticate the user
-      console.log('Email:', email);
-      console.log('Password:', password);
+      this.userService.loginUser(email, password).subscribe(
+        () => {
+          // Successful login, navigate to the desired page or perform other actions
+          console.log('Login successful');
+        },
+        (error: HttpErrorResponse) => {
+          // Handle login error, display a message, or perform other actions
+          console.error('Login failed:', error);
+        }
+      );
 
       // Reset the form after handling the login
       this.loginForm.reset();

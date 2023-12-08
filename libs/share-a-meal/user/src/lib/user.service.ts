@@ -3,6 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ApiResponse, User as IUser } from '@avans-nx-workshop/shared/api';
+import { AuthService } from './auth.service';
 
 
 
@@ -12,7 +13,7 @@ import { ApiResponse, User as IUser } from '@avans-nx-workshop/shared/api';
 export class UserService {
   private readonly apiUrl = 'http://localhost:3000/api/users';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient, private readonly authService: AuthService) {}
 
   getUsers(): Observable<IUser[]> {
     console.log('getUsers called');
@@ -28,6 +29,20 @@ export class UserService {
         const resultArray = response.results as IUser[] || [];
         const firstResult = resultArray.length > 0 ? resultArray[0] : null;
         return firstResult ? (firstResult as any)._fields[0].properties as IUser : null;
+      }),
+      catchError(this.handleError)
+    );
+  }
+  loginUser(email: string, password: string): Observable<any> {
+    const signInDto = { emailAddress: email, password: password };
+    return this.http.post<any>('http://localhost:3000/auth/login', signInDto).pipe(
+      tap(response => {
+        // Assuming the login endpoint returns an access token
+        const accessToken = response?.access_token;
+        if (accessToken) {
+          // Store the access token in local storage or wherever you manage tokens
+          this.authService.setToken(accessToken);
+        }
       }),
       catchError(this.handleError)
     );

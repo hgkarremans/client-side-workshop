@@ -23,11 +23,11 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(32);
-const app_service_1 = __webpack_require__(33);
+const app_controller_1 = __webpack_require__(33);
+const app_service_1 = __webpack_require__(34);
 const mongoose_1 = __webpack_require__(23);
 const features_2 = __webpack_require__(5);
-const util_env_1 = __webpack_require__(34);
+const util_env_1 = __webpack_require__(35);
 const dist_1 = __webpack_require__(29);
 let AppModule = exports.AppModule = class AppModule {
 };
@@ -65,7 +65,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(6), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
-tslib_1.__exportStar(__webpack_require__(36), exports);
+tslib_1.__exportStar(__webpack_require__(32), exports);
 // export * from './lib/auth/auth.guard';
 
 
@@ -938,86 +938,6 @@ exports.UserController = UserController = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppController = void 0;
-const tslib_1 = __webpack_require__(4);
-const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(33);
-let AppController = exports.AppController = class AppController {
-    constructor(appService) {
-        this.appService = appService;
-    }
-    getData() {
-        return this.appService.getData();
-    }
-};
-tslib_1.__decorate([
-    (0, common_1.Get)(),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", void 0)
-], AppController.prototype, "getData", null);
-exports.AppController = AppController = tslib_1.__decorate([
-    (0, common_1.Controller)(),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
-], AppController);
-
-
-/***/ }),
-/* 33 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AppService = void 0;
-const tslib_1 = __webpack_require__(4);
-const common_1 = __webpack_require__(1);
-let AppService = exports.AppService = class AppService {
-    getData() {
-        return { message: 'Hello API' };
-    }
-};
-exports.AppService = AppService = tslib_1.__decorate([
-    (0, common_1.Injectable)()
-], AppService);
-
-
-/***/ }),
-/* 34 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(35), exports);
-
-
-/***/ }),
-/* 35 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.environment = void 0;
-exports.environment = {
-    production: false,
-    apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
-    MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
-    NEO4J_SCHEME: 'neo4j',
-    NEO4J_HOST: 'localhost',
-    NEO4J_PORT: '7687',
-    NEO4J_USERNAME: 'neo4j',
-    NEO4J_PASSWORD: 'ticketshop2003',
-    NEO4J_DATABASE: 'TicketShopUsers',
-};
-
-
-/***/ }),
-/* 36 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
 var AuthService_1;
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -1059,6 +979,86 @@ exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof Neo4jUser_service_1.Neo4jUserService !== "undefined" && Neo4jUser_service_1.Neo4jUserService) === "function" ? _a : Object, typeof (_b = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _b : Object])
 ], AuthService);
+
+
+/***/ }),
+/* 33 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const app_service_1 = __webpack_require__(34);
+let AppController = exports.AppController = class AppController {
+    constructor(appService) {
+        this.appService = appService;
+    }
+    getData() {
+        return this.appService.getData();
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppController.prototype, "getData", null);
+exports.AppController = AppController = tslib_1.__decorate([
+    (0, common_1.Controller)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
+], AppController);
+
+
+/***/ }),
+/* 34 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AppService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+let AppService = exports.AppService = class AppService {
+    getData() {
+        return { message: 'Hello API' };
+    }
+};
+exports.AppService = AppService = tslib_1.__decorate([
+    (0, common_1.Injectable)()
+], AppService);
+
+
+/***/ }),
+/* 35 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(36), exports);
+
+
+/***/ }),
+/* 36 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.environment = void 0;
+exports.environment = {
+    production: false,
+    apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
+    MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
+    NEO4J_SCHEME: 'neo4j',
+    NEO4J_HOST: 'localhost',
+    NEO4J_PORT: '7687',
+    NEO4J_USERNAME: 'neo4j',
+    NEO4J_PASSWORD: 'ticketshop2003',
+    NEO4J_DATABASE: 'TicketShopUsers',
+};
 
 
 /***/ })
