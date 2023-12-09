@@ -23,11 +23,11 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(33);
-const app_service_1 = __webpack_require__(34);
+const app_controller_1 = __webpack_require__(38);
+const app_service_1 = __webpack_require__(39);
 const mongoose_1 = __webpack_require__(23);
 const features_2 = __webpack_require__(5);
-const util_env_1 = __webpack_require__(35);
+const util_env_1 = __webpack_require__(40);
 const dist_1 = __webpack_require__(29);
 let AppModule = exports.AppModule = class AppModule {
 };
@@ -35,6 +35,7 @@ exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [features_1.MealModule,
             features_2.BackendFeaturesModule,
+            features_1.AuthModule,
             mongoose_1.MongooseModule.forRoot(util_env_1.environment.apiUrl),
             dist_1.Neo4jModule.forRoot({
                 scheme: util_env_1.environment.NEO4J_SCHEME,
@@ -66,7 +67,9 @@ const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(6), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
 tslib_1.__exportStar(__webpack_require__(32), exports);
-// export * from './lib/auth/auth.guard';
+tslib_1.__exportStar(__webpack_require__(33), exports);
+tslib_1.__exportStar(__webpack_require__(36), exports);
+tslib_1.__exportStar(__webpack_require__(28), exports);
 
 
 /***/ }),
@@ -528,6 +531,7 @@ const tslib_1 = __webpack_require__(4);
 const ticket_service_1 = __webpack_require__(25);
 const api_1 = __webpack_require__(10);
 const common_1 = __webpack_require__(1);
+const public_decorator_1 = __webpack_require__(42);
 let TicketController = exports.TicketController = class TicketController {
     constructor(ticketService) {
         this.ticketService = ticketService;
@@ -550,12 +554,14 @@ let TicketController = exports.TicketController = class TicketController {
 };
 tslib_1.__decorate([
     (0, common_1.Get)(''),
+    (0, public_decorator_1.Public)(),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], TicketController.prototype, "getTickets", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':id'),
+    (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
@@ -865,6 +871,7 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const Neo4jUser_service_1 = __webpack_require__(28);
 const api_1 = __webpack_require__(10);
+const public_decorator_1 = __webpack_require__(43);
 let UserController = exports.UserController = class UserController {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -900,6 +907,7 @@ tslib_1.__decorate([
 ], UserController.prototype, "getAllUsers", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':Id'),
+    (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Param)('Id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
@@ -907,6 +915,7 @@ tslib_1.__decorate([
 ], UserController.prototype, "getOneUser", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
+    (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof api_1.User !== "undefined" && api_1.User) === "function" ? _b : Object]),
@@ -986,12 +995,166 @@ exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthModule = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const auth_service_1 = __webpack_require__(32);
+const jwt_1 = __webpack_require__(22);
+const auth_controller_1 = __webpack_require__(34);
+const core_1 = __webpack_require__(2);
+const auth_guard_1 = __webpack_require__(36);
+const config_1 = __webpack_require__(37);
+const backendFeatures_module_1 = __webpack_require__(21);
+let AuthModule = exports.AuthModule = class AuthModule {
+};
+exports.AuthModule = AuthModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        imports: [
+            config_1.ConfigModule,
+            jwt_1.JwtModule.registerAsync({
+                useFactory: () => ({
+                    global: true,
+                    secret: 'yourSecretKey',
+                    signOptions: { expiresIn: '3600s' },
+                }),
+            }),
+            backendFeatures_module_1.BackendFeaturesModule,
+        ],
+        providers: [
+            auth_service_1.AuthService,
+            {
+                provide: core_1.APP_GUARD,
+                useClass: auth_guard_1.AuthGuard,
+            },
+        ],
+        controllers: [auth_controller_1.AuthController],
+        exports: [auth_service_1.AuthService],
+    })
+], AuthModule);
+
+
+/***/ }),
+/* 34 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const auth_service_1 = __webpack_require__(32);
+const public_decorator_1 = __webpack_require__(35);
+let AuthController = exports.AuthController = class AuthController {
+    constructor(authService) {
+        this.authService = authService;
+    }
+    signIn(signInDto) {
+        return this.authService.signIn(signInDto['emailAddress'], signInDto['password']);
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, public_decorator_1.Public)(),
+    (0, common_1.Post)('login'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof Record !== "undefined" && Record) === "function" ? _b : Object]),
+    tslib_1.__metadata("design:returntype", void 0)
+], AuthController.prototype, "signIn", null);
+exports.AuthController = AuthController = tslib_1.__decorate([
+    (0, common_1.Controller)('auth'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof auth_service_1.AuthService !== "undefined" && auth_service_1.AuthService) === "function" ? _a : Object])
+], AuthController);
+
+
+/***/ }),
+/* 35 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Public = exports.IS_PUBLIC_KEY = void 0;
+const common_1 = __webpack_require__(1);
+exports.IS_PUBLIC_KEY = 'isPublic';
+const Public = () => (0, common_1.SetMetadata)(exports.IS_PUBLIC_KEY, true);
+exports.Public = Public;
+
+
+/***/ }),
+/* 36 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AuthGuard = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const jwt_1 = __webpack_require__(22);
+const core_1 = __webpack_require__(2);
+const public_decorator_1 = __webpack_require__(35);
+let AuthGuard = exports.AuthGuard = class AuthGuard {
+    constructor(jwtService, reflector) {
+        this.jwtService = jwtService;
+        this.reflector = reflector;
+    }
+    async canActivate(context) {
+        const isPublic = this.reflector.getAllAndOverride(public_decorator_1.IS_PUBLIC_KEY, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+        if (isPublic) {
+            // 💡 See this condition
+            return true;
+        }
+        const request = context.switchToHttp().getRequest();
+        const token = this.extractTokenFromHeader(request);
+        if (!token) {
+            throw new common_1.UnauthorizedException();
+        }
+        try {
+            const payload = await this.jwtService.verifyAsync(token, {
+                secret: 'yourSecretKey',
+            });
+            // 💡 We're assigning the payload to the request object here
+            // so that we can access it in our route handlers
+            request['user'] = payload;
+        }
+        catch {
+            throw new common_1.UnauthorizedException();
+        }
+        return true;
+    }
+    extractTokenFromHeader(request) {
+        const [type, token] = request.headers.authorization?.split(' ') ?? [];
+        return type === 'Bearer' ? token : undefined;
+    }
+};
+exports.AuthGuard = AuthGuard = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object, typeof (_b = typeof core_1.Reflector !== "undefined" && core_1.Reflector) === "function" ? _b : Object])
+], AuthGuard);
+
+
+/***/ }),
+/* 37 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+/* 38 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(34);
+const app_service_1 = __webpack_require__(39);
 let AppController = exports.AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -1013,7 +1176,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 34 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1032,17 +1195,17 @@ exports.AppService = AppService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 35 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(36), exports);
+tslib_1.__exportStar(__webpack_require__(41), exports);
 
 
 /***/ }),
-/* 36 */
+/* 41 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1059,6 +1222,34 @@ exports.environment = {
     NEO4J_PASSWORD: 'ticketshop2003',
     NEO4J_DATABASE: 'TicketShopUsers',
 };
+
+
+/***/ }),
+/* 42 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Public = exports.IS_PUBLIC_KEY = void 0;
+// public.decorator.ts
+const common_1 = __webpack_require__(1);
+exports.IS_PUBLIC_KEY = 'isPublic';
+const Public = () => (0, common_1.SetMetadata)(exports.IS_PUBLIC_KEY, true);
+exports.Public = Public;
+
+
+/***/ }),
+/* 43 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Public = exports.IS_PUBLIC_KEY = void 0;
+// public.decorator.ts
+const common_1 = __webpack_require__(1);
+exports.IS_PUBLIC_KEY = 'isPublic';
+const Public = () => (0, common_1.SetMetadata)(exports.IS_PUBLIC_KEY, true);
+exports.Public = Public;
 
 
 /***/ })

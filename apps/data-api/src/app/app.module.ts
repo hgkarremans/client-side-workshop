@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MealModule } from '@avans-nx-workshop/backend/features';
+import { AuthModule, MealModule } from '@avans-nx-workshop/backend/features';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,6 +10,7 @@ import { Neo4jModule, Neo4jScheme } from "nest-neo4j/dist";
 @Module({
   imports: [MealModule, 
     BackendFeaturesModule, 
+    AuthModule,
     MongooseModule.forRoot(environment.apiUrl),
     Neo4jModule.forRoot({
       scheme : environment.NEO4J_SCHEME as Neo4jScheme,

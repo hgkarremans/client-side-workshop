@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { Neo4jUserService } from './Neo4jUser.service';
 import { User } from '@avans-nx-workshop/shared/api';
+import { Public } from './Decorators/public.decorator';
 
 @Controller('users')
 export class UserController {
@@ -13,6 +14,7 @@ export class UserController {
   }
 
   @Get(':Id')
+  @Public()
   async getOneUser(@Param('Id') Id: string) {
     const user = await this.neo4jService.getOne(Id);
     console.log("Id in controller: ", Id);
@@ -23,6 +25,7 @@ export class UserController {
 
 
   @Post()
+  @Public()
   async createUser(@Body() newUser: User) {
     const createdUser = await this.neo4jService.create(newUser);
     return createdUser;
