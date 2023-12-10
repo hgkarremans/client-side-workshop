@@ -1,11 +1,11 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document, Schema as MongooseSchema} from 'mongoose';
-import { IClub } from '@avans-nx-workshop/shared/api';
+import { IDivision } from '@avans-nx-workshop/shared/api';
 import { IsMongoId } from 'class-validator';
-export type ClubDocument = IClub & Document;
+export type DivisionDocument = IDivision & Document;
 
 @Schema()
-export class Club implements IClub {
+export class Division implements IDivision {
 
     @IsMongoId()
     _id!: string;
@@ -18,14 +18,16 @@ export class Club implements IClub {
 
     @Prop({
         required: true,
-        type: Date
+        type: String
     })
-    setupDate!: Date;
+    ranking!: string;
 
     @Prop({
         required: true,
-        type: String
+        type: [String]
     })
-    stadium!: string;    
+    teams!: string[];
+
+       
 }
-export const ClubSchema = SchemaFactory.createForClass(Club);
+export const DivisionSchema = SchemaFactory.createForClass(Division);
