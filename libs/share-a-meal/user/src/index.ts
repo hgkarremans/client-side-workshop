@@ -6,3 +6,4 @@ export * from './lib/delete-conformation-modal/delete-conformation-modal.compone
 export * from './lib/user-create/user-create.component';
 export * from './lib/user.service';
 export * from './lib/user-login/user-login.component';
+export * from './lib/auth.service';

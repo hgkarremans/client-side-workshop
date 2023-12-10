@@ -1,5 +1,5 @@
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { Neo4jUserService as UsersService } from "../neo4j/Neo4jUser.service";
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Neo4jUserService as UsersService } from '../neo4j/Neo4jUser.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -14,14 +14,22 @@ export class AuthService {
     const user = await this.usersService.findOne(emailAddress);
 
     this.logger.log(`emailAddress: ${emailAddress} trying to authenticate...`);
+    console.log('user: ', user);
+    console.log('pass: ', pass);
+    console.log('user.passwordHash: ', user.passwordHash);
 
-    if (!await this.usersService.validatePassword(pass, user.passwordHash)) {
+    if (!(await this.usersService.validatePassword(pass, user.passwordHash))) {
       throw new UnauthorizedException();
     }
 
     const payload = { sub: user.Id, username: user.emailAddress };
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    console.log('payload: ', payload);
+    console.log('accessToken: ', accessToken);
+
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: accessToken,
     };
   }
 

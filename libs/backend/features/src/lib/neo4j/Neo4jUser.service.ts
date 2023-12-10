@@ -144,6 +144,8 @@ export class Neo4jUserService {
     return result;
   }
   async validatePassword (password: string, passwordHash: string): Promise<boolean> {
+    console.log('password: ', password);
+    console.log('passwordHash: ', passwordHash);
     return bcrypt.compare(password, passwordHash);
   }
   async generateHash (password: string): Promise<string> {

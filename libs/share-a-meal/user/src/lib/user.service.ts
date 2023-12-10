@@ -35,18 +35,25 @@ export class UserService {
   }
   loginUser(email: string, password: string): Observable<any> {
     const signInDto = { emailAddress: email, password: password };
-    return this.http.post<any>('http://localhost:3000/auth/login', signInDto).pipe(
+    return this.http.post<any>('http://localhost:3000/api/auth/login', signInDto).pipe(
       tap(response => {
-        // Assuming the login endpoint returns an access token
-        const accessToken = response?.access_token;
+        // Assuming the login endpoint returns an object with a nested "results" property
+        const accessToken = response?.results?.access_token;
+        console.log('Access token:', accessToken);
         if (accessToken) {
           // Store the access token in local storage or wherever you manage tokens
           this.authService.setToken(accessToken);
+          console.log('User token in login page:', this.authService.getToken());
+        } else {
+          // Log an error or handle the case where the access token is not present
+          console.error('Access token not found in the response:', response);
         }
       }),
       catchError(this.handleError)
     );
   }
+  
+  
   
   addUser(newUser: IUser): Observable<IUser> {
     console.log('addUser called');

@@ -32,6 +32,8 @@ export class UserLoginComponent {
         () => {
           // Successful login, navigate to the desired page or perform other actions
           console.log('Login successful');
+          
+          console.log('User is logged in:', this.authService.isLoggedIn());
         },
         (error: HttpErrorResponse) => {
           // Handle login error, display a message, or perform other actions

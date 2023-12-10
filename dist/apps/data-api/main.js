@@ -849,6 +849,8 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         return result;
     }
     async validatePassword(password, passwordHash) {
+        console.log('password: ', password);
+        console.log('passwordHash: ', passwordHash);
         return bcrypt.compare(password, passwordHash);
     }
     async generateHash(password) {
@@ -992,12 +994,18 @@ let AuthService = exports.AuthService = AuthService_1 = class AuthService {
     async signIn(emailAddress, pass) {
         const user = await this.usersService.findOne(emailAddress);
         this.logger.log(`emailAddress: ${emailAddress} trying to authenticate...`);
-        if (!await this.usersService.validatePassword(pass, user.passwordHash)) {
+        console.log('user: ', user);
+        console.log('pass: ', pass);
+        console.log('user.passwordHash: ', user.passwordHash);
+        if (!(await this.usersService.validatePassword(pass, user.passwordHash))) {
             throw new common_1.UnauthorizedException();
         }
         const payload = { sub: user.Id, username: user.emailAddress };
+        const accessToken = await this.jwtService.signAsync(payload);
+        console.log('payload: ', payload);
+        console.log('accessToken: ', accessToken);
         return {
-            access_token: await this.jwtService.signAsync(payload),
+            access_token: accessToken,
         };
     }
     isLoggedIn(token) {
