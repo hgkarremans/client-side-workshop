@@ -11,8 +11,8 @@
   <div class="row mb-3 d-flex justify-content-center">
     <div class="col-md-4">
       <label for="divisionFilter" class="form-label">Filter by Division:</label>
-      <select id="divisionFilter" class="form-select" [(ngModel)]="divisionId"
-        (change)="filterTicketsByDivision(divisionId)">
+      <select id="divisionFilter" class="form-select" [(ngModel)]="selectedDivisionId"
+        (change)="filterTicketsByDivision(selectedDivisionId)">
         <option value="" selected>All Divisions</option>
         <option *ngFor="let division of divisions" [value]="division._id">{{ division.name }}</option>
       </select>

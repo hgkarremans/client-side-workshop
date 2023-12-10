@@ -1,5 +1,3 @@
-// ticket-list.component.ts
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ITicket, IDivision } from '@avans-nx-workshop/shared/api';
 import { TicketService } from '../ticket.service';
@@ -18,16 +16,28 @@ export class TicketListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   isLoggedIn = false;
   decodedToken: any | null = null;
-  divisionName: string | null = null;
-  divisionId: string | null = null;
+  selectedDivisionId: string | null = null;
+  originalTickets: ITicket[] | null = null;  // Add originalTickets property
 
   constructor(private ticketService: TicketService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
 
-    // Fetch all tickets initially
-    this.fetchAllTickets();
+    // Fetch all tickets initially and store them in originalTickets
+    this.ticketService
+      .getTickets()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (response) => {
+          this.originalTickets = response;
+          this.tickets = this.originalTickets;
+          console.log('All Tickets:', this.tickets);
+        },
+        (error) => {
+          console.error('Error fetching all tickets:', error);
+        }
+      );
 
     // Fetch divisions
     this.ticketService
@@ -36,7 +46,6 @@ export class TicketListComponent implements OnInit, OnDestroy {
       .subscribe(
         (response) => {
           this.divisions = response;
-          console.log('Divisions:', this.divisions);
         },
         (error) => {
           console.error('Error fetching divisions:', error);
@@ -57,8 +66,9 @@ export class TicketListComponent implements OnInit, OnDestroy {
       console.log('User is not logged in.');
     }
   }
+
   resetDivisionFilter(): void {
-    this.divisionName = null;
+    this.selectedDivisionId = null;
     this.fetchAllTickets(); // Reset filter, fetch all tickets
   }
 
@@ -70,31 +80,27 @@ export class TicketListComponent implements OnInit, OnDestroy {
   isCreateButtonVisible(): boolean {
     return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
   }
-  filterTicketsByDivision(divisionId: string | null): void {
-    if (!divisionId) {
-      this.divisionId = null;
-      this.fetchAllTickets(); // Reset filter, fetch all tickets
-      return;
-    }
 
-    this.divisionId = divisionId;
-    this.fetchTicketsByDivision(); // Fetch tickets based on selected division
+  filterTicketsByDivision(divisionId: string | null): void {
+    this.selectedDivisionId = divisionId;
+    this.fetchTicketsByDivision(); // Fetch tickets based on the selected division
   }
 
   private fetchTicketsByDivision(): void {
-    if (this.divisionId) {
-      this.ticketService
-        .getTicketsByDivision(this.divisionId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (response) => {
-            this.tickets = response;
-            console.log('Filtered Tickets:', this.tickets);
-          },
-          (error) => {
-            console.error('Error fetching filtered tickets:', error);
-          }
-        );
+    if (this.selectedDivisionId) {
+      console.log('Fetching tickets by division:', this.selectedDivisionId);
+
+      // Use nullish coalescing operator to ensure a default empty array
+      const ticketsArray = this.originalTickets ?? [];
+
+      ticketsArray.forEach(ticket => console.log('Ticket divisionId:', ticket?.divisionId));
+
+      this.tickets = ticketsArray.filter((ticket) => {
+        console.log('Comparing:', ticket?.divisionId, 'with', this.selectedDivisionId);
+        return ticket?.divisionId === this.selectedDivisionId;
+      }) || [];
+
+      console.log('Tickets by division:', this.tickets);
     }
   }
 
@@ -113,4 +119,3 @@ export class TicketListComponent implements OnInit, OnDestroy {
       );
   }
 }
-
