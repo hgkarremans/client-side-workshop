@@ -1273,6 +1273,13 @@ tslib_1.__decorate([
     }),
     tslib_1.__metadata("design:type", Array)
 ], Division.prototype, "teams", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        type: [{ type: String, ref: 'Ticket' }],
+        default: [],
+    }),
+    tslib_1.__metadata("design:type", Array)
+], Division.prototype, "tickets", void 0);
 exports.Division = Division = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Division);

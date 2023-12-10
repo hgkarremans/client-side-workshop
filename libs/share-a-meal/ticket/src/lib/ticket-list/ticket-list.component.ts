@@ -1,6 +1,7 @@
 // ticket-list.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ITicket } from '@avans-nx-workshop/shared/api';
+import { ITicket, IDivision } from '@avans-nx-workshop/shared/api';
 import { TicketService } from '../ticket.service';
 import { AuthService } from '@avans-nx-workshop/user';
 import { takeUntil } from 'rxjs/operators';
@@ -12,39 +13,42 @@ import { Subject } from 'rxjs';
   styles: [],
 })
 export class TicketListComponent implements OnInit, OnDestroy {
-  tickets: ITicket[] | null = null;
+  tickets: ITicket[] | null = [];
+  divisions: IDivision[] = [];
   private destroy$ = new Subject<void>();
   isLoggedIn = false;
-  decodedToken: any | null = null; // Add this property to store the decoded token
+  decodedToken: any | null = null;
+  divisionId: string | null = null;
 
-  // Inject TicketService and AuthService in the constructor
   constructor(private ticketService: TicketService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Use AuthService to check if the user is logged in
     this.isLoggedIn = this.authService.isLoggedIn();
 
-    // Continue fetching tickets regardless of user login status
-    this.ticketService.getTickets().pipe(takeUntil(this.destroy$)).subscribe(
-      (response) => {
-        this.tickets = response;
-        console.log('Tickets:', this.tickets);
-      },
-      (error) => {
-        console.error('Error fetching tickets:', error);
-      }
-    );
+    // Fetch all tickets initially
+    this.fetchAllTickets();
 
-    // Get the token from AuthService
+    // Fetch divisions
+    this.ticketService
+      .getDivisions()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (response) => {
+          this.divisions = response;
+          console.log('Divisions:', this.divisions);
+        },
+        (error) => {
+          console.error('Error fetching divisions:', error);
+        }
+      );
+
     const token = this.authService.getToken();
 
-    // Decode the token
     if (token) {
       this.decodedToken = this.authService.decodeToken(token);
       console.log('Decoded Token:', this.decodedToken);
     }
 
-    // Print console message based on user login status
     if (this.isLoggedIn) {
       console.log('User is logged in.');
       console.log('User token:', token);
@@ -55,12 +59,56 @@ export class TicketListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.destroy$.complete();   
+    this.destroy$.complete();
   }
 
-  // Add a method to check if the "Create Ticket" button should be visible
   isCreateButtonVisible(): boolean {
-    // Check if the user's role is 'Admin' or 'Editor'
     return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
+  }
+
+  filterTicketsByDivision(divisionId: string | null): void {
+    this.divisionId = divisionId;
+    this.updateFilteredTickets();
+  }
+
+  resetDivisionFilter(): void {
+    this.divisionId = null;
+    this.updateFilteredTickets();
+  }
+
+  private fetchAllTickets(): void {
+    this.ticketService
+      .getTickets()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (response) => {
+          this.tickets = response;
+          console.log('All Tickets:', this.tickets);
+        },
+        (error) => {
+          console.error('Error fetching all tickets:', error);
+        }
+      );
+  }
+
+  private updateFilteredTickets(): void {
+    if (this.divisionId) {
+      // Filter tickets based on the selected division
+      this.ticketService
+        .getTicketsByDivision(this.divisionId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (response) => {
+            this.tickets = response;
+            console.log('Filtered Tickets:', this.tickets);
+          },
+          (error) => {
+            console.error('Error fetching filtered tickets:', error);
+          }
+        );
+    } else {
+      // Fetch all tickets
+      this.fetchAllTickets();
+    }
   }
 }

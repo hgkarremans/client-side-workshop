@@ -1,3 +1,4 @@
+import { IDivision } from "./division.interface";
 import { User } from "./user.interface";
 
 export enum TicketStatus {

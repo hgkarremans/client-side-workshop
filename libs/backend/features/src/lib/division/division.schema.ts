@@ -1,6 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document, Schema as MongooseSchema} from 'mongoose';
-import { IClub, IDivision } from '@avans-nx-workshop/shared/api';
+import { IClub, IDivision, ITicket } from '@avans-nx-workshop/shared/api';
 import { IsMongoId } from 'class-validator';
 export type DivisionDocument = IDivision & Document;
 
@@ -27,6 +27,12 @@ export class Division implements IDivision {
         default: [],
     })
     teams!: IClub[];
+
+    @Prop({
+        type: [{ type: String, ref: 'Ticket' }],
+        default: [],
+    })
+    tickets!: ITicket[];
 
     
 

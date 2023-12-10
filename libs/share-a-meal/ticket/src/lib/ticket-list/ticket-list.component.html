@@ -2,8 +2,20 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 d-flex justify-content-center mb-3">
-      <!-- Add *ngIf to conditionally show the button based on user's role -->
       <button *ngIf="isCreateButtonVisible()" class="btn btn-primary" [routerLink]="'create'">Create Ticket</button>
+    </div>
+  </div>
+
+  <!-- Division filter dropdown -->
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="divisionFilter" class="form-label">Filter by Division:</label>
+      <select id="divisionFilter" class="form-select" [(ngModel)]="divisionId" (change)="filterTicketsByDivision(divisionId)">
+        <option value="" selected>All Divisions</option>
+        <!-- Add options dynamically based on your divisions -->
+        <option *ngFor="let division of divisions" [value]="division._id">{{ division.name }}</option>
+      </select>
+      <button class="btn btn-link" (click)="resetDivisionFilter()">Reset Filter</button>
     </div>
   </div>
 
