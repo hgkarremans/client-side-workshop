@@ -2,7 +2,7 @@ import { IEnvironment } from './environment.interface';
 
 export const environment: IEnvironment = {
   production: true,
-  apiUrl: 'https://your-production-api-url/',  
+  apiUrl: 'https://clientsidehg.azurewebsites.net/',  
   MONGO_DB_CONNECTION_STRING: 'mongodb+srv://hgkarremans:ticketshop2003@ticketshop.tof9tyt.mongodb.net/?retryWrites=true&w=majority',  
   NEO4J_SCHEME: 'neo4j+s',
   NEO4J_HOST: 'neo4j+s://4127d9b6.databases.neo4j.io',  
