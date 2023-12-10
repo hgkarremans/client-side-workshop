@@ -6,7 +6,7 @@ name: Build and deploy a Node.js app and an Angular app to an Azure
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -24,8 +24,8 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build --if-present --prod
-         
+          npm run build --if-present
+          npm run test --if-present
 
       - name: Zip artifacts for deployment
         run: |
@@ -39,7 +39,7 @@ jobs:
           name: share-a-meal-web
           path: share-a-meal-web-release.zip
           
-      - name: Upload data-api artifact for deployment job
+      - name: Upload backend-api artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: data-api
@@ -88,15 +88,12 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip data-api-release.zip
-
-      - name: Install dependencies
-        run: npm install
-
+       
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'avans-nx-matthijs'
+          app-name: 'clientsideHG'
           slot-name: 'Production'
           publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE }}
           package: .
