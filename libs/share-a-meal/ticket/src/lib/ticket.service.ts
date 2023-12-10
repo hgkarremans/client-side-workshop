@@ -90,12 +90,13 @@ export class TicketService implements OnDestroy {
         })
       );
   }
+  addTicketToDivision(divisionId: string, ticket: ITicket): Observable<ITicket> {
+    // Use the appropriate API endpoint for adding a ticket to a division
+    const url = `${this.divisionUrl}/${divisionId}`;
   
-  
-  
-  
-  
-  
+    // Assuming the server expects a PUT request with the ticket data
+    return this.http.put<ITicket>(url, { ticket }).pipe(takeUntil(this.destroy$));
+  }
 
   getDivisions(): Observable<IDivision[]> {
     return this.http

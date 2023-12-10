@@ -1,8 +1,10 @@
+// ticket-create.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from '../ticket.service';
-import { ITicket } from '@avans-nx-workshop/shared/api';
+import { ITicket, IDivision } from '@avans-nx-workshop/shared/api';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class TicketCreateComponent implements OnInit, OnDestroy {
   ticketForm!: FormGroup;
   ticket: ITicket | undefined;
+  divisions: IDivision[] = [];
   private ticketSubscription: Subscription | undefined;
 
   constructor(
@@ -28,7 +31,12 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
       date: ['', Validators.required],
       status: ['Active', Validators.required],
       seat: ['', [Validators.required, Validators.min(1)]],
+      division: [''],
+    });
 
+    // Load divisions for the dropdown
+    this.ticketService.getDivisions().subscribe((divisions) => {
+      this.divisions = divisions;
     });
 
     this.route.paramMap.subscribe((params) => {
@@ -46,19 +54,21 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
     if (this.ticketForm.valid) {
       const ticketData = this.ticketForm.value;
 
-      if (this.ticket) {
-        const updatedTicket = {
-          ...this.ticket,
-          ...ticketData,
-        };
-
-        this.ticketService.updateTicket(updatedTicket.id, updatedTicket).subscribe(() => {
-          console.log('Ticket updated successfully');
+      // If a division is selected, add the ticket to the selected division
+      if (ticketData.division) {
+        this.ticketService.addTicketToDivision(ticketData.division, ticketData).subscribe(() => {
+          console.log('Ticket added to division successfully');
         });
-      } else {
         this.ticketService.addTicket(ticketData).subscribe(() => {
           console.log('Ticket added successfully');
-        });
+        }
+        );
+      } else {
+        // Handle the case where no division is selected
+        this.ticketService.addTicket(ticketData).subscribe(() => {
+          console.log('Ticket added successfully');
+        }
+        );
       }
     } else {
       console.log('Form is invalid');
