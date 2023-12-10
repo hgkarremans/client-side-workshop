@@ -47,7 +47,7 @@
           "fileReplacements": [
             {
               "replace": "libs/shared/env/src/lib/environment.development.ts",
-              "with": "libs/shared/util-env/src/lib/environment.production.ts"
+              "with": "libs/shared/env/src/lib/environment.production.ts"
             }
           ]
         },
