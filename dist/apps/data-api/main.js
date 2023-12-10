@@ -1182,6 +1182,13 @@ tslib_1.__decorate([
     }),
     tslib_1.__metadata("design:type", String)
 ], Club.prototype, "stadium", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        type: [{ type: String, ref: 'Player' }],
+        default: [],
+    }),
+    tslib_1.__metadata("design:type", Array)
+], Club.prototype, "players", void 0);
 exports.Club = Club = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Club);
@@ -1261,8 +1268,8 @@ tslib_1.__decorate([
 ], Division.prototype, "ranking", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
-        required: true,
-        type: [String]
+        type: [{ type: String, ref: 'Club' }],
+        default: [],
     }),
     tslib_1.__metadata("design:type", Array)
 ], Division.prototype, "teams", void 0);
@@ -1477,6 +1484,7 @@ let ClubController = exports.ClubController = class ClubController {
         return this.clubService.createClub(clubData);
     }
     async updateClub(id, updatedClubData) {
+        console.log('updatedClubData', updatedClubData);
         return this.clubService.updateClub(id, updatedClubData);
     }
     async deleteClub(id) {

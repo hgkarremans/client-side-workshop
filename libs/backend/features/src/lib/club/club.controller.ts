@@ -26,6 +26,7 @@ export class ClubController {
 
   @Put(':id')
   async updateClub(@Param('id') id: string, @Body() updatedClubData: Partial<IClub>): Promise<IClub | null> {
+    console.log('updatedClubData', updatedClubData);
     return this.clubService.updateClub(id, updatedClubData);
   }
 

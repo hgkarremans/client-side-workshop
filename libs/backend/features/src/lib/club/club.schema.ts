@@ -6,7 +6,6 @@ export type ClubDocument = IClub & Document;
 
 @Schema()
 export class Club implements IClub {
-    players: IPlayer[];
 
     @IsMongoId()
     _id!: string;
@@ -29,7 +28,13 @@ export class Club implements IClub {
     })
     stadium!: string;   
 
-    
+    @Prop({
+        type: [{ type: String, ref: 'Player' }],
+        default: [],
+    })
+    players!: IPlayer[];
+
+
     
     
 }
