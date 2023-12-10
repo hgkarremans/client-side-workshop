@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common'
 import { DivisionService } from './division.service'; // Import the DivisionService
 import { Division } from './division.schema'; // Import the Division schema
 import { IDivision } from '@avans-nx-workshop/shared/api';
+import { Public } from './Decorators/public.decorator';
 
 @Controller('division')
+@Public()
 export class DivisionController {
   constructor(private readonly divisionService: DivisionService) {}
 

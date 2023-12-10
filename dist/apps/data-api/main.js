@@ -23,11 +23,11 @@ exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const features_1 = __webpack_require__(5);
-const app_controller_1 = __webpack_require__(43);
-const app_service_1 = __webpack_require__(44);
+const app_controller_1 = __webpack_require__(55);
+const app_service_1 = __webpack_require__(56);
 const mongoose_1 = __webpack_require__(26);
 const features_2 = __webpack_require__(5);
-const util_env_1 = __webpack_require__(45);
+const util_env_1 = __webpack_require__(57);
 const dist_1 = __webpack_require__(33);
 let AppModule = exports.AppModule = class AppModule {
 };
@@ -66,9 +66,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(6), exports);
 tslib_1.__exportStar(__webpack_require__(24), exports);
-tslib_1.__exportStar(__webpack_require__(37), exports);
-tslib_1.__exportStar(__webpack_require__(38), exports);
-tslib_1.__exportStar(__webpack_require__(41), exports);
+tslib_1.__exportStar(__webpack_require__(49), exports);
+tslib_1.__exportStar(__webpack_require__(50), exports);
+tslib_1.__exportStar(__webpack_require__(53), exports);
 tslib_1.__exportStar(__webpack_require__(32), exports);
 
 
@@ -516,6 +516,15 @@ const ticket_service_1 = __webpack_require__(28);
 const ticket_schema_1 = __webpack_require__(30);
 const Neo4jUser_service_1 = __webpack_require__(32);
 const Neo4jUser_controller_1 = __webpack_require__(35);
+const player_service_1 = __webpack_require__(37);
+const club_service_1 = __webpack_require__(39);
+const division_service_1 = __webpack_require__(41);
+const player_controller_1 = __webpack_require__(43);
+const division_controller_1 = __webpack_require__(45);
+const club_controller_1 = __webpack_require__(47);
+const club_schema_1 = __webpack_require__(40);
+const player_schema_1 = __webpack_require__(38);
+const division_schema_1 = __webpack_require__(42);
 let BackendFeaturesModule = exports.BackendFeaturesModule = class BackendFeaturesModule {
 };
 exports.BackendFeaturesModule = BackendFeaturesModule = tslib_1.__decorate([
@@ -526,10 +535,13 @@ exports.BackendFeaturesModule = BackendFeaturesModule = tslib_1.__decorate([
                 signOptions: { expiresIn: '3600s' },
             }),
             mongoose_1.MongooseModule.forFeature([{ name: 'Ticket', schema: ticket_schema_1.TicketSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: 'Club', schema: club_schema_1.ClubSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: 'Player', schema: player_schema_1.PlayerSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: 'Division', schema: division_schema_1.DivisionSchema }]),
         ],
-        controllers: [ticket_controller_1.TicketController, Neo4jUser_controller_1.UserController],
-        providers: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
-        exports: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService],
+        controllers: [ticket_controller_1.TicketController, Neo4jUser_controller_1.UserController, player_controller_1.PlayerController, club_controller_1.ClubController, division_controller_1.DivisionController],
+        providers: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService, player_service_1.PlayerService, club_service_1.ClubService, division_service_1.DivisionService],
+        exports: [ticket_service_1.TicketService, Neo4jUser_service_1.Neo4jUserService, player_service_1.PlayerService, club_service_1.ClubService, division_service_1.DivisionService],
     })
 ], BackendFeaturesModule);
 
@@ -1012,6 +1024,526 @@ exports.Public = Public;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PlayerService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const mongoose_1 = __webpack_require__(29);
+const mongoose_2 = __webpack_require__(26);
+const player_schema_1 = __webpack_require__(38);
+let PlayerService = exports.PlayerService = class PlayerService {
+    constructor(playerModel) {
+        this.playerModel = playerModel;
+    }
+    async getAllPlayers() {
+        return this.playerModel.find().exec();
+    }
+    async getPlayerById(id) {
+        return this.playerModel.findById(id).exec();
+    }
+    async createPlayer(playerData) {
+        const createdPlayer = new this.playerModel(playerData);
+        return createdPlayer.save();
+    }
+    async updatePlayer(id, updatedPlayerData) {
+        return this.playerModel.findByIdAndUpdate(id, updatedPlayerData, { new: true }).exec();
+    }
+    async deletePlayer(id) {
+        await this.playerModel.findByIdAndDelete(id).exec();
+    }
+};
+exports.PlayerService = PlayerService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_2.InjectModel)(player_schema_1.Player.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object])
+], PlayerService);
+
+
+/***/ }),
+/* 38 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PlayerSchema = exports.Player = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(26);
+const class_validator_1 = __webpack_require__(21);
+let Player = exports.Player = class Player {
+};
+tslib_1.__decorate([
+    (0, class_validator_1.IsMongoId)(),
+    tslib_1.__metadata("design:type", String)
+], Player.prototype, "_id", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], Player.prototype, "firstName", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], Player.prototype, "lastName", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: Number
+    }),
+    tslib_1.__metadata("design:type", Number)
+], Player.prototype, "number", void 0);
+exports.Player = Player = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Player);
+exports.PlayerSchema = mongoose_1.SchemaFactory.createForClass(Player);
+
+
+/***/ }),
+/* 39 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ClubService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const mongoose_1 = __webpack_require__(29);
+const mongoose_2 = __webpack_require__(26);
+const club_schema_1 = __webpack_require__(40);
+let ClubService = exports.ClubService = class ClubService {
+    constructor(clubModel) {
+        this.clubModel = clubModel;
+    }
+    async getAllClubs() {
+        return this.clubModel.find().exec();
+    }
+    async getClubById(id) {
+        return this.clubModel.findById(id).exec();
+    }
+    async createClub(clubData) {
+        const createdClub = new this.clubModel(clubData);
+        return createdClub.save();
+    }
+    async updateClub(id, updatedClubData) {
+        return this.clubModel.findByIdAndUpdate(id, updatedClubData, { new: true }).exec();
+    }
+    async deleteClub(id) {
+        await this.clubModel.findByIdAndDelete(id).exec();
+    }
+};
+exports.ClubService = ClubService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_2.InjectModel)(club_schema_1.Club.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object])
+], ClubService);
+
+
+/***/ }),
+/* 40 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ClubSchema = exports.Club = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(26);
+const class_validator_1 = __webpack_require__(21);
+let Club = exports.Club = class Club {
+};
+tslib_1.__decorate([
+    (0, class_validator_1.IsMongoId)(),
+    tslib_1.__metadata("design:type", String)
+], Club.prototype, "_id", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], Club.prototype, "name", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: Date
+    }),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
+], Club.prototype, "setupDate", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], Club.prototype, "stadium", void 0);
+exports.Club = Club = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Club);
+exports.ClubSchema = mongoose_1.SchemaFactory.createForClass(Club);
+
+
+/***/ }),
+/* 41 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DivisionService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const mongoose_1 = __webpack_require__(29);
+const mongoose_2 = __webpack_require__(26);
+const division_schema_1 = __webpack_require__(42);
+let DivisionService = exports.DivisionService = class DivisionService {
+    constructor(divisionModel) {
+        this.divisionModel = divisionModel;
+    }
+    async getAllDivisions() {
+        return this.divisionModel.find().exec();
+    }
+    async getDivisionById(id) {
+        return this.divisionModel.findById(id).exec();
+    }
+    async createDivision(divisionData) {
+        const createdDivision = new this.divisionModel(divisionData);
+        return createdDivision.save();
+    }
+    async updateDivision(id, updatedDivisionData) {
+        return this.divisionModel.findByIdAndUpdate(id, updatedDivisionData, { new: true }).exec();
+    }
+    async deleteDivision(id) {
+        await this.divisionModel.findByIdAndDelete(id).exec();
+    }
+};
+exports.DivisionService = DivisionService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_2.InjectModel)(division_schema_1.Division.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object])
+], DivisionService);
+
+
+/***/ }),
+/* 42 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DivisionSchema = exports.Division = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(26);
+const class_validator_1 = __webpack_require__(21);
+let Division = exports.Division = class Division {
+};
+tslib_1.__decorate([
+    (0, class_validator_1.IsMongoId)(),
+    tslib_1.__metadata("design:type", String)
+], Division.prototype, "_id", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], Division.prototype, "name", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: String
+    }),
+    tslib_1.__metadata("design:type", String)
+], Division.prototype, "ranking", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: [String]
+    }),
+    tslib_1.__metadata("design:type", Array)
+], Division.prototype, "teams", void 0);
+exports.Division = Division = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Division);
+exports.DivisionSchema = mongoose_1.SchemaFactory.createForClass(Division);
+
+
+/***/ }),
+/* 43 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f, _g, _h;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PlayerController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const player_service_1 = __webpack_require__(37); // Import the PlayerService
+const api_1 = __webpack_require__(10);
+const public_decorator_1 = __webpack_require__(44);
+let PlayerController = exports.PlayerController = class PlayerController {
+    constructor(playerService) {
+        this.playerService = playerService;
+    }
+    async getAllPlayers() {
+        return this.playerService.getAllPlayers();
+    }
+    async getPlayerById(id) {
+        return this.playerService.getPlayerById(id);
+    }
+    async createPlayer(playerData) {
+        return this.playerService.createPlayer(playerData);
+    }
+    async updatePlayer(id, updatedPlayerData) {
+        return this.playerService.updatePlayer(id, updatedPlayerData);
+    }
+    async deletePlayer(id) {
+        return this.playerService.deletePlayer(id);
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], PlayerController.prototype, "getAllPlayers", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], PlayerController.prototype, "getPlayerById", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_1.IPlayer !== "undefined" && api_1.IPlayer) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], PlayerController.prototype, "createPlayer", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof Partial !== "undefined" && Partial) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], PlayerController.prototype, "updatePlayer", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], PlayerController.prototype, "deletePlayer", null);
+exports.PlayerController = PlayerController = tslib_1.__decorate([
+    (0, common_1.Controller)('player'),
+    (0, public_decorator_1.Public)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof player_service_1.PlayerService !== "undefined" && player_service_1.PlayerService) === "function" ? _a : Object])
+], PlayerController);
+
+
+/***/ }),
+/* 44 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Public = exports.IS_PUBLIC_KEY = void 0;
+// public.decorator.ts
+const common_1 = __webpack_require__(1);
+exports.IS_PUBLIC_KEY = 'isPublic';
+const Public = () => (0, common_1.SetMetadata)(exports.IS_PUBLIC_KEY, true);
+exports.Public = Public;
+
+
+/***/ }),
+/* 45 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f, _g, _h;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DivisionController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const division_service_1 = __webpack_require__(41); // Import the DivisionService
+const api_1 = __webpack_require__(10);
+const public_decorator_1 = __webpack_require__(46);
+let DivisionController = exports.DivisionController = class DivisionController {
+    constructor(divisionService) {
+        this.divisionService = divisionService;
+    }
+    async getAllDivisions() {
+        return this.divisionService.getAllDivisions();
+    }
+    async getDivisionById(id) {
+        return this.divisionService.getDivisionById(id);
+    }
+    async createDivision(divisionData) {
+        return this.divisionService.createDivision(divisionData);
+    }
+    async updateDivision(id, updatedDivisionData) {
+        return this.divisionService.updateDivision(id, updatedDivisionData);
+    }
+    async deleteDivision(id) {
+        return this.divisionService.deleteDivision(id);
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], DivisionController.prototype, "getAllDivisions", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], DivisionController.prototype, "getDivisionById", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_1.IDivision !== "undefined" && api_1.IDivision) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], DivisionController.prototype, "createDivision", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof Partial !== "undefined" && Partial) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], DivisionController.prototype, "updateDivision", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], DivisionController.prototype, "deleteDivision", null);
+exports.DivisionController = DivisionController = tslib_1.__decorate([
+    (0, common_1.Controller)('division'),
+    (0, public_decorator_1.Public)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof division_service_1.DivisionService !== "undefined" && division_service_1.DivisionService) === "function" ? _a : Object])
+], DivisionController);
+
+
+/***/ }),
+/* 46 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Public = exports.IS_PUBLIC_KEY = void 0;
+// public.decorator.ts
+const common_1 = __webpack_require__(1);
+exports.IS_PUBLIC_KEY = 'isPublic';
+const Public = () => (0, common_1.SetMetadata)(exports.IS_PUBLIC_KEY, true);
+exports.Public = Public;
+
+
+/***/ }),
+/* 47 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f, _g, _h;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ClubController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const club_service_1 = __webpack_require__(39); // Make sure to import your ClubService
+const api_1 = __webpack_require__(10);
+const public_decorator_1 = __webpack_require__(48);
+let ClubController = exports.ClubController = class ClubController {
+    constructor(clubService) {
+        this.clubService = clubService;
+    }
+    async getAllClubs() {
+        return this.clubService.getAllClubs();
+    }
+    async getClubById(id) {
+        return this.clubService.getClubById(id);
+    }
+    async createClub(clubData) {
+        return this.clubService.createClub(clubData);
+    }
+    async updateClub(id, updatedClubData) {
+        return this.clubService.updateClub(id, updatedClubData);
+    }
+    async deleteClub(id) {
+        return this.clubService.deleteClub(id);
+    }
+};
+tslib_1.__decorate([
+    (0, common_1.Get)(),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], ClubController.prototype, "getAllClubs", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], ClubController.prototype, "getClubById", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_1.IClub !== "undefined" && api_1.IClub) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], ClubController.prototype, "createClub", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof Partial !== "undefined" && Partial) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], ClubController.prototype, "updateClub", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], ClubController.prototype, "deleteClub", null);
+exports.ClubController = ClubController = tslib_1.__decorate([
+    (0, common_1.Controller)('club'),
+    (0, public_decorator_1.Public)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof club_service_1.ClubService !== "undefined" && club_service_1.ClubService) === "function" ? _a : Object])
+], ClubController);
+
+
+/***/ }),
+/* 48 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Public = exports.IS_PUBLIC_KEY = void 0;
+// public.decorator.ts
+const common_1 = __webpack_require__(1);
+exports.IS_PUBLIC_KEY = 'isPublic';
+const Public = () => (0, common_1.SetMetadata)(exports.IS_PUBLIC_KEY, true);
+exports.Public = Public;
+
+
+/***/ }),
+/* 49 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
 var AuthService_1;
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -1062,7 +1594,7 @@ exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 38 */
+/* 50 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1070,12 +1602,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const auth_service_1 = __webpack_require__(37);
+const auth_service_1 = __webpack_require__(49);
 const jwt_1 = __webpack_require__(25);
-const auth_controller_1 = __webpack_require__(39);
+const auth_controller_1 = __webpack_require__(51);
 const core_1 = __webpack_require__(2);
-const auth_guard_1 = __webpack_require__(41);
-const config_1 = __webpack_require__(42);
+const auth_guard_1 = __webpack_require__(53);
+const config_1 = __webpack_require__(54);
 const backendFeatures_module_1 = __webpack_require__(24);
 let AuthModule = exports.AuthModule = class AuthModule {
 };
@@ -1106,7 +1638,7 @@ exports.AuthModule = AuthModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 39 */
+/* 51 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1115,8 +1647,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const auth_service_1 = __webpack_require__(37);
-const public_decorator_1 = __webpack_require__(40);
+const auth_service_1 = __webpack_require__(49);
+const public_decorator_1 = __webpack_require__(52);
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -1141,7 +1673,7 @@ exports.AuthController = AuthController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 40 */
+/* 52 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1154,7 +1686,7 @@ exports.Public = Public;
 
 
 /***/ }),
-/* 41 */
+/* 53 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1165,7 +1697,7 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const jwt_1 = __webpack_require__(25);
 const core_1 = __webpack_require__(2);
-const public_decorator_1 = __webpack_require__(40);
+const public_decorator_1 = __webpack_require__(52);
 let AuthGuard = exports.AuthGuard = class AuthGuard {
     constructor(jwtService, reflector) {
         this.jwtService = jwtService;
@@ -1210,13 +1742,13 @@ exports.AuthGuard = AuthGuard = tslib_1.__decorate([
 
 
 /***/ }),
-/* 42 */
+/* 54 */
 /***/ ((module) => {
 
 module.exports = require("@nestjs/config");
 
 /***/ }),
-/* 43 */
+/* 55 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1225,7 +1757,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(44);
+const app_service_1 = __webpack_require__(56);
 let AppController = exports.AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -1247,7 +1779,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 44 */
+/* 56 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1266,17 +1798,17 @@ exports.AppService = AppService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 45 */
+/* 57 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(46), exports);
+tslib_1.__exportStar(__webpack_require__(58), exports);
 
 
 /***/ }),
-/* 46 */
+/* 58 */
 /***/ ((__unused_webpack_module, exports) => {
 
 

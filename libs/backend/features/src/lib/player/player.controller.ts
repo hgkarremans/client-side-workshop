@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common'
 import { PlayerService } from './player.service'; // Import the PlayerService
 import { Player } from './player.schema'; // Import the Player schema
 import { IPlayer } from '@avans-nx-workshop/shared/api';
+import { Public } from './Decorators/public.decorator';
 
 @Controller('player')
+@Public()
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 

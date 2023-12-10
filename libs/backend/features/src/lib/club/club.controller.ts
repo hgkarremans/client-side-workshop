@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common'
 import { ClubService } from './club.service'; // Make sure to import your ClubService
 import { Club } from './club.schema'; // Import the Club schema
 import { IClub } from '@avans-nx-workshop/shared/api';
+import { Public } from './Decorators/public.decorator';
 
 @Controller('club')
+@Public()
 export class ClubController {
   constructor(private readonly clubService: ClubService) {}
 
