@@ -699,6 +699,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketSchema = exports.Ticket = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(26);
+const mongoose_2 = __webpack_require__(29);
 const api_1 = __webpack_require__(10);
 const class_validator_1 = __webpack_require__(21);
 let Ticket = exports.Ticket = class Ticket {
@@ -743,6 +744,13 @@ tslib_1.__decorate([
     }),
     tslib_1.__metadata("design:type", Number)
 ], Ticket.prototype, "seat", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: mongoose_2.Types.ObjectId,
+    }),
+    tslib_1.__metadata("design:type", String)
+], Ticket.prototype, "divisionId", void 0);
 exports.Ticket = Ticket = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Ticket);

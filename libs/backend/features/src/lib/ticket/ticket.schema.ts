@@ -1,5 +1,5 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document, Schema as MongooseSchema} from 'mongoose';
+import {Document, Schema as MongooseSchema, Types} from 'mongoose';
 import { 
     ITicket,
     User,
@@ -42,6 +42,12 @@ export class Ticket implements ITicket {
         type: Number
     })
     seat!: number;
+
+    @Prop({
+        required: true,
+        type: Types.ObjectId,
+    })
+    divisionId!: string;
 
     
 }

@@ -66,28 +66,13 @@ export class TicketService implements OnDestroy {
     return this.http.put<void>(`${this.apiUrl}/${id}`, updatedTicketsData).pipe(takeUntil(this.destroy$));
   }
 
-  getTicketsByDivision(divisionId: string | null = null): Observable<ITicket[]> {
-    let url = this.apiUrl; // Use the default API URL
-  
-    if (divisionId) {
-      url = this.divisionUrl; // Use the division API URL if divisionId is provided
-    }
-  
-    let params = new HttpParams();
-  
-    if (divisionId) {
-      params = params.set('division', divisionId);
-    }
-  
+  getTicketsByDivision(divisionId: string): Observable<ITicket[]> {
+    const params = new HttpParams().set('divisionId', divisionId);
     return this.http
-      .get<ApiResponse<IDivision[] | IDivision>>(url, { params: params })
+      .get<ApiResponse<ITicket[]>>(this.apiUrl, { params })
       .pipe(
         takeUntil(this.destroy$),
-        map((response) => {
-          const divisions = (Array.isArray(response.results) ? response.results : [response.results]) as IDivision[];
-          const selectedDivision = divisions.find((d) => d._id === divisionId);
-          return selectedDivision?.tickets || [];
-        })
+        map((response) => (response.results || []) as ITicket[])
       );
   }
   addTicketToDivision(divisionId: string, ticket: ITicket): Observable<ITicket> {

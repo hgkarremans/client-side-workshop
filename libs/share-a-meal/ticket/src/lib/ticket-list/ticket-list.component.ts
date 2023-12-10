@@ -18,6 +18,7 @@ export class TicketListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   isLoggedIn = false;
   decodedToken: any | null = null;
+  divisionName: string | null = null;
   divisionId: string | null = null;
 
   constructor(private ticketService: TicketService, private authService: AuthService) {}
@@ -56,6 +57,10 @@ export class TicketListComponent implements OnInit, OnDestroy {
       console.log('User is not logged in.');
     }
   }
+  resetDivisionFilter(): void {
+    this.divisionName = null;
+    this.fetchAllTickets(); // Reset filter, fetch all tickets
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -65,15 +70,32 @@ export class TicketListComponent implements OnInit, OnDestroy {
   isCreateButtonVisible(): boolean {
     return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
   }
-
   filterTicketsByDivision(divisionId: string | null): void {
+    if (!divisionId) {
+      this.divisionId = null;
+      this.fetchAllTickets(); // Reset filter, fetch all tickets
+      return;
+    }
+
     this.divisionId = divisionId;
-    this.updateFilteredTickets();
+    this.fetchTicketsByDivision(); // Fetch tickets based on selected division
   }
 
-  resetDivisionFilter(): void {
-    this.divisionId = null;
-    this.updateFilteredTickets();
+  private fetchTicketsByDivision(): void {
+    if (this.divisionId) {
+      this.ticketService
+        .getTicketsByDivision(this.divisionId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          (response) => {
+            this.tickets = response;
+            console.log('Filtered Tickets:', this.tickets);
+          },
+          (error) => {
+            console.error('Error fetching filtered tickets:', error);
+          }
+        );
+    }
   }
 
   private fetchAllTickets(): void {
@@ -90,25 +112,5 @@ export class TicketListComponent implements OnInit, OnDestroy {
         }
       );
   }
-
-  private updateFilteredTickets(): void {
-    if (this.divisionId) {
-      // Filter tickets based on the selected division
-      this.ticketService
-        .getTicketsByDivision(this.divisionId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(
-          (response) => {
-            this.tickets = response;
-            console.log('Filtered Tickets:', this.tickets);
-          },
-          (error) => {
-            console.error('Error fetching filtered tickets:', error);
-          }
-        );
-    } else {
-      // Fetch all tickets
-      this.fetchAllTickets();
-    }
-  }
 }
+

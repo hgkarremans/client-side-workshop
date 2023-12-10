@@ -15,4 +15,5 @@ export interface ITicket {
     date: Date;
     status: TicketStatus;
     seat: number;
+    divisionId: string;
 }

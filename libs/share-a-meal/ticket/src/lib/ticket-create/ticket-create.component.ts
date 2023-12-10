@@ -56,19 +56,18 @@ export class TicketCreateComponent implements OnInit, OnDestroy {
 
       // If a division is selected, add the ticket to the selected division
       if (ticketData.division) {
-        this.ticketService.addTicketToDivision(ticketData.division, ticketData).subscribe(() => {
-          console.log('Ticket added to division successfully');
-        });
+        // Associate the selected division's ID with the ticket
+        ticketData.divisionId = ticketData.division;
+
+        // Save the ticket with the associated divisionId
         this.ticketService.addTicket(ticketData).subscribe(() => {
           console.log('Ticket added successfully');
-        }
-        );
+        });
       } else {
         // Handle the case where no division is selected
         this.ticketService.addTicket(ticketData).subscribe(() => {
           console.log('Ticket added successfully');
-        }
-        );
+        });
       }
     } else {
       console.log('Form is invalid');
