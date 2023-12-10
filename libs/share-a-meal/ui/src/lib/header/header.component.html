@@ -4,7 +4,8 @@
       <img src="assets/logo.png" alt="Logo" height="30" class="mr-2">
       Ticketshop
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
@@ -20,14 +21,18 @@
         </li>
       </ul>
       <div class="navbar-nav">
-        <a class="nav-link text-dark" routerLink="login">Login</a>
-        <a class="nav-link text-dark" routerLink="register">Register</a>
+        <ng-container *ngIf="!isLoggedIn">
+          <a class="nav-link text-dark" routerLink="login">Login</a>
+          <a class="nav-link text-dark" routerLink="register">Register</a>
+        </ng-container>
+        <ng-container *ngIf="isLoggedIn">
+          <a class="nav-link text-dark" routerLink="edit-account">Edit account</a>
+          <a class="nav-link text-dark" (click)="logout()">Logout</a>
+          
+        </ng-container>
       </div>
-      <!-- <div class="navbar-nav">
-        <a class="nav-link text-dark" routerLink="login">Edit account</a>
-        <a class="nav-link text-dark" routerLink="register">Logout</a>
-      </div> -->
-      
+
+
     </div>
   </div>
 </nav>
