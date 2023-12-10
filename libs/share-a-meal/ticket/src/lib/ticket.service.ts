@@ -15,7 +15,7 @@ export class TicketService implements OnDestroy {
   // apiUrl: 'http://localhost:3000/api/',
   private readonly apiUrl = environment.apiUrl + 'ticket';
   private readonly divisionUrl = environment.apiUrl + 'division';
-  // private readonly divisionUrl = 'http://localhost:3000/api/division';
+  // private readonly divisionUrl = 'http://localhost:3000/api/division';//
   private destroy$ = new Subject<void>();
 
   constructor(private readonly http: HttpClient) {}
