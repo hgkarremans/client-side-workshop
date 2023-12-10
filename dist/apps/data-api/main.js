@@ -805,9 +805,12 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             hasTransportation: newUser.hasTransportation || false,
             passwordHash: hashedPassword,
         });
-        // Generate a JWT for the newly created user
         const userProperties = result.records[0]?.get('user').properties;
-        const payload = { sub: userProperties.Id, username: userProperties.emailAddress };
+        const payload = {
+            sub: userProperties.Id,
+            username: userProperties.emailAddress,
+            role: userProperties.role,
+        };
         const accessToken = await this.jwtService.signAsync(payload);
         console.log('payload: ', payload);
         console.log('accessToken:', accessToken); // Log the JWT for debugging
@@ -1000,7 +1003,7 @@ let AuthService = exports.AuthService = AuthService_1 = class AuthService {
         if (!(await this.usersService.validatePassword(pass, user.passwordHash))) {
             throw new common_1.UnauthorizedException();
         }
-        const payload = { sub: user.Id, username: user.emailAddress };
+        const payload = { sub: user.Id, username: user.emailAddress, role: user.role };
         const accessToken = await this.jwtService.signAsync(payload);
         console.log('payload: ', payload);
         console.log('accessToken: ', accessToken);

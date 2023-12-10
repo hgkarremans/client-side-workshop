@@ -22,13 +22,14 @@ export const appRoutes: Route[] = [
         component: UserCreateComponent
     },
     {
+        path: 'users/edit',
+        component: UserEditComponent
+    },
+    {
         path: 'users/:id',
         component: UserDetailsComponent
     },
-    {
-        path: 'users/:id/edit',
-        component: UserEditComponent
-    },
+    
     {
         path: 'login',
         component: UserLoginComponent

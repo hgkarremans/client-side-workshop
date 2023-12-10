@@ -13,9 +13,7 @@
         <li class="nav-item">
           <a class="nav-link text-dark" routerLink="about">About</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" routerLink="users">Users</a>
-        </li>
+
         <li class="nav-item">
           <a class="nav-link text-dark" routerLink="tickets">Tickets</a>
         </li>
@@ -26,7 +24,6 @@
           <a class="nav-link text-dark" routerLink="register">Register</a>
         </ng-container>
         <ng-container *ngIf="isLoggedIn">
-          <a class="nav-link text-dark" routerLink="edit-account">Edit account</a>
           <a class="nav-link text-dark" (click)="logout()">Logout</a>
           
         </ng-container>

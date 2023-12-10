@@ -11,8 +11,8 @@ export class Neo4jUserService {
 
   constructor(
     private readonly neo4jService: Neo4jService,
-    private readonly jwtService: JwtService,
-    ) {}
+    private readonly jwtService: JwtService
+  ) {}
 
   async getAll() {
     Logger.log('getAll', this.TAG);
@@ -41,7 +41,6 @@ export class Neo4jUserService {
     const result = await this.neo4jService.read(query, { emailAddress });
     return result?.records[0]?.get('user').properties;
   }
-    
 
   async create(newUser: User) {
     Logger.log('create', this.TAG);
@@ -90,20 +89,34 @@ export class Neo4jUserService {
       passwordHash: hashedPassword,
     });
 
-    // Generate a JWT for the newly created user
     const userProperties = result.records[0]?.get('user').properties;
-    const payload = { sub: userProperties.Id, username: userProperties.emailAddress };
+    const payload = {
+      sub: userProperties.Id,
+      username: userProperties.emailAddress,
+      role: userProperties.role,
+    };
     const accessToken = await this.jwtService.signAsync(payload);
-    console.log('payload: ', payload)
+    console.log('payload: ', payload);
     console.log('accessToken:', accessToken); // Log the JWT for debugging
 
     // Include the JWT in the response
     return { user: userProperties, access_token: accessToken };
   }
-  
-  
 
-  async update(Id: string, user: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'>) {
+  async update(
+    Id: string,
+    user: Pick<
+      User,
+      | 'firstName'
+      | 'lastName'
+      | 'image'
+      | 'emailAddress'
+      | 'dateOfBirth'
+      | 'gender'
+      | 'role'
+      | 'friends'
+    >
+  ) {
     Logger.log(`Update(${Id})`, this.TAG);
 
     const query = `
@@ -143,13 +156,15 @@ export class Neo4jUserService {
 
     return result;
   }
-  async validatePassword (password: string, passwordHash: string): Promise<boolean> {
+  async validatePassword(
+    password: string,
+    passwordHash: string
+  ): Promise<boolean> {
     console.log('password: ', password);
     console.log('passwordHash: ', passwordHash);
     return bcrypt.compare(password, passwordHash);
   }
-  async generateHash (password: string): Promise<string> {
+  async generateHash(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
   }
-
 }

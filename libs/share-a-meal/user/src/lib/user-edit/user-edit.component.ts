@@ -5,6 +5,7 @@ import { User } from '@avans-nx-workshop/shared/api';
 import { UserGender } from '@avans-nx-workshop/shared/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserRole } from '@avans-nx-workshop/shared/api';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'clientside-nx-workshop-user-edit',
@@ -16,41 +17,33 @@ export class UserEditComponent implements OnInit {
   userForm!: FormGroup;
   genderOptions = Object.values(UserGender);
   rolesOptions = Object.values(UserRole);
+  token: string | null = null; // Add this property to store the token
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
+    private authService: AuthService, // Inject the AuthService
     private fb: FormBuilder
   ) {
     // Initialize the form with default values or empty strings
     this.userForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
-      emailAddress: ['', [Validators.required, Validators.email]],
-      image: ['', Validators.required],
-      gender: ['', Validators.required],
-      role: ['', Validators.required],
+      // ... your form controls
     });
   }
 
   ngOnInit(): void {
+    // Get the token from the AuthService
+    this.token = this.authService.getToken();
+
     this.route.paramMap.subscribe((params) => {
       const userId = String(params.get('id'));
       this.userService.getUserById(userId).subscribe(
         (user) => {
-          this.user = user!; // Use the non-null assertion operator
-  
+          this.user = user!;
           // Update the form controls with the user's values
           this.userForm.patchValue({
-            firstName: this.user.firstName,
-            lastName: this.user.lastName,
-            dateOfBirth: this.user.dateOfBirth,
-            emailAddress: this.user.emailAddress,
-            image: this.user.image,
-            gender: this.user.gender,
-            role: this.user.role,
+            // ... your form values
           });
         },
         (error) => {
@@ -59,14 +52,15 @@ export class UserEditComponent implements OnInit {
       );
     });
   }
-  
 
-  // Method to handle form submission
   onSubmit(): void {
     if (this.userForm.valid && this.user) {
       console.log('Form is valid');
       console.log('Form values:', this.user.Id, this.userForm.value);
-  
+
+      // Log the token
+      console.log('Token:', this.token);
+
       // Assuming you have a method in your UserService to save the updated user
       this.userService.updateUser(this.user.Id, this.userForm.value).subscribe(
         () => {
@@ -79,9 +73,7 @@ export class UserEditComponent implements OnInit {
         }
       );
     } else {
-      // Handle form validation errors or display a message to the user
       console.log('Form is invalid');
     }
   }
-  
 }
