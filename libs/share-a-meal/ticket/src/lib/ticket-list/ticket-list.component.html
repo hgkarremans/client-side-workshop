@@ -7,7 +7,7 @@
   </div>
 
   <!-- Division filter dropdown -->
-  <div class="row mb-3">
+  <div class="row mb-3 d-flex justify-content-center">
     <div class="col-md-4">
       <label for="divisionFilter" class="form-label">Filter by Division:</label>
       <select id="divisionFilter" class="form-select" [(ngModel)]="divisionId" (change)="filterTicketsByDivision(divisionId)">
@@ -15,7 +15,7 @@
         <!-- Add options dynamically based on your divisions -->
         <option *ngFor="let division of divisions" [value]="division._id">{{ division.name }}</option>
       </select>
-      <button class="btn btn-link" (click)="resetDivisionFilter()">Reset Filter</button>
+      <button class="btn " (click)="resetDivisionFilter()">Reset Filter</button>
     </div>
   </div>
 
