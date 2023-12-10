@@ -1,13 +1,15 @@
+<!-- ticket-list.component.html -->
 <div class="container">
   <div class="row">
     <div class="col-md-12 d-flex justify-content-center mb-3">
-      <button class="btn btn-primary" [routerLink]="'create'">Create Ticket</button>
+      <!-- Add *ngIf to conditionally show the button based on user's role -->
+      <button *ngIf="isCreateButtonVisible()" class="btn btn-primary" [routerLink]="'create'">Create Ticket</button>
     </div>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let ticket of tickets">
-      <a [routerLink]="'tickets/' + ticket?._id" class="card-link" style="text-decoration: none;">
+      <a [routerLink]="'/tickets/' + ticket?._id" class="card-link" style="text-decoration: none;">
         <div class="card m-3 shadow position-relative" style="width: 18rem; border: none; margin-right: 10px; margin-bottom: 10px;">
           <img src="../assets/soccer_player.png" class="card-img-top shadow-sm" alt="Soccer player">
           <div class="card-body">

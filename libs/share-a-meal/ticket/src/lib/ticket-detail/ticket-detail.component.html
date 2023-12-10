@@ -13,13 +13,14 @@
           <p>Seat: {{ ticket.seat }}</p>
           <p class="card-text">Status: {{ ticket.status }}</p>
 
-
-
-          <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
-            <button class="btn btn-light" style="border: 1px solid #000;" routerLink="edit">Edit</button>
-            <span class="mx-2"></span>
-            <button routerLink="../../tickets" class="btn btn-danger" style="border: 1px solid #000;"
-              (click)="openDeleteConfirmationModal()">Delete</button>
+          <!-- Conditionally show Edit and Delete buttons based on user role -->
+          <div *ngIf="decodedToken && decodedToken.role === 'Admin'">
+            <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
+              <button class="btn btn-light" style="border: 1px solid #000;" routerLink="edit">Edit</button>
+              <span class="mx-2"></span>
+              <button routerLink="../../tickets" class="btn btn-danger" style="border: 1px solid #000;"
+                (click)="openDeleteConfirmationModal()">Delete</button>
+            </div>
           </div>
         </div>
       </div>

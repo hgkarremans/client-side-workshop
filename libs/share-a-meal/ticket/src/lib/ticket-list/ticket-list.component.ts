@@ -15,6 +15,7 @@ export class TicketListComponent implements OnInit, OnDestroy {
   tickets: ITicket[] | null = null;
   private destroy$ = new Subject<void>();
   isLoggedIn = false;
+  decodedToken: any | null = null; // Add this property to store the decoded token
 
   // Inject TicketService and AuthService in the constructor
   constructor(private ticketService: TicketService, private authService: AuthService) {}
@@ -34,10 +35,19 @@ export class TicketListComponent implements OnInit, OnDestroy {
       }
     );
 
+    // Get the token from AuthService
+    const token = this.authService.getToken();
+
+    // Decode the token
+    if (token) {
+      this.decodedToken = this.authService.decodeToken(token);
+      console.log('Decoded Token:', this.decodedToken);
+    }
+
     // Print console message based on user login status
     if (this.isLoggedIn) {
       console.log('User is logged in.');
-      console.log('User token:', this.authService.getToken());
+      console.log('User token:', token);
     } else {
       console.log('User is not logged in.');
     }
@@ -45,6 +55,12 @@ export class TicketListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.complete();   
+  }
+
+  // Add a method to check if the "Create Ticket" button should be visible
+  isCreateButtonVisible(): boolean {
+    // Check if the user's role is 'Admin' or 'Editor'
+    return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
   }
 }

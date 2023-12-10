@@ -569,6 +569,7 @@ tslib_1.__decorate([
 ], TicketController.prototype, "getTicketById", null);
 tslib_1.__decorate([
     (0, common_1.Post)(''),
+    (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_1.ITicket !== "undefined" && api_1.ITicket) === "function" ? _d : Object]),
@@ -576,6 +577,7 @@ tslib_1.__decorate([
 ], TicketController.prototype, "addTicket", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
+    (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
@@ -583,6 +585,7 @@ tslib_1.__decorate([
 ], TicketController.prototype, "deleteTicket", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
+    (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
@@ -820,19 +823,19 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
     async update(Id, user) {
         common_2.Logger.log(`Update(${Id})`, this.TAG);
         const query = `
-      MATCH (user:User {Id: $Id})
-      SET
-        user.firstName = $firstName,
-        user.lastName = $lastName,
-        user.image = $image,
-        user.emailAddress = $emailAddress,
-        user.dateOfBirth = $dateOfBirth,
-        user.gender = $gender,
-        user.role = $role,
-        user.friends = $friends
-      RETURN user
+        MATCH (user:User {Id: $Id})
+        SET
+            user.firstName = $firstName,
+            user.lastName = $lastName,
+            user.image = $image,
+            user.emailAddress = $emailAddress,
+            user.dateOfBirth = $dateOfBirth,
+            user.gender = $gender,
+            user.role = $role,
+            user.friends = $friends
+        RETURN user
     `;
-        const result = await this.neo4jService.write(query, {
+        const parameters = {
             Id: parseInt(Id),
             firstName: user.firstName,
             lastName: user.lastName,
@@ -842,7 +845,9 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             gender: user.gender,
             role: user.role,
             friends: user.friends || [],
-        });
+        };
+        console.log('Update Parameters:', parameters); // Log the parameters for debugging
+        const result = await this.neo4jService.write(query, parameters);
         return result.records;
     }
     async delete(Id) {

@@ -106,47 +106,46 @@ export class Neo4jUserService {
   async update(
     Id: string,
     user: Pick<
-      User,
-      | 'firstName'
-      | 'lastName'
-      | 'image'
-      | 'emailAddress'
-      | 'dateOfBirth'
-      | 'gender'
-      | 'role'
-      | 'friends'
+        User,
+        'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'
     >
-  ) {
+) {
     Logger.log(`Update(${Id})`, this.TAG);
 
     const query = `
-      MATCH (user:User {Id: $Id})
-      SET
-        user.firstName = $firstName,
-        user.lastName = $lastName,
-        user.image = $image,
-        user.emailAddress = $emailAddress,
-        user.dateOfBirth = $dateOfBirth,
-        user.gender = $gender,
-        user.role = $role,
-        user.friends = $friends
-      RETURN user
+        MATCH (user:User {Id: $Id})
+        SET
+            user.firstName = $firstName,
+            user.lastName = $lastName,
+            user.image = $image,
+            user.emailAddress = $emailAddress,
+            user.dateOfBirth = $dateOfBirth,
+            user.gender = $gender,
+            user.role = $role,
+            user.friends = $friends
+        RETURN user
     `;
 
-    const result = await this.neo4jService.write(query, {
-      Id: parseInt(Id),
-      firstName: user.firstName,
-      lastName: user.lastName,
-      image: user.image,
-      emailAddress: user.emailAddress,
-      dateOfBirth: user.dateOfBirth,
-      gender: user.gender,
-      role: user.role,
-      friends: user.friends || [],
-    });
+    const parameters = {
+        Id: parseInt(Id),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        image: user.image,
+        emailAddress: user.emailAddress,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
+        role: user.role,
+        friends: user.friends || [],
+    };
+
+    console.log('Update Parameters:', parameters); // Log the parameters for debugging
+
+    const result = await this.neo4jService.write(query, parameters);
 
     return result.records;
-  }
+}
+
+
 
   async delete(Id: string) {
     Logger.log(`Delete(${Id})`, this.TAG);

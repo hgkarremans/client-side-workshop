@@ -20,16 +20,19 @@ export class TicketController {
     }
 
     @Post('')
+    @Public()
     addTicket(@Body() ticketData: ITicket): Promise<ITicket> {
       return this.ticketService.addTicket(ticketData);
     }
 
     @Delete(':id')
+    @Public()
     deleteTicket(@Param('id') id: string): Promise<void> {
       return this.ticketService.deleteTicket(id);
     }
 
     @Put(':id') 
+    @Public()
     updateTicket(@Param('id') id: string, @Body() updatedTicketData: Partial<ITicket>): Promise<ITicket | null> {
       return this.ticketService.updateTicket(id, updatedTicketData);
     }
