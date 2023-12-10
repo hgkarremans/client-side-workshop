@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ApiResponse, User as IUser } from '@avans-nx-workshop/shared/api';
 import { AuthService } from './auth.service';
+import { environment } from '@avans-nx-workshop/shared/util-env';
 
 
 
@@ -11,7 +12,9 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class UserService {
-  private readonly apiUrl = 'http://localhost:3000/api/users';
+  // private readonly apiUrl = 'http://localhost:3000/api/users';
+  private readonly apiUrl = environment.apiUrl + 'users';
+
 
   constructor(private readonly http: HttpClient, private readonly authService: AuthService) {}
 
@@ -35,7 +38,7 @@ export class UserService {
   }
   loginUser(email: string, password: string): Observable<any> {
     const signInDto = { emailAddress: email, password: password };
-    return this.http.post<any>('http://localhost:3000/api/auth/login', signInDto).pipe(
+    return this.http.post<any>(environment.apiUrl + 'auth/login', signInDto).pipe(
       tap(response => {
         // Assuming the login endpoint returns an object with a nested "results" property
         const accessToken = response?.results?.access_token;

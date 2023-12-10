@@ -36,7 +36,7 @@ exports.AppModule = AppModule = tslib_1.__decorate([
         imports: [features_1.MealModule,
             features_2.BackendFeaturesModule,
             features_1.AuthModule,
-            mongoose_1.MongooseModule.forRoot(util_env_1.environment.apiUrl),
+            mongoose_1.MongooseModule.forRoot(util_env_1.environment.MONGO_DB_CONNECTION_STRING),
             dist_1.Neo4jModule.forRoot({
                 scheme: util_env_1.environment.NEO4J_SCHEME,
                 host: util_env_1.environment.NEO4J_HOST,
@@ -1839,7 +1839,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.environment = void 0;
 exports.environment = {
     production: false,
-    apiUrl: 'mongodb://localhost:27017/avans-nx-workshop',
+    apiUrl: 'http://localhost:3000/api/',
     MONGO_DB_CONNECTION_STRING: 'mongodb://localhost:27017/avans-nx-workshop',
     NEO4J_SCHEME: 'neo4j',
     NEO4J_HOST: 'localhost',

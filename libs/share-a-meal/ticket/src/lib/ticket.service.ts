@@ -5,12 +5,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, map, tap } from 'rxjs/operators';
 import { ITicket, ApiResponse, IDivision } from '@avans-nx-workshop/shared/api';
-
+import { environment } from '@avans-nx-workshop/shared/util-env';
+ 
 @Injectable({
   providedIn: 'root',
 })
 export class TicketService implements OnDestroy {
-  private readonly apiUrl = 'http://localhost:3000/api/ticket';
+  // private readonly apiUrl = 'http://localhost:3000/api/ticket';
+  // apiUrl: 'http://localhost:3000/api/',
+  private readonly apiUrl = environment.apiUrl + 'ticket';
   private readonly divisionUrl = 'http://localhost:3000/api/division';
   private destroy$ = new Subject<void>();
 

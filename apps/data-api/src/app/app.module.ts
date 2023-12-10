@@ -11,7 +11,7 @@ import { Neo4jModule, Neo4jScheme } from "nest-neo4j/dist";
   imports: [MealModule, 
     BackendFeaturesModule, 
     AuthModule,
-    MongooseModule.forRoot(environment.apiUrl),
+    MongooseModule.forRoot(environment.MONGO_DB_CONNECTION_STRING),
     Neo4jModule.forRoot({
       scheme : environment.NEO4J_SCHEME as Neo4jScheme,
       host: environment.NEO4J_HOST,
