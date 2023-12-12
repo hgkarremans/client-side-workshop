@@ -1,0 +1,38 @@
+<!-- ticket-list.component.html -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-center mb-3">
+      <button *ngIf="isCreateButtonVisible()" class="btn btn-primary" [routerLink]="'create'">Create Ticket</button>
+    </div>
+  </div>
+
+  <!-- Division filter dropdown -->
+  <div class="row mb-3 d-flex justify-content-center">
+    <div class="col-md-4">
+      <label for="divisionFilter" class="form-label">Filter by Division:</label>
+      <select id="divisionFilter" class="form-select" [(ngModel)]="selectedDivisionId"
+        (change)="filterTicketsByDivision(selectedDivisionId)">
+        <option value="" selected>All Divisions</option>
+        <option *ngFor="let division of divisions" [value]="division._id">{{ division.name }}</option>
+      </select>
+
+      <button class="btn" (click)="resetDivisionFilter()">Reset Filter</button>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let ticket of tickets">
+      <a [routerLink]="'/tickets/' + ticket?._id" class="card-link" style="text-decoration: none;">
+        <div class="card m-3 shadow position-relative"
+          style="width: 18rem; border: none; margin-right: 10px; margin-bottom: 10px;">
+          <img src="../assets/soccer_player.png" class="card-img-top shadow-sm" alt="Soccer player">
+          <div class="card-body">
+            <h5 class="card-title">{{ ticket.title}}</h5>
+            <p class="card-text">Match date: {{ ticket.date | date }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<!-- ticket-create.component.html -->
+<h2 class="text-center mt-3 mb-4">Create Ticket</h2>
+
+<div class="card-create shadow mx-auto m-3 bg-light" style="width: 85em; position: relative; border: none;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="../assets/soccer_player.png" class="card-img" alt="User Image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <form [formGroup]="ticketForm">
+          <div>
+            <label for="title">Title</label>
+            <input type="text" class="form-control" placeholder="Enter title" formControlName="title">
+          </div>
+          <div>
+            <label for="price">Price</label>
+            <input type="number" class="form-control" placeholder="Enter price" formControlName="price">
+          </div>
+          <div>
+            <label for="date">Date</label>
+            <input type="date" class="form-control" placeholder="Select date" formControlName="date">
+          </div>
+
+          <div>
+            <label for="status">Status</label>
+            <select class="form-select" name="status" id="status" formControlName="status">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+          <div>
+            <label for="seat">Seat</label>
+            <input type="number" class="form-control" placeholder="Enter seat number" formControlName="seat">
+          </div>
+          <div>
+            <label for="division">Select Division</label>
+            <select class="form-select" name="division" id="division" formControlName="division">
+              <option value="" selected disabled>Select Division</option>
+              <option *ngFor="let division of divisions" [value]="division._id">{{ division.name }}</option>
+            </select>
+          </div>
+          <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
+            <button routerLink="../" class="btn btn-primary" style="border: 1px solid #000;" (click)="saveTicket()" [disabled]="!ticketForm.valid">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

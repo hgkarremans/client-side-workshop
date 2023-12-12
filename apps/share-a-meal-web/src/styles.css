@@ -1,0 +1,30 @@
+.navbar, .footer {
+    background-color: #fefefe;
+    
+}
+.card-body {
+    border: none;
+    object-fit: cover; object-position: center
+  
+}
+.card {
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; 
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transform: scale(1.05); 
+  }
+@media (max-width: 767px) {
+  /* Styles for screens smaller than 768 pixels wide (typical mobile devices) */
+  .card-create .col-md-4 {
+    display: none !important; /* Use !important to increase specificity */
+  }
+
+  .card-create .col-md-8 {
+    width: 100% !important; /* Use !important to increase specificity */
+  }
+}
+
+
+  

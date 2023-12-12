@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-center mb-3">
+      <button class="btn btn-primary" [routerLink]="'create'">Create User</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let user of users$ | async">
+      <a [routerLink]="'../users/' + user.Id" class="card-link" style="text-decoration: none;">
+        <div class="card m-3 shadow position-relative" style="width: 18rem; border: none;">
+          <img [src]="user.image" class="card-img-top" [alt]="user.image + ' Image'">
+          <div class="card-body">
+            <h5 class="card-title">{{ user.firstName }} {{ user.lastName }}</h5>
+            <p class="card-text">Birthdate: {{ user.dateOfBirth | date }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
