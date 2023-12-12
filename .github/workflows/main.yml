@@ -32,7 +32,6 @@ jobs:
           echo ${GITHUB_WORKSPACE}
           cd ${GITHUB_WORKSPACE}/dist/apps/data-api/ && zip ${GITHUB_WORKSPACE}/data-api-release.zip ./* -r
           cd ${GITHUB_WORKSPACE}/dist/apps/share-a-meal-web/ && zip ${GITHUB_WORKSPACE}/share-a-meal-web-release.zip ./* -r
-          cd ${GITHUB_WORKSPACE}/dist/apps/rcmnd-api/ && zip ${GITHUB_WORKSPACE}/rcmnd-api-release.zip ./* -r
 
       - name: Upload frontend-app artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -45,12 +44,6 @@ jobs:
         with:
           name: data-api
           path: data-api-release.zip
-
-      - name: Upload backend-api artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: rcmnd-api
-          path: rcmnd-api-release.zip
           
           
   deploy-frontend-app:
@@ -102,7 +95,7 @@ jobs:
         with:
           app-name: 'clientsideHG'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.NESTJS_PUBLISHPROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
 
           
