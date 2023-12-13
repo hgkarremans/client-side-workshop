@@ -100,7 +100,3 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.NEXTJS_PUBLISHPROFILE}}
           package: .
-
-          
-
-      
