@@ -13,12 +13,13 @@ import { Neo4jModule, Neo4jScheme } from "nest-neo4j/dist";
     AuthModule,
     MongooseModule.forRoot(environment.MONGO_DB_CONNECTION_STRING),
     Neo4jModule.forRoot({
-      scheme : environment.NEO4J_SCHEME as Neo4jScheme,
+      scheme: environment.NEO4J_SCHEME as Neo4jScheme,
       host: environment.NEO4J_HOST,
-      port: environment.NEO4J_PORT,
+      port: parseInt(environment.NEO4J_PORT, 10), // Parse the port as an integer
       username: environment.NEO4J_USERNAME,
       password: environment.NEO4J_PASSWORD,
-  }),
+      database: environment.NEO4J_DATABASE,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
