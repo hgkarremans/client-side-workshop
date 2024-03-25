@@ -40,9 +40,10 @@ exports.AppModule = AppModule = tslib_1.__decorate([
             dist_1.Neo4jModule.forRoot({
                 scheme: util_env_1.environment.NEO4J_SCHEME,
                 host: util_env_1.environment.NEO4J_HOST,
-                port: util_env_1.environment.NEO4J_PORT,
+                port: parseInt(util_env_1.environment.NEO4J_PORT, 10),
                 username: util_env_1.environment.NEO4J_USERNAME,
                 password: util_env_1.environment.NEO4J_PASSWORD,
+                database: util_env_1.environment.NEO4J_DATABASE,
             }),
         ],
         controllers: [app_controller_1.AppController],
@@ -853,7 +854,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             role: newUser.role || api_1.UserRole.guest,
             friends: newUser.friends || [],
             hasTransportation: newUser.hasTransportation || false,
-            passwordHash: hashedPassword,
+            passwordHash: hashedPassword, // Pass the hashed password here
         });
         const userProperties = result.records[0]?.get('user').properties;
         const payload = {
@@ -869,29 +870,33 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
     }
     async update(Id, user) {
         common_2.Logger.log(`Update(${Id})`, this.TAG);
+        // Check if any of the user properties are undefined, and provide default values if needed
+        const updatedUser = {
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            image: user.image || '',
+            emailAddress: user.emailAddress || '',
+            dateOfBirth: user.dateOfBirth || '',
+            gender: user.gender || '',
+            role: user.role || '',
+            friends: user.friends || [],
+        };
         const query = `
-        MATCH (user:User {Id: $Id})
-        SET
-            user.firstName = $firstName,
-            user.lastName = $lastName,
-            user.image = $image,
-            user.emailAddress = $emailAddress,
-            user.dateOfBirth = $dateOfBirth,
-            user.gender = $gender,
-            user.role = $role,
-            user.friends = $friends
-        RETURN user
-    `;
+      MATCH (user:User {Id: $Id})
+      SET
+          user.firstName = $firstName,
+          user.lastName = $lastName,
+          user.image = $image,
+          user.emailAddress = $emailAddress,
+          user.dateOfBirth = $dateOfBirth,
+          user.gender = $gender,
+          user.role = $role,
+          user.friends = $friends
+      RETURN user
+  `;
         const parameters = {
             Id: parseInt(Id),
-            firstName: user.firstName,
-            lastName: user.lastName,
-            image: user.image,
-            emailAddress: user.emailAddress,
-            dateOfBirth: user.dateOfBirth,
-            gender: user.gender,
-            role: user.role,
-            friends: user.friends || [],
+            ...updatedUser, // Use the updated user object with default values
         };
         console.log('Update Parameters:', parameters); // Log the parameters for debugging
         const result = await this.neo4jService.write(query, parameters);
@@ -1846,7 +1851,7 @@ exports.environment = {
     NEO4J_PORT: '7687',
     NEO4J_USERNAME: 'neo4j',
     NEO4J_PASSWORD: 'ticketshop2003',
-    NEO4J_DATABASE: 'TicketShopUsers',
+    NEO4J_DATABASE: 'neo4j',
 };
 
 

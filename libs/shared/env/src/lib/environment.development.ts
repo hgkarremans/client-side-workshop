@@ -9,5 +9,5 @@ export const environment: IEnvironment = {
     NEO4J_PORT: '7687',
     NEO4J_USERNAME: 'neo4j',
     NEO4J_PASSWORD: 'ticketshop2003',
-    NEO4J_DATABASE: 'TicketShopUsers',
+    NEO4J_DATABASE: 'neo4j',
 }

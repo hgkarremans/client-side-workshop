@@ -86,7 +86,7 @@ export class Neo4jUserService {
       role: newUser.role || UserRole.guest, // Provide a default value if not specified
       friends: newUser.friends || [],
       hasTransportation: newUser.hasTransportation || false, // Provide a default value if not specified
-      passwordHash: hashedPassword,
+      passwordHash: hashedPassword, // Pass the hashed password here
     });
 
     const userProperties = result.records[0]?.get('user').properties;
@@ -101,48 +101,54 @@ export class Neo4jUserService {
 
     // Include the JWT in the response
     return { user: userProperties, access_token: accessToken };
-  }
+}
 
-  async update(
-    Id: string,
-    user: Pick<
-        User,
-        'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'
-    >
+
+async update(
+  Id: string,
+  user: Pick<
+      User,
+      'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'
+  >
 ) {
-    Logger.log(`Update(${Id})`, this.TAG);
+  Logger.log(`Update(${Id})`, this.TAG);
 
-    const query = `
-        MATCH (user:User {Id: $Id})
-        SET
-            user.firstName = $firstName,
-            user.lastName = $lastName,
-            user.image = $image,
-            user.emailAddress = $emailAddress,
-            user.dateOfBirth = $dateOfBirth,
-            user.gender = $gender,
-            user.role = $role,
-            user.friends = $friends
-        RETURN user
-    `;
+  // Check if any of the user properties are undefined, and provide default values if needed
+  const updatedUser = {
+      firstName: user.firstName || '',
+      lastName: user.lastName || '',
+      image: user.image || '',
+      emailAddress: user.emailAddress || '',
+      dateOfBirth: user.dateOfBirth || '',
+      gender: user.gender || '',
+      role: user.role || '',
+      friends: user.friends || [],
+  };
 
-    const parameters = {
-        Id: parseInt(Id),
-        firstName: user.firstName,
-        lastName: user.lastName,
-        image: user.image,
-        emailAddress: user.emailAddress,
-        dateOfBirth: user.dateOfBirth,
-        gender: user.gender,
-        role: user.role,
-        friends: user.friends || [],
-    };
+  const query = `
+      MATCH (user:User {Id: $Id})
+      SET
+          user.firstName = $firstName,
+          user.lastName = $lastName,
+          user.image = $image,
+          user.emailAddress = $emailAddress,
+          user.dateOfBirth = $dateOfBirth,
+          user.gender = $gender,
+          user.role = $role,
+          user.friends = $friends
+      RETURN user
+  `;
 
-    console.log('Update Parameters:', parameters); // Log the parameters for debugging
+  const parameters = {
+      Id: parseInt(Id),
+      ...updatedUser, // Use the updated user object with default values
+  };
 
-    const result = await this.neo4jService.write(query, parameters);
+  console.log('Update Parameters:', parameters); // Log the parameters for debugging
 
-    return result.records;
+  const result = await this.neo4jService.write(query, parameters);
+
+  return result.records;
 }
 
 

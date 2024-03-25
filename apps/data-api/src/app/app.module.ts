@@ -15,7 +15,7 @@ import { Neo4jModule, Neo4jScheme } from "nest-neo4j/dist";
     Neo4jModule.forRoot({
       scheme: environment.NEO4J_SCHEME as Neo4jScheme,
       host: environment.NEO4J_HOST,
-      port: parseInt(environment.NEO4J_PORT, 10), // Parse the port as an integer
+      port: parseInt(environment.NEO4J_PORT, 10), 
       username: environment.NEO4J_USERNAME,
       password: environment.NEO4J_PASSWORD,
       database: environment.NEO4J_DATABASE,

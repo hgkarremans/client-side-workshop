@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http'; // Import HttpErrorRes
 })
 export class UserLoginComponent {
   loginForm: FormGroup;
+  loginFailed = false; // Add a property to track login failure
 
   constructor(
     private fb: FormBuilder,
@@ -32,17 +33,17 @@ export class UserLoginComponent {
         () => {
           // Successful login, navigate to the desired page or perform other actions
           console.log('Login successful');
-          
           console.log('User is logged in:', this.authService.isLoggedIn());
+          // Reset the form after successful login
+          this.loginForm.reset();
+          this.loginFailed = false; // Clear the login failure message
         },
         (error: HttpErrorResponse) => {
           // Handle login error, display a message, or perform other actions
           console.error('Login failed:', error);
+          this.loginFailed = true; // Set loginFailed to true
         }
       );
-
-      // Reset the form after handling the login
-      this.loginForm.reset();
     } else {
       console.log('Form is invalid');
     }

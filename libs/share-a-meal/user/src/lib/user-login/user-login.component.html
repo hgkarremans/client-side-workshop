@@ -20,8 +20,12 @@
               [ngClass]="{'is-invalid': loginForm.get('passwordHash')?.invalid && loginForm.get('passwordHash')?.touched}">
             <div *ngIf="loginForm.get('passwordHash')?.hasError('required') && loginForm.get('passwordHash')?.touched">Password is required.</div>
           </div>
+          <div class="mb-3 w-75 text-danger" *ngIf="loginFailed">Invalid email or password.</div>
+
           <div style="margin-top: 16px;">
-            <button routerLink="" class="btn btn-primary" style="border: 1px solid #000;" (click)="login()" [disabled]="loginForm.invalid">Login</button>
+            <button class="btn btn-primary" style="border: 1px solid #000;" (click)="login()" [disabled]="loginForm.invalid">Login</button>
+            
+
           </div>
         </form>
       </div>
