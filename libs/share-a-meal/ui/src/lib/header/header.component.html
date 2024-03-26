@@ -24,7 +24,7 @@
           <a class="nav-link text-dark" routerLink="register">Register</a>
         </ng-container>
         <ng-container *ngIf="isLoggedIn">
-          <a class="nav-link text-dark" (click)="logout()">Logout</a>
+          <a class="nav-link text-dark" (click)="logout()" routerLink="tickets">Logout</a>
           
         </ng-container>
       </div>
