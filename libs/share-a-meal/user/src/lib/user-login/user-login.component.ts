@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
-import { HttpErrorResponse } from '@angular/common/http'; // Import HttpErrorResponse
+import { HttpErrorResponse } from '@angular/common/http'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'clientside-nx-workshop-user-login',
@@ -16,7 +17,8 @@ export class UserLoginComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       emailAddress: ['', [Validators.required, Validators.email]],
@@ -31,17 +33,18 @@ export class UserLoginComponent {
 
       this.userService.loginUser(email, password).subscribe(
         () => {
-          // Successful login, navigate to the desired page or perform other actions
+          
           console.log('Login successful');
           console.log('User is logged in:', this.authService.isLoggedIn());
-          // Reset the form after successful login
+          
           this.loginForm.reset();
-          this.loginFailed = false; // Clear the login failure message
+          this.loginFailed = false; 
+          this.router.navigate(['/tickets']);
         },
         (error: HttpErrorResponse) => {
-          // Handle login error, display a message, or perform other actions
+          
           console.error('Login failed:', error);
-          this.loginFailed = true; // Set loginFailed to true
+          this.loginFailed = true; 
         }
       );
     } else {
