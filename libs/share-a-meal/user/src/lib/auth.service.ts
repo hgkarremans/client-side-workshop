@@ -32,4 +32,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+  isAuthenticated(): boolean {
+    // Check if the token is in localStorage
+    return localStorage.getItem('authToken') !== null;
+  }
 }

@@ -23,8 +23,10 @@ import { AuthGuard } from './auth.guard';
     UserCreateComponent,
     UserLoginComponent,
   ],
-  providers: [UserService,
-    ],
+  providers: [
+    UserService,
+    AuthGuard,
+  ],
   exports: [
     UserListComponent,
     UserEditComponent,
