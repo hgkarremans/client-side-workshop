@@ -10,6 +10,8 @@ import { UserCreateComponent } from './user-create/user-create.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './user.service';
 import { UserLoginComponent } from './user-login/user-login.component';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
@@ -21,7 +23,8 @@ import { UserLoginComponent } from './user-login/user-login.component';
     UserCreateComponent,
     UserLoginComponent,
   ],
-  providers: [UserService],
+  providers: [UserService,
+    ],
   exports: [
     UserListComponent,
     UserEditComponent,
