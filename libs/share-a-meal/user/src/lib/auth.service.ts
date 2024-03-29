@@ -34,10 +34,10 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    //return !!this.getToken();
-    return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
+    return !!this.getToken();
+    //return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
   }
-
-  
-  
+  isRole(): boolean {
+    return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
+  }  
 }
