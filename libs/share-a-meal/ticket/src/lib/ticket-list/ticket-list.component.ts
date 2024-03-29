@@ -64,6 +64,7 @@ export class TicketListComponent implements OnInit, OnDestroy {
       console.log('User token:', token);
     } else {
       console.log('User is not logged in.');
+      console.log('User token when not logged in:', token);
     }
   }
 

@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 export class AuthService {
   private readonly TOKEN_KEY = 'access_token';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  decodedToken: any;
 
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
@@ -26,14 +27,17 @@ export class AuthService {
   }
 
   decodeToken(token: string): any {
-    return jwtDecode(token);
+    if (!token) {
+      return null;
+    }
+    return jwtDecode(token)
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    //return !!this.getToken();
+    return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
   }
-  isAuthenticated(): boolean {
-    // Check if the token is in localStorage
-    return localStorage.getItem('authToken') !== null;
-  }
+
+  
+  
 }

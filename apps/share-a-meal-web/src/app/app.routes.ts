@@ -14,22 +14,9 @@ export const appRoutes: Route[] = [
         component: TicketListComponent
     },
     {
-        path: 'users',
-        component: UserListComponent,
-    },
-    {
         path: 'register',
         component: UserCreateComponent
     },
-    {
-        path: 'users/edit',
-        component: UserEditComponent
-    },
-    {
-        path: 'users/:id',
-        component: UserDetailsComponent
-    },
-    
     {
         path: 'login',
         component: UserLoginComponent
@@ -49,14 +36,15 @@ export const appRoutes: Route[] = [
     },
     {
         path: 'tickets/:id/edit',
-        component: TicketEditComponent
+        component: TicketEditComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'about',
         component: AboutComponent
     },
-    // {
-    //     path: '**',
-    //     redirectTo: '',
-    // }
+    {
+        path: '**',
+        redirectTo: 'tickets',
+    }
 ];
