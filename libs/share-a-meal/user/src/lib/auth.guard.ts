@@ -7,13 +7,21 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+  decodedToken: any | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    const token = this.authService.getToken();
+
+    if (token) {
+      this.decodedToken = this.authService.decodeToken(token);
+      console.log('Decoded Token:', this.decodedToken);
+    }
+  }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.authService.getToken()) {
+    if (this.authService.isRole(this.decodedToken)) {
       return true;
     } else {
       this.router.navigate(['/login']);

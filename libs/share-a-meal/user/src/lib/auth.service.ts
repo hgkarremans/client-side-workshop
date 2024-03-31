@@ -37,7 +37,9 @@ export class AuthService {
     return !!this.getToken();
     //return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
   }
-  isRole(): boolean {
-    return this.decodedToken?.role === 'Admin' || this.decodedToken?.role === 'Editor';
+  isRole(token : any): boolean {
+    
+    
+    return token?.role === 'Admin' || token?.role === 'Editor';
   }  
 }
