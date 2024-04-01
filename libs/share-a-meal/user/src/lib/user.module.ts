@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import { UsersFriendsComponent } from './users-friends/users-friends.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
@@ -22,16 +23,15 @@ import { AuthGuard } from './auth.guard';
     DeleteConformationModalComponent,
     UserCreateComponent,
     UserLoginComponent,
+    UsersFriendsComponent,
   ],
-  providers: [
-    UserService,
-    AuthGuard,
-  ],
+  providers: [UserService, AuthGuard],
   exports: [
     UserListComponent,
     UserEditComponent,
     DeleteConformationModalComponent,
-    UserLoginComponent
+    UserLoginComponent,
+    UsersFriendsComponent,
   ],
 })
 export class UserModule {}

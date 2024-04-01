@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { UserCreateComponent, UserDetailsComponent, UserEditComponent, UserListComponent, UserLoginComponent } from '@avans-nx-workshop/user';
+import { UserCreateComponent, UserDetailsComponent, UserEditComponent, UserListComponent, UserLoginComponent, UsersFriendsComponent } from '@avans-nx-workshop/user';
 import { AboutComponent } from '@avans-nx-workshop/share-a-meal/features';
 import { TicketCreateComponent, TicketDetailComponent, TicketEditComponent, TicketListComponent } from '@avans-nx-workshop/tickets';
 import { AuthGuard } from '@avans-nx-workshop/user';
@@ -37,6 +37,11 @@ export const appRoutes: Route[] = [
     {
         path: 'tickets/:id/edit',
         component: TicketEditComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'user/friends',
+        component: UsersFriendsComponent,
         canActivate: [AuthGuard]
     },
     {
