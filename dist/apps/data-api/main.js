@@ -808,6 +808,12 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         console.log('Result:', result); // Log the result for debugging
         return result.records;
     }
+    async getFriends(Id) {
+        common_2.Logger.log(`getFriends(${Id})`, this.TAG);
+        const query = `MATCH (user:User {Id: $Id})-[:FRIENDS_WITH]->(friend:User) RETURN friend`;
+        const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
+        return result?.records.map((record) => record.get('friend').properties);
+    }
     async findOne(emailAddress) {
         const query = `MATCH (user:User {emailAddress: $emailAddress}) RETURN user`;
         const result = await this.neo4jService.read(query, { emailAddress });
@@ -854,7 +860,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             role: newUser.role || api_1.UserRole.guest,
             friends: newUser.friends || [],
             hasTransportation: newUser.hasTransportation || false,
-            passwordHash: hashedPassword, // Pass the hashed password here
+            passwordHash: hashedPassword,
         });
         const userProperties = result.records[0]?.get('user').properties;
         const payload = {
@@ -864,8 +870,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         };
         const accessToken = await this.jwtService.signAsync(payload);
         console.log('payload: ', payload);
-        console.log('accessToken:', accessToken); // Log the JWT for debugging
-        // Include the JWT in the response
+        console.log('accessToken:', accessToken);
         return { user: userProperties, access_token: accessToken };
     }
     async update(Id, user) {
@@ -962,6 +967,10 @@ let UserController = exports.UserController = class UserController {
         console.log("controller user: ", user);
         return user;
     }
+    async getFriends(Id) {
+        const friends = await this.neo4jService.getFriends(Id);
+        return friends;
+    }
     async createUser(newUser) {
         const createdUser = await this.neo4jService.create(newUser);
         return createdUser;
@@ -989,6 +998,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "getOneUser", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':Id/friends'),
+    tslib_1.__param(0, (0, common_1.Param)('Id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "getFriends", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
     (0, public_decorator_1.Public)(),

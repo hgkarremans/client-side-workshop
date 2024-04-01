@@ -21,9 +21,11 @@ export class UserController {
     console.log("controller user: ", user);
     return user;
   }
-  
-
-
+  @Get(':Id/friends')
+  async getFriends(@Param('Id') Id: string) {
+    const friends = await this.neo4jService.getFriends(Id);
+    return friends;
+  }
   @Post()
   @Public()
   async createUser(@Body() newUser: User) {

@@ -36,6 +36,16 @@ export class Neo4jUserService {
 
     return result.records;
   }
+  async getFriends(Id: string) {
+    Logger.log(`getFriends(${Id})`, this.TAG);
+
+    const query = `MATCH (user:User {Id: $Id})-[:FRIENDS_WITH]->(friend:User) RETURN friend`;
+
+    const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
+
+    return result?.records.map((record) => record.get('friend').properties);
+  }
+
   async findOne(emailAddress: string): Promise<User> {
     const query = `MATCH (user:User {emailAddress: $emailAddress}) RETURN user`;
     const result = await this.neo4jService.read(query, { emailAddress });
@@ -83,10 +93,10 @@ export class Neo4jUserService {
       emailAddress: newUser.emailAddress,
       dateOfBirth: newUser.dateOfBirth,
       gender: newUser.gender,
-      role: newUser.role || UserRole.guest, // Provide a default value if not specified
+      role: newUser.role || UserRole.guest, 
       friends: newUser.friends || [],
-      hasTransportation: newUser.hasTransportation || false, // Provide a default value if not specified
-      passwordHash: hashedPassword, // Pass the hashed password here
+      hasTransportation: newUser.hasTransportation || false, 
+      passwordHash: hashedPassword, 
     });
 
     const userProperties = result.records[0]?.get('user').properties;
@@ -97,9 +107,9 @@ export class Neo4jUserService {
     };
     const accessToken = await this.jwtService.signAsync(payload);
     console.log('payload: ', payload);
-    console.log('accessToken:', accessToken); // Log the JWT for debugging
+    console.log('accessToken:', accessToken); 
 
-    // Include the JWT in the response
+    
     return { user: userProperties, access_token: accessToken };
 }
 

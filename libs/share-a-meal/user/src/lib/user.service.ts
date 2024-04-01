@@ -36,6 +36,12 @@ export class UserService {
       catchError(this.handleError)
     );
   }
+  getUserFriends(): Observable<IUser[]> {
+    // Assuming your API endpoint returns an array of User objects representing the user's friends
+    // Adjust the API endpoint according to your backend implementation
+    return this.http.get<IUser[]>(`${this.apiUrl}/friends`);
+  }
+  
   loginUser(email: string, password: string): Observable<any> {
     const signInDto = { emailAddress: email, password: password };
     return this.http.post<any>(environment.apiUrl + 'auth/login', signInDto).pipe(
