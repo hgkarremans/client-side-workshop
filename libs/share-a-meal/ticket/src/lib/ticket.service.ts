@@ -4,7 +4,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, map, tap } from 'rxjs/operators';
-import { ITicket, ApiResponse, IDivision } from '@avans-nx-workshop/shared/api';
+import { ITicket, ApiResponse, IDivision, IClub, IPlayer } from '@avans-nx-workshop/shared/api';
 import { environment } from '@avans-nx-workshop/shared/util-env';
  
 @Injectable({
@@ -15,6 +15,7 @@ export class TicketService implements OnDestroy {
   // apiUrl: 'http://localhost:3000/api/',
   private readonly apiUrl = environment.apiUrl + 'ticket';
   private readonly divisionUrl = environment.apiUrl + 'division';
+  private readonly clubUrl = environment.apiUrl + 'club';
   // private readonly divisionUrl = 'http://localhost:3000/api/division';//
   private destroy$ = new Subject<void>();
 
@@ -95,6 +96,16 @@ export class TicketService implements OnDestroy {
         map((response) => (response.results || []) as IDivision[])
       );
   }
+  getClubs() {
+    return this.http.get(this.clubUrl).pipe(
+      takeUntil(this.destroy$),
+      map((response: any) => {
+        return response.results || [];
+      })
+    );
+  }
+  
+  
   updateTicketOwner(ticketId: string, ownerId: string): Observable<void> {
     const url = `${this.apiUrl}/${ticketId}/user`;
     return this.http.put<void>(url, { owner: ownerId }).pipe(takeUntil(this.destroy$));

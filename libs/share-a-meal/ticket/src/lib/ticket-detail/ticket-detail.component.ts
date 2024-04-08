@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ITicket } from '@avans-nx-workshop/shared/api';
+import { IClub, ITicket } from '@avans-nx-workshop/shared/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TicketService } from '../ticket.service';
 import { Subscription } from 'rxjs';
@@ -16,7 +16,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   ownerFirstName: string | undefined;
   private ticketSubscription: Subscription | undefined;
   jwtToken: string | null = null;
-  decodedToken: any | null = null; // Variable to store the decoded token
+  decodedToken: any | null = null; 
+  clubs: IClub[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +53,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       this.ticketService.getTicketById(ticketId || '').subscribe(
         (ticket) => {
           this.ticket = ticket;
+          this.fetchClubs(ticket.clubs);
           console.log('Ticket:', this.ticket);
         },
         (error) => {
@@ -74,6 +76,12 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         console.error('Error deleting ticket:', error);
       }
     );
+  }
+  fetchClubs(clubIds: string[]): void {
+    this.ticketService.getClubs().subscribe((clubs) => {
+      // Filter clubs based on club IDs
+      this.clubs = clubs.filter((club: IClub) => clubIds.includes(club._id));
+    });
   }
   claimTicket() {
     console.log('Claiming ticket');

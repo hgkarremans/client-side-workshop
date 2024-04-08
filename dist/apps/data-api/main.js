@@ -777,7 +777,6 @@ tslib_1.__decorate([
 ], Ticket.prototype, "clubs", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
-        required: true,
         type: mongoose_2.Types.ObjectId,
     }),
     tslib_1.__metadata("design:type", String)

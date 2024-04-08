@@ -56,7 +56,7 @@ export class Ticket implements ITicket {
     clubs!: string[];
 
     @Prop({
-        required: true,
+        
         type: Types.ObjectId,
     })
     owner?: string;
