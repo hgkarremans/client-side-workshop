@@ -752,6 +752,13 @@ tslib_1.__decorate([
     }),
     tslib_1.__metadata("design:type", String)
 ], Ticket.prototype, "divisionId", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: [String]
+    }),
+    tslib_1.__metadata("design:type", Array)
+], Ticket.prototype, "clubs", void 0);
 exports.Ticket = Ticket = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Ticket);

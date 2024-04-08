@@ -49,6 +49,12 @@ export class Ticket implements ITicket {
     })
     divisionId!: string;
 
+    @Prop({
+        required: true,
+        type: [String]
+    })
+    clubs!: string[];
+
     
 }
 export const TicketSchema = SchemaFactory.createForClass(Ticket);

@@ -16,4 +16,5 @@ export interface ITicket {
     status: TicketStatus;
     seat: number;
     divisionId: string;
+    clubs: string[];
 }
