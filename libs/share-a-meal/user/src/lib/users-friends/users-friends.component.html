@@ -1,6 +1,9 @@
 <div class="friend-list">
   <h2>Friends</h2>
-  <button class="add-button" >Add Friend</button>
+  <div class="add-friend">
+    <input type="text" placeholder="Enter email to add friend" >
+    <button class="add-button" (click)="addFriend()">Add Friend</button>
+  </div>
   <ul>
     <li *ngFor="let friend of friends" class="friend-item">
       <div class="friend-info">

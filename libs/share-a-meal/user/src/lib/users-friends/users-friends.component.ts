@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../user.service'; 
 import { User } from '@avans-nx-workshop/shared/api';
 import { AuthService } from '../auth.service';
@@ -12,16 +11,17 @@ import { AuthService } from '../auth.service';
 export class UsersFriendsComponent implements OnInit {
   friends: User[] = [];
   token: string | null;
+  newFriendEmail = '';
 
-  constructor(
-    private userService: UserService,
-    private authService: AuthService,
-    private dialog: MatDialog
-  ) {
+  constructor(private userService: UserService, private authService: AuthService) {
     this.token = this.authService.getToken();
   }
 
   ngOnInit(): void {
+    this.loadFriends();
+  }
+
+  loadFriends() {
     this.userService.getUserFriends('2870.0', this.token).subscribe(
       (response: any) => {
         if (response?.results && response.results.length > 0) {
@@ -37,33 +37,11 @@ export class UsersFriendsComponent implements OnInit {
     );
   }
 
-  openSpinner(): void {
-    const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-      width: '250px',
-      data: { emails: [] } // Pass an empty array initially
-    });
-
-    this.userService.getUsers().subscribe(
-      (users: IUser[]) => {
-        dialogRef.componentInstance.data.emails = users.map(user => user.emailAddress);
-      },
-      (error) => {
-        console.error('Error fetching user emails:', error);
-      }
-    );
+  addFriend() {
+    // Call your service method to add friend here
+    console.log('Adding friend with email:', this.newFriendEmail);
+    // You need to implement the logic to add a friend using the entered email
+    // After adding friend, you may want to reload the friend list
+    this.loadFriends();
   }
-}
-
-@Component({
-  selector: 'spinner-dialog',
-  template: `
-    <h2 mat-dialog-title>Loading User Emails</h2>
-    <mat-spinner></mat-spinner>
-    <div mat-dialog-content>
-      <p *ngFor="let email of data.emails">{{ email }}</p>
-    </div>
-  `,
-})
-export class SpinnerDialogComponent {
-  constructor(public dialogRef: MatDialogRef<SpinnerDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {}
 }
