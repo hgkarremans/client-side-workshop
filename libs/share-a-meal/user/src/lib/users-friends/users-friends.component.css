@@ -1,0 +1,42 @@
+.friend-list {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .add-button {
+    margin-bottom: 10px;
+  }
+  
+  .friend-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .friend-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .friend-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .delete-button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: #d22f17;
+  }
+  

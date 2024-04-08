@@ -39,12 +39,19 @@ export class Neo4jUserService {
   async getFriends(Id: string) {
     Logger.log(`getFriends(${Id})`, this.TAG);
 
-    const query = `MATCH (user:User {Id: $Id})-[:FRIENDS_WITH]->(friend:User) RETURN friend`;
+    try {
+        const query = `MATCH (user:User {Id: $Id})-[:FRIENDS]-(friend:User) RETURN friend`;
 
-    const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
+        const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
 
-    return result?.records.map((record) => record.get('friend').properties);
-  }
+        const friends = result?.records.map(record => record.get('friend').properties);
+        return friends;
+    } catch (error) {
+        console.error('Error fetching friends:', error);
+        throw new Error('Failed to fetch friends');
+    }
+}
+
 
   async findOne(emailAddress: string): Promise<User> {
     const query = `MATCH (user:User {emailAddress: $emailAddress}) RETURN user`;

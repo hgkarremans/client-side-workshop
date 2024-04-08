@@ -36,7 +36,7 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  getUserFriends(userId: string, token: any): Observable<IUser[]> {
+  getUserFriends(userId: string, token: any): Observable<any> {
     console.log(`getUserFriends called for userId: ${userId}`);
     
     // Construct headers with Authorization token
@@ -45,11 +45,11 @@ export class UserService {
     });
 
     // Include headers in the HTTP request
-    return this.http.get<IUser[]>(`${this.apiUrl}/${userId}/friends`, { headers }).pipe(
-      tap(response => console.log('Friend list:', response)),
+    return this.http.get<any>(`${this.apiUrl}/${userId}/friends`, { headers }).pipe(
+      tap(response => console.log('Friend list:', response.results)),
       catchError(error => {
         console.error('Error fetching user friends:', error);
-        throw error; // Rethrow the error to be caught by the caller
+        return throwError(error); // Rethrow the error to be caught by the caller
       })
     );
 }
