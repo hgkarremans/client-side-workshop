@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ITicket } from '@avans-nx-workshop/shared/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TicketService } from '../ticket.service';
@@ -22,7 +22,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ticketService: TicketService,
     private modalService: NgbModal,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -81,9 +82,22 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.ticketService.updateTicketOwner(this.ticket?._id || '', this.decodedToken?.sub || '').subscribe(
       (ticket) => {
         console.log('Ticket claimed:', ticket);
+        this.router.navigate(['/tickets']);
       },
       (error) => {
         console.error('Error claiming ticket:', error);
+      }
+    );
+  }
+  unclaimTicket() {
+    console.log('Unclaiming ticket');
+    this.ticketService.updateTicketOwner(this.ticket?._id || '', '').subscribe(
+      (ticket) => {
+        console.log('Ticket unclaimed:', ticket);
+        this.router.navigate(['/tickets']);
+      },
+      (error) => {
+        console.error('Error unclaiming ticket:', error);
       }
     );
   }
