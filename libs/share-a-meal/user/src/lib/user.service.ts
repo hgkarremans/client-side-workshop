@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ApiResponse, User as IUser } from '@avans-nx-workshop/shared/api';
 import { AuthService } from './auth.service';
@@ -36,12 +36,24 @@ export class UserService {
       catchError(this.handleError)
     );
   }
-  getUserFriends(): Observable<IUser[]> {
-    // Assuming your API endpoint returns an array of User objects representing the user's friends
-    // Adjust the API endpoint according to your backend implementation
-    return this.http.get<IUser[]>(`${this.apiUrl}/friends`);
-  }
-  
+  getUserFriends(userId: string, token: any): Observable<IUser[]> {
+    console.log(`getUserFriends called for userId: ${userId}`);
+    
+    // Construct headers with Authorization token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Include headers in the HTTP request
+    return this.http.get<IUser[]>(`${this.apiUrl}/${userId}/friends`, { headers }).pipe(
+      tap(response => console.log('Friend list:', response)),
+      catchError(error => {
+        console.error('Error fetching user friends:', error);
+        throw error; // Rethrow the error to be caught by the caller
+      })
+    );
+}
+
   loginUser(email: string, password: string): Observable<any> {
     const signInDto = { emailAddress: email, password: password };
     return this.http.post<any>(environment.apiUrl + 'auth/login', signInDto).pipe(
@@ -65,11 +77,27 @@ export class UserService {
   
   
   addUser(newUser: IUser): Observable<IUser> {
-    console.log('addUser called');
-    return this.http.post<IUser>(this.apiUrl, newUser).pipe(
-      tap(console.log),
-      catchError(this.handleError)
-    );
+    console.log('addUserAndLogin called');
+  
+  return this.http.post<IUser>(this.apiUrl, newUser).pipe(
+    tap((registeredUser: IUser) => {
+      console.log('User registered:', registeredUser);
+      
+      // After successful registration, login the user
+      this.loginUser(newUser.emailAddress, newUser.passwordHash).subscribe(
+        () => {
+          console.log('User logged in after registration');
+          // You may emit an event or perform any other action upon successful login
+        },
+        error => {
+          console.error('Error logging in user after registration:', error);
+          // Handle login errors if necessary
+        }
+      );
+    }),
+    catchError(this.handleError)
+  );
+    
   }
 
   updateUser(id: string, updatedUserData: IUser): Observable<IUser> {

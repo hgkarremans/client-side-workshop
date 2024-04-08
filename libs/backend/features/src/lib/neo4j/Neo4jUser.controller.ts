@@ -34,7 +34,7 @@ export class UserController {
   }
 
   @Put(':Id')
-  async updateUser(@Param('Id') Id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'>) {
+  async updateUser(@Param('Id') Id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' >) {
     const result = await this.neo4jService.update(Id, updatedUser);
     return result;
   }

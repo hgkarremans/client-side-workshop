@@ -39,7 +39,6 @@ export class UserCreateComponent implements OnInit {
       const newUser: User = {
         ...this.userForm.value,
         id: 0, // Assigning a temporary value, assuming the backend will assign a proper ID
-        friends: [],
       };
 
       console.log('Form Values:', this.userForm.value); // Log the form values
@@ -48,6 +47,7 @@ export class UserCreateComponent implements OnInit {
       this.userService.addUser(newUser).subscribe(
         (addedUser) => {
           console.log('User added successfully:', addedUser);
+          
         },
         (error) => {
           console.error('Error adding user:', error);

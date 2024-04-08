@@ -68,7 +68,6 @@ export class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends,
         user.hasTransportation = $hasTransportation,
         user.passwordHash = $passwordHash
       ON MATCH SET 
@@ -79,7 +78,6 @@ export class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends,
         user.hasTransportation = $hasTransportation,
         user.passwordHash = $passwordHash
       RETURN user
@@ -94,7 +92,6 @@ export class Neo4jUserService {
       dateOfBirth: newUser.dateOfBirth,
       gender: newUser.gender,
       role: newUser.role || UserRole.guest, 
-      friends: newUser.friends || [],
       hasTransportation: newUser.hasTransportation || false, 
       passwordHash: hashedPassword, 
     });
@@ -118,7 +115,7 @@ async update(
   Id: string,
   user: Pick<
       User,
-      'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' | 'friends'
+      'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' 
   >
 ) {
   Logger.log(`Update(${Id})`, this.TAG);
@@ -132,7 +129,7 @@ async update(
       dateOfBirth: user.dateOfBirth || '',
       gender: user.gender || '',
       role: user.role || '',
-      friends: user.friends || [],
+      
   };
 
   const query = `
@@ -145,7 +142,6 @@ async update(
           user.dateOfBirth = $dateOfBirth,
           user.gender = $gender,
           user.role = $role,
-          user.friends = $friends
       RETURN user
   `;
 

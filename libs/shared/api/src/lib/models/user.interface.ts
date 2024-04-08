@@ -22,7 +22,6 @@ export interface User {
     role: UserRole;
     gender : UserGender;
     image: string;
-    friends: User[];
     hasTransportation: boolean;
     ticketsId: string[];
 }

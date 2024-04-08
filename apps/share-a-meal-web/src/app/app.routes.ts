@@ -42,7 +42,7 @@ export const appRoutes: Route[] = [
     {
         path: 'user/friends',
         component: UsersFriendsComponent,
-        canActivate: [AuthGuard]
+        
     },
     {
         path: 'about',

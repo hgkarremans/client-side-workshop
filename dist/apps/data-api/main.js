@@ -833,7 +833,6 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends,
         user.hasTransportation = $hasTransportation,
         user.passwordHash = $passwordHash
       ON MATCH SET 
@@ -844,7 +843,6 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         user.dateOfBirth = $dateOfBirth,
         user.gender = $gender,
         user.role = $role,
-        user.friends = $friends,
         user.hasTransportation = $hasTransportation,
         user.passwordHash = $passwordHash
       RETURN user
@@ -858,7 +856,6 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             dateOfBirth: newUser.dateOfBirth,
             gender: newUser.gender,
             role: newUser.role || api_1.UserRole.guest,
-            friends: newUser.friends || [],
             hasTransportation: newUser.hasTransportation || false,
             passwordHash: hashedPassword,
         });
@@ -884,7 +881,6 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             dateOfBirth: user.dateOfBirth || '',
             gender: user.gender || '',
             role: user.role || '',
-            friends: user.friends || [],
         };
         const query = `
       MATCH (user:User {Id: $Id})
@@ -896,7 +892,6 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
           user.dateOfBirth = $dateOfBirth,
           user.gender = $gender,
           user.role = $role,
-          user.friends = $friends
       RETURN user
   `;
         const parameters = {
