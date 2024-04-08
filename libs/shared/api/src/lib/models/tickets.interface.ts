@@ -13,6 +13,7 @@ export interface ITicket {
     title: string,
     price: number;
     date: Date;
+    owner?: string;
     status: TicketStatus;
     seat: number;
     divisionId: string;

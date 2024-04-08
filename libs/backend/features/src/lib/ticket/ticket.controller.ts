@@ -36,4 +36,9 @@ export class TicketController {
     updateTicket(@Param('id') id: string, @Body() updatedTicketData: Partial<ITicket>): Promise<ITicket | null> {
       return this.ticketService.updateTicket(id, updatedTicketData);
     }
+    @Put(':id')
+    @Public()
+    updateUserTicket(@Param('id') id: string, @Body() updatedTicketData: Partial<ITicket>): Promise<ITicket | null> {
+      return this.ticketService.updateTicket(id, updatedTicketData);
+    }
 }

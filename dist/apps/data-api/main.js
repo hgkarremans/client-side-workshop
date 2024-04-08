@@ -564,7 +564,7 @@ module.exports = require("@nestjs/mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -589,6 +589,9 @@ let TicketController = exports.TicketController = class TicketController {
         return this.ticketService.deleteTicket(id);
     }
     updateTicket(id, updatedTicketData) {
+        return this.ticketService.updateTicket(id, updatedTicketData);
+    }
+    updateUserTicket(id, updatedTicketData) {
         return this.ticketService.updateTicket(id, updatedTicketData);
     }
 };
@@ -632,6 +635,15 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String, typeof (_g = typeof Partial !== "undefined" && Partial) === "function" ? _g : Object]),
     tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], TicketController.prototype, "updateTicket", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    (0, public_decorator_1.Public)(),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_j = typeof Partial !== "undefined" && Partial) === "function" ? _j : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+], TicketController.prototype, "updateUserTicket", null);
 exports.TicketController = TicketController = tslib_1.__decorate([
     (0, common_1.Controller)('ticket'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
@@ -759,6 +771,13 @@ tslib_1.__decorate([
     }),
     tslib_1.__metadata("design:type", Array)
 ], Ticket.prototype, "clubs", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({
+        required: true,
+        type: mongoose_2.Types.ObjectId,
+    }),
+    tslib_1.__metadata("design:type", String)
+], Ticket.prototype, "owner", void 0);
 exports.Ticket = Ticket = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Ticket);
