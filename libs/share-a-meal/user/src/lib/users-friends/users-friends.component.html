@@ -1,7 +1,7 @@
 <div class="friend-list">
   <h2>Friends</h2>
   <div class="add-friend">
-    <input type="text" placeholder="Enter email to add friend" >
+    <input type="text" placeholder="Enter email to add friend" [(ngModel)]="newFriendEmail">
     <button class="add-button" (click)="addFriend()">Add Friend</button>
   </div>
   <ul>

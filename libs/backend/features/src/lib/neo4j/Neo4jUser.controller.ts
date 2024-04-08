@@ -26,6 +26,12 @@ export class UserController {
     const friends = await this.neo4jService.getFriends(Id);
     return friends;
   }
+  @Post('friends')
+async addFriend(@Body() body: { email1: string, friendEmail: string }) {
+  const result = await this.neo4jService.addFriend(body.email1, body.friendEmail);
+  return result;
+}
+
   @Post()
   @Public()
   async createUser(@Body() newUser: User) {

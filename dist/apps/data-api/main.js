@@ -821,6 +821,23 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
             throw new Error('Failed to fetch friends');
         }
     }
+    async addFriend(email1, friendEmail) {
+        common_2.Logger.log("addfriends called", this.TAG);
+        common_2.Logger.log(`addFriend(${email1}, ${friendEmail})`, this.TAG);
+        try {
+            const query = `
+        MATCH (user1:User { emailAddress: $email1 }), (user2:User { emailAddress: $friendEmail })
+        CREATE (user1)-[:FRIENDS]->(user2)
+
+        `;
+            const result = await this.neo4jService.write(query, { userId: parseInt(email1), friendId: parseInt(friendEmail) });
+            return result;
+        }
+        catch (error) {
+            console.error('Error adding friend:', error);
+            throw new Error('Failed to add friend');
+        }
+    }
     async findOne(emailAddress) {
         const query = `MATCH (user:User {emailAddress: $emailAddress}) RETURN user`;
         const result = await this.neo4jService.read(query, { emailAddress });
@@ -973,6 +990,10 @@ let UserController = exports.UserController = class UserController {
         const friends = await this.neo4jService.getFriends(Id);
         return friends;
     }
+    async addFriend(body) {
+        const result = await this.neo4jService.addFriend(body.email1, body.friendEmail);
+        return result;
+    }
     async createUser(newUser) {
         const createdUser = await this.neo4jService.create(newUser);
         return createdUser;
@@ -1007,6 +1028,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "getFriends", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('friends'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "addFriend", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
     (0, public_decorator_1.Public)(),

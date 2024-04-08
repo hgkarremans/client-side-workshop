@@ -53,6 +53,27 @@ export class UserService {
       })
     );
 }
+addFriend(userEmail: string, friendEmail: string, token: string): Observable<any> {
+  console.log(`addFriend called for userEmail: ${userEmail} and friendEmail: ${friendEmail}`);
+  const url = `${this.apiUrl}/friends`;
+  
+  // Construct headers with Authorization token
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  // Include headers in the HTTP request
+  return this.http.post<any>(url, { userEmail, friendEmail }, { headers }).pipe(
+    tap(response => console.log('Friend added:', response)),
+    catchError(error => {
+      console.error('Error adding friend:', error);
+      return throwError(error); // Rethrow the error to be caught by the caller
+    })
+  );
+}
+
+
+
 
   loginUser(email: string, password: string): Observable<any> {
     const signInDto = { emailAddress: email, password: password };

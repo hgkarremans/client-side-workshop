@@ -51,6 +51,25 @@ export class Neo4jUserService {
         throw new Error('Failed to fetch friends');
     }
 }
+  async addFriend(email1: string, friendEmail: string) {
+    Logger.log("addfriends called", this.TAG);
+    Logger.log(`addFriend(${email1}, ${friendEmail})`, this.TAG);
+
+    try {
+        const query = `
+        MATCH (user1:User { emailAddress: $email1 }), (user2:User { emailAddress: $friendEmail })
+        CREATE (user1)-[:FRIENDS]->(user2)
+
+        `;
+
+        const result = await this.neo4jService.write(query, { userId: parseInt(email1), friendId: parseInt(friendEmail) });
+
+        return result;
+    } catch (error) {
+        console.error('Error adding friend:', error);
+        throw new Error('Failed to add friend');
+    }
+  }
 
 
   async findOne(emailAddress: string): Promise<User> {

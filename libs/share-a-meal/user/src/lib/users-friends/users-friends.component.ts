@@ -10,11 +10,14 @@ import { AuthService } from '../auth.service';
 })
 export class UsersFriendsComponent implements OnInit {
   friends: User[] = [];
-  token: string | null;
+  token: any;
+  email : any;
   newFriendEmail = '';
 
   constructor(private userService: UserService, private authService: AuthService) {
     this.token = this.authService.getToken();
+    this.email = this.authService.decodeToken(this.token).u;
+    console.log('Email:', this.email);
   }
 
   ngOnInit(): void {
@@ -38,10 +41,7 @@ export class UsersFriendsComponent implements OnInit {
   }
 
   addFriend() {
-    // Call your service method to add friend here
-    console.log('Adding friend with email:', this.newFriendEmail);
-    // You need to implement the logic to add a friend using the entered email
-    // After adding friend, you may want to reload the friend list
-    this.loadFriends();
+    console.log('Adding friend:', this.newFriendEmail);
+    this.userService.addFriend(this.email, this.newFriendEmail, this.token)
   }
 }
