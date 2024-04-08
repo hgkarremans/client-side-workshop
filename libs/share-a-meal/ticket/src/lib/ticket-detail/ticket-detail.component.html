@@ -24,7 +24,7 @@
           <div *ngIf="ticket.owner === decodedToken.sub">
             <button class="btn btn-danger" style="border: 1px solid #000;" (click)="unclaimTicket()">Unclaim Ticket</button>
           </div>
-          <div *ngIf="ticket.owner  !== decodedToken.sub">
+          <div *ngIf="!ticket.owner && ticket.owner !== decodedToken.sub">
             <button class="btn btn-primary" style="border: 1px solid #000;" (click)="claimTicket()">Claim Ticket</button>
           </div>
         </div>
