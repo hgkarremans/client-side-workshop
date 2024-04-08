@@ -32,5 +32,14 @@ export class TicketService {
   
     return updatedTicket;
   }
+  async updateUserTicket(id: string, updatedTicketData: Partial<Ticket>): Promise<Ticket | null> {
+    const updatedTicket = await this.ticketModel.findByIdAndUpdate(
+      id,
+      { $set: updatedTicketData },
+      { new: true } 
+    ).exec();
+  
+    return updatedTicket;
+  }
   
 }

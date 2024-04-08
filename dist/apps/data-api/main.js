@@ -636,7 +636,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], TicketController.prototype, "updateTicket", null);
 tslib_1.__decorate([
-    (0, common_1.Put)(':id'),
+    (0, common_1.Put)(':id/user'),
     (0, public_decorator_1.Public)(),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
@@ -686,6 +686,10 @@ let TicketService = exports.TicketService = class TicketService {
         // Find the ticket by ID and update its data
         const updatedTicket = await this.ticketModel.findByIdAndUpdate(id, { $set: updatedTicketData }, { new: true } // Return the updated document
         ).exec();
+        return updatedTicket;
+    }
+    async updateUserTicket(id, updatedTicketData) {
+        const updatedTicket = await this.ticketModel.findByIdAndUpdate(id, { $set: updatedTicketData }, { new: true }).exec();
         return updatedTicket;
     }
 };

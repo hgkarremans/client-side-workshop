@@ -95,6 +95,10 @@ export class TicketService implements OnDestroy {
         map((response) => (response.results || []) as IDivision[])
       );
   }
+  updateTicketOwner(ticketId: string, ownerId: string): Observable<void> {
+    const url = `${this.apiUrl}/${ticketId}/user`;
+    return this.http.put<void>(url, { owner: ownerId }).pipe(takeUntil(this.destroy$));
+  }
   
 
   ngOnDestroy(): void {

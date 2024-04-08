@@ -12,6 +12,7 @@
           <p>Price: {{ ticket.price | currency:'EUR':'symbol':'1.2-2' }}</p>
           <p>Seat: {{ ticket.seat }}</p>
           <p class="card-text">Status: {{ ticket.status }}</p>
+          <p>Owner: {{ ticket.owner ? ticket.owner : 'No owner yet' }}</p>
 
           <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
             <button *ngIf="decodedToken && decodedToken.role === 'Admin'"

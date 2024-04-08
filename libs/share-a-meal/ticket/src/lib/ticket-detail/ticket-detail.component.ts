@@ -76,6 +76,16 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
   claimTicket() {
     console.log('Claiming ticket');
+    // console.log('Ticket:', this.ticket);
+    // console.log('Decoded Token:', this.decodedToken);
+    this.ticketService.updateTicketOwner(this.ticket?._id || '', this.decodedToken?.sub || '').subscribe(
+      (ticket) => {
+        console.log('Ticket claimed:', ticket);
+      },
+      (error) => {
+        console.error('Error claiming ticket:', error);
+      }
+    );
   }
 
   ngOnDestroy(): void {
