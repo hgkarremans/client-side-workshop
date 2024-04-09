@@ -16,7 +16,7 @@ export class UsersFriendsComponent implements OnInit {
 
   constructor(private userService: UserService, private authService: AuthService) {
     this.token = this.authService.getToken();
-    this.email = this.authService.decodeToken(this.token).u;
+    this.email = this.authService.decodeToken(this.token).username;
     console.log('Email:', this.email);
   }
 
@@ -25,7 +25,7 @@ export class UsersFriendsComponent implements OnInit {
   }
 
   loadFriends() {
-    this.userService.getUserFriends('2870.0', this.token).subscribe(
+    this.userService.getUserFriends(this.authService.decodeToken(this.token).sub, this.token).subscribe(
       (response: any) => {
         if (response?.results && response.results.length > 0) {
           this.friends = response.results.map((result: any) => result);
