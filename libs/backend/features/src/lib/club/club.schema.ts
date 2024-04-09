@@ -2,6 +2,7 @@ import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document, Schema as MongooseSchema} from 'mongoose';
 import { IClub, IPlayer } from '@avans-nx-workshop/shared/api';
 import { IsMongoId } from 'class-validator';
+import { Player, PlayerSchema } from '../player/player.schema';
 export type ClubDocument = IClub & Document;
 
 @Schema()
@@ -29,10 +30,12 @@ export class Club implements IClub {
     stadium!: string;   
 
     @Prop({
-        type: [{ type: String, ref: 'Player' }],
+        type: [PlayerSchema], 
         default: [],
     })
     players!: IPlayer[];
+
+
 
 
     

@@ -1243,6 +1243,7 @@ exports.ClubSchema = exports.Club = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(26);
 const class_validator_1 = __webpack_require__(21);
+const player_schema_1 = __webpack_require__(38);
 let Club = exports.Club = class Club {
 };
 tslib_1.__decorate([
@@ -1272,7 +1273,7 @@ tslib_1.__decorate([
 ], Club.prototype, "stadium", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)({
-        type: [{ type: String, ref: 'Player' }],
+        type: [player_schema_1.PlayerSchema],
         default: [],
     }),
     tslib_1.__metadata("design:type", Array)
