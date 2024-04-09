@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Club, ClubDocument } from './club.schema';
-import { IClub } from '@avans-nx-workshop/shared/api';
+import { IClub, IPlayer } from '@avans-nx-workshop/shared/api';
 
 @Injectable()
 export class ClubService {
@@ -28,4 +28,8 @@ export class ClubService {
   async deleteClub(id: string): Promise<void> {
     await this.clubModel.findByIdAndDelete(id).exec();
   }
-}
+  async getClubPlayers(id: string): Promise<IPlayer[] | null> {
+    const club = await this.clubModel.findById(id).populate('players').exec();
+    return club ? club.players : null;
+  }
+}  

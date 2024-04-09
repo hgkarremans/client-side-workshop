@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common';
 import { ClubService } from './club.service'; // Make sure to import your ClubService
 import { Club } from './club.schema'; // Import the Club schema
-import { IClub } from '@avans-nx-workshop/shared/api';
+import { IClub, IPlayer } from '@avans-nx-workshop/shared/api';
 import { Public } from './Decorators/public.decorator';
 
 @Controller('club')
@@ -17,6 +17,10 @@ export class ClubController {
   @Get(':id')
   async getClubById(@Param('id') id: string): Promise<IClub | null> {
     return this.clubService.getClubById(id);
+  }
+  @Get(':id/players')
+  async getClubPlayers(@Param('id') id: string): Promise<IPlayer[] | null> {
+    return this.clubService.getClubPlayers(id);
   }
 
   @Post()

@@ -41,6 +41,11 @@ export class TicketService implements OnDestroy {
         map((response) => (response.results as ITicket) || null)
       );
   }
+  getPlayersByClub(clubId: string): Observable<IPlayer[]> {
+    const url = `${this.clubUrl}/${clubId}/players`;
+    return this.http.get<IPlayer[]>(url).pipe(takeUntil(this.destroy$));
+  }
+  
 
   addTicket(ticket: ITicket): Observable<ITicket> {
     console.log(ticket);

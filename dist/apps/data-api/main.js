@@ -1224,6 +1224,10 @@ let ClubService = exports.ClubService = class ClubService {
     async deleteClub(id) {
         await this.clubModel.findByIdAndDelete(id).exec();
     }
+    async getClubPlayers(id) {
+        const club = await this.clubModel.findById(id).populate('players').exec();
+        return club ? club.players : null;
+    }
 };
 exports.ClubService = ClubService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
@@ -1558,7 +1562,7 @@ exports.Public = Public;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ClubController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -1575,6 +1579,9 @@ let ClubController = exports.ClubController = class ClubController {
     }
     async getClubById(id) {
         return this.clubService.getClubById(id);
+    }
+    async getClubPlayers(id) {
+        return this.clubService.getClubPlayers(id);
     }
     async createClub(clubData) {
         return this.clubService.createClub(clubData);
@@ -1601,26 +1608,33 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], ClubController.prototype, "getClubById", null);
 tslib_1.__decorate([
+    (0, common_1.Get)(':id/players'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], ClubController.prototype, "getClubPlayers", null);
+tslib_1.__decorate([
     (0, common_1.Post)(),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof api_1.IClub !== "undefined" && api_1.IClub) === "function" ? _d : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof api_1.IClub !== "undefined" && api_1.IClub) === "function" ? _e : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], ClubController.prototype, "createClub", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof Partial !== "undefined" && Partial) === "function" ? _f : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_g = typeof Partial !== "undefined" && Partial) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], ClubController.prototype, "updateClub", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], ClubController.prototype, "deleteClub", null);
 exports.ClubController = ClubController = tslib_1.__decorate([
     (0, common_1.Controller)('club'),
