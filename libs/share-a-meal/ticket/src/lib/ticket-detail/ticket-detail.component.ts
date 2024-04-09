@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IClub, ITicket } from '@avans-nx-workshop/shared/api';
+import { IClub, ITicket, IPlayer } from '@avans-nx-workshop/shared/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TicketService } from '../ticket.service';
 import { Subscription } from 'rxjs';
@@ -16,8 +16,11 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   ownerFirstName: string | undefined;
   private ticketSubscription: Subscription | undefined;
   jwtToken: string | null = null;
-  decodedToken: any | null = null; 
+  decodedToken: any | null = null;
   clubs: IClub[] = [];
+  players: IPlayer[] = [];
+  team1Players: IPlayer[] = [];
+  team2Players: IPlayer[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -47,9 +50,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       const ticketId = params.get('id');
       console.log('Ticket ID:', ticketId);
 
-      // Log to see if this block is executed
-      console.log('Before service call:', ticketId);
-
       this.ticketService.getTicketById(ticketId || '').subscribe(
         (ticket) => {
           this.ticket = ticket;
@@ -58,10 +58,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error('Error fetching ticket:', error);
-        },
-        () => {
-          // Log to see if this block is executed
-          console.log('After service call:', ticketId);
         }
       );
     });
@@ -77,16 +73,10 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       }
     );
   }
-  fetchClubs(clubIds: string[]): void {
-    this.ticketService.getClubs().subscribe((clubs) => {
-      // Filter clubs based on club IDs
-      this.clubs = clubs.filter((club: IClub) => clubIds.includes(club._id));
-    });
-  }
+
   claimTicket() {
     console.log('Claiming ticket');
-    // console.log('Ticket:', this.ticket);
-    // console.log('Decoded Token:', this.decodedToken);
+
     this.ticketService.updateTicketOwner(this.ticket?._id || '', this.decodedToken?.sub || '').subscribe(
       (ticket) => {
         console.log('Ticket claimed:', ticket);
@@ -97,6 +87,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   unclaimTicket() {
     console.log('Unclaiming ticket');
     this.ticketService.updateTicketOwner(this.ticket?._id || '', '').subscribe(
@@ -108,6 +99,32 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         console.error('Error unclaiming ticket:', error);
       }
     );
+  }
+
+  fetchClubs(clubIds: string[]): void {
+    this.ticketService.getClubs().subscribe((clubs) => {
+      this.clubs = clubs.filter((club: IClub) => clubIds.includes(club._id));
+  
+      this.clubs.forEach((club, index) => {
+        this.ticketService.getPlayersByClub(club._id).subscribe(
+          (data: any) => {
+            const playersArray = data.results;
+            if (Array.isArray(playersArray)) {
+              if (index % 2 === 0) {
+                this.team1Players = this.team1Players.concat(playersArray);
+              } else {
+                this.team2Players = this.team2Players.concat(playersArray);
+              }
+            } else {
+              console.error('Invalid data format for players:', data);
+            }
+          },
+          (error) => {
+            console.error('Error fetching players:', error);
+          }
+        );
+      });
+    });
   }
 
   ngOnDestroy(): void {
