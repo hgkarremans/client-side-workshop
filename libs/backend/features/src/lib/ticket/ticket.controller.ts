@@ -41,4 +41,16 @@ export class TicketController {
     updateUserTicket(@Param('id') id: string, @Body() updatedTicketData: Partial<ITicket>): Promise<ITicket | null> {
       return this.ticketService.updateTicket(id, updatedTicketData);
     }
+  
+
+  @Get('/friends/:userId')
+  async getTicketsFromFriends(@Param('userId') userId: string): Promise<ITicket[]> {
+    try {
+      const tickets = await this.ticketService.getTicketsFromFriends(userId);
+      return tickets;
+    } catch (error) {
+      console.error('Error fetching tickets from friends:', error);
+      throw error;
+    }
+  }
 }

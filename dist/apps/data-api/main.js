@@ -564,7 +564,7 @@ module.exports = require("@nestjs/mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -593,6 +593,16 @@ let TicketController = exports.TicketController = class TicketController {
     }
     updateUserTicket(id, updatedTicketData) {
         return this.ticketService.updateTicket(id, updatedTicketData);
+    }
+    async getTicketsFromFriends(userId) {
+        try {
+            const tickets = await this.ticketService.getTicketsFromFriends(userId);
+            return tickets;
+        }
+        catch (error) {
+            console.error('Error fetching tickets from friends:', error);
+            throw error;
+        }
     }
 };
 tslib_1.__decorate([
@@ -644,6 +654,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String, typeof (_j = typeof Partial !== "undefined" && Partial) === "function" ? _j : Object]),
     tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
 ], TicketController.prototype, "updateUserTicket", null);
+tslib_1.__decorate([
+    (0, common_1.Get)('/friends/:userId'),
+    tslib_1.__param(0, (0, common_1.Param)('userId')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_l = typeof Promise !== "undefined" && Promise) === "function" ? _l : Object)
+], TicketController.prototype, "getTicketsFromFriends", null);
 exports.TicketController = TicketController = tslib_1.__decorate([
     (0, common_1.Controller)('ticket'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof ticket_service_1.TicketService !== "undefined" && ticket_service_1.TicketService) === "function" ? _a : Object])
@@ -655,17 +672,19 @@ exports.TicketController = TicketController = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TicketService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const mongoose_1 = __webpack_require__(26);
 const mongoose_2 = __webpack_require__(29);
-const ticket_schema_1 = __webpack_require__(30); // Import the correct types
+const ticket_schema_1 = __webpack_require__(30);
+const Neo4jUser_service_1 = __webpack_require__(31);
 let TicketService = exports.TicketService = class TicketService {
-    constructor(ticketModel) {
+    constructor(ticketModel, neo4jUserservice) {
         this.ticketModel = ticketModel;
+        this.neo4jUserservice = neo4jUserservice;
     }
     async getTickets() {
         console.log('getTickets aangeroepen in service backend');
@@ -678,6 +697,32 @@ let TicketService = exports.TicketService = class TicketService {
     async addTicket(ticketData) {
         const createdTicket = new this.ticketModel(ticketData);
         return createdTicket.save();
+    }
+    async getTicketsFromFriends(Id) {
+        console.log('getTicketsFromFriends called in the service backend');
+        // Fetch friends of the user
+        const friends = await this.neo4jUserservice.getFriends(Id);
+        console.log('Friends:', friends);
+        // Fetch all tickets
+        const tickets = await this.getTickets();
+        console.log('Tickets:', tickets);
+        // Filter tickets owned by the friend (ID: 528)
+        const friendTickets = tickets.filter(ticket => Number(ticket.owner) === Number(Id));
+        console.log('Friend Tickets:', friendTickets);
+        // Return the filtered tickets owned by the friend
+        return friendTickets;
+    }
+    async getTicketsByOwnerId(ownerId) {
+        console.log('getTicketsByOwnerId called in the service backend for owner ID: ' + ownerId);
+        try {
+            const tickets = await this.ticketModel.find({ owner: ownerId }).exec();
+            console.log('Tickets:', tickets);
+            return tickets;
+        }
+        catch (error) {
+            console.error('Error fetching tickets by owner ID:', error);
+            throw error; // Rethrow the error for handling in the caller
+        }
     }
     async deleteTicket(id) {
         await this.ticketModel.findByIdAndDelete(id).exec();
@@ -696,7 +741,7 @@ let TicketService = exports.TicketService = class TicketService {
 exports.TicketService = TicketService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__param(0, (0, mongoose_1.InjectModel)(ticket_schema_1.Ticket.name)),
-    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object, typeof (_b = typeof Neo4jUser_service_1.Neo4jUserService !== "undefined" && Neo4jUser_service_1.Neo4jUserService) === "function" ? _b : Object])
 ], TicketService);
 
 
