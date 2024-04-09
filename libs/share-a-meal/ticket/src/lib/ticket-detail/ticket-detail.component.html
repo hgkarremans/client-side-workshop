@@ -1,5 +1,5 @@
 <!-- ticket-detail.component.html -->
-<div *ngIf="ticket" class="card-details shadow mx-auto m-3 bg-light" style="width: 75rem; border: none;">
+<div *ngIf="ticket" class="card-details shadow mx-auto m-3 bg-light" style="width: 75rem; border: none; position: relative;">
   <div class="row no-gutters">
     <div class="col-md-4">
       <img src="../assets/soccer_player.png" class="card-img" alt="User Image">
@@ -21,23 +21,19 @@
           </ul>
         </div>
 
-        <!-- Admin actions -->
-        <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
-          <button *ngIf="decodedToken && decodedToken.role === 'Admin'" class="btn btn-light mr-2"
-            style="border: 1px solid #000;" routerLink="edit">Edit</button>
-          <button routerLink="../../tickets" *ngIf="decodedToken && decodedToken.role === 'Admin'"
-            class="btn btn-danger" style="border: 1px solid #000;" (click)="openDeleteConfirmationModal()">Delete</button>
-        </div>
-
-        <!-- Claim/Unclaim ticket buttons -->
-        <div *ngIf="ticket.owner === decodedToken.sub || (!ticket.owner && ticket.owner !== decodedToken.sub)">
-          <button *ngIf="ticket.owner === decodedToken.sub" class="btn btn-danger" style="border: 1px solid #000;"
-            (click)="unclaimTicket()">Unclaim Ticket</button>
-          <button *ngIf="!ticket.owner && ticket.owner !== decodedToken.sub" class="btn btn-primary"
-            style="border: 1px solid #000;" (click)="claimTicket()">Claim Ticket</button>
+        <!-- Claim/Unclaim ticket buttons --> 
+        <div *ngIf="ticket.owner === decodedToken.sub || (!ticket.owner && ticket.owner !== decodedToken.sub)" class="mb-3" style="position: absolute; bottom: 0;">
+          <button *ngIf="ticket.owner === decodedToken.sub" class="btn btn-danger mr-2" style="border: 1px solid #000;" (click)="unclaimTicket()">Unclaim Ticket</button>
+          <button *ngIf="!ticket.owner && ticket.owner !== decodedToken.sub" class="btn btn-primary mr-2" style="border: 1px solid #000;" (click)="claimTicket()">Claim Ticket</button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Admin actions -->
+  <div style="position: absolute; bottom: 0; right: 0; margin: 8px;">
+    <button *ngIf="decodedToken && decodedToken.role === 'Admin'" class="btn btn-light mr-2" style="border: 1px solid #000;" routerLink="edit">Edit</button>
+    <button routerLink="../../tickets" *ngIf="decodedToken && decodedToken.role === 'Admin'" class="btn btn-danger" style="border: 1px solid #000;" (click)="openDeleteConfirmationModal()">Delete</button>
   </div>
 </div>
 
