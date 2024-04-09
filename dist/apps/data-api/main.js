@@ -842,7 +842,7 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         try {
             const query = `MATCH (user:User {Id: $Id})-[:FRIENDS]-(friend:User) RETURN friend`;
             const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
-            const friends = result?.records.map(record => record.get('friend').properties);
+            const friends = result?.records.map((record) => record.get('friend').properties);
             return friends;
         }
         catch (error) {
@@ -851,19 +851,39 @@ let Neo4jUserService = exports.Neo4jUserService = class Neo4jUserService {
         }
     }
     async addFriend(email1, friendEmail) {
-        common_2.Logger.log("addfriends called", this.TAG);
+        common_2.Logger.log('addfriends called', this.TAG);
         common_2.Logger.log(`addFriend(${email1}, ${friendEmail})`, this.TAG);
         try {
             const query = `
       MATCH (user1:User { emailAddress: $email1 }), (user2:User { emailAddress: $friendEmail })
       CREATE (user1)-[:FRIENDS]->(user2)
     `;
-            const result = await this.neo4jService.write(query, { email1, friendEmail });
+            const result = await this.neo4jService.write(query, {
+                email1,
+                friendEmail,
+            });
             return result;
         }
         catch (error) {
             console.error('Error adding friend:', error);
             throw new Error('Failed to add friend');
+        }
+    }
+    async deleteFriend(email1, friendEmail) {
+        try {
+            const query = `
+      MATCH (user1:User { emailAddress: $email1 })-[r:FRIENDS]->(user2:User { emailAddress: $friendEmail })
+      DELETE r
+    `;
+            const result = await this.neo4jService.write(query, {
+                email1,
+                friendEmail,
+            });
+            return result;
+        }
+        catch (error) {
+            console.error('Error deleting friend connection:', error);
+            throw new Error('Failed to delete friend connection');
         }
     }
     async findOne(emailAddress) {
@@ -1010,8 +1030,8 @@ let UserController = exports.UserController = class UserController {
     }
     async getOneUser(Id) {
         const user = await this.neo4jService.getOne(Id);
-        console.log("Id in controller: ", Id);
-        console.log("controller user: ", user);
+        console.log('Id in controller: ', Id);
+        console.log('controller user: ', user);
         return user;
     }
     async getFriends(Id) {
@@ -1020,6 +1040,10 @@ let UserController = exports.UserController = class UserController {
     }
     async addFriend(body) {
         const result = await this.neo4jService.addFriend(body.email1, body.friendEmail);
+        return result;
+    }
+    async deleteFriend(body) {
+        const result = await this.neo4jService.deleteFriend(body.email1, body.friendEmail);
         return result;
     }
     async createUser(newUser) {
@@ -1063,6 +1087,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], UserController.prototype, "addFriend", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)('friends'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UserController.prototype, "deleteFriend", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
     (0, public_decorator_1.Public)(),

@@ -77,6 +77,29 @@ addFriend(userEmail: string, friendEmail: string, token: string): Observable<any
     })
   );
 }
+deleteFriend(userEmail: string, friendEmail: string, token: string): Observable<any> {
+  console.log(`deleteFriend called for userEmail: ${userEmail} and friendEmail: ${friendEmail}`);
+  const url = `${this.apiUrl}/friends`;
+  
+  // Construct headers with Authorization token
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+  
+  // Include headers in the HTTP request and send the data in the request body
+  return this.http.delete<any>(url, { headers, body: { email1: userEmail, friendEmail } }).pipe(
+    tap(response => {
+      if (!response) {
+        throw new Error('No response received after deleting friend.');
+      }
+      console.log('Friend deleted:', response);
+    }),
+    catchError(error => {
+      console.error('Error deleting friend:', error);
+      return throwError(error);
+    })
+  );
+}
 
 
 

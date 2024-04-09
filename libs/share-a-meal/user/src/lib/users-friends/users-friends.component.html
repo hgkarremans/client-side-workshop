@@ -13,7 +13,8 @@
           <p>{{ friend.emailAddress }}</p>
         </div>
       </div>
-      <button class="delete-button" >Delete</button>
+      <button class="delete-button" (click)="deleteFriend(friend.emailAddress)">Delete</button>
+
     </li>
   </ul>
 </div>

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+} from '@nestjs/common';
 import { Neo4jUserService } from './Neo4jUser.service';
 import { User } from '@avans-nx-workshop/shared/api';
 import { Public } from './Decorators/public.decorator';
@@ -17,8 +25,8 @@ export class UserController {
   @Public()
   async getOneUser(@Param('Id') Id: string) {
     const user = await this.neo4jService.getOne(Id);
-    console.log("Id in controller: ", Id);
-    console.log("controller user: ", user);
+    console.log('Id in controller: ', Id);
+    console.log('controller user: ', user);
     return user;
   }
   @Get(':Id/friends')
@@ -27,8 +35,19 @@ export class UserController {
     return friends;
   }
   @Post('friends')
-  async addFriend(@Body() body: { email1: string, friendEmail: string }) {
-    const result = await this.neo4jService.addFriend(body.email1, body.friendEmail);
+  async addFriend(@Body() body: { email1: string; friendEmail: string }) {
+    const result = await this.neo4jService.addFriend(
+      body.email1,
+      body.friendEmail
+    );
+    return result;
+  }
+  @Delete('friends')
+  async deleteFriend(@Body() body: { email1: string; friendEmail: string }) {
+    const result = await this.neo4jService.deleteFriend(
+      body.email1,
+      body.friendEmail
+    );
     return result;
   }
 
@@ -40,7 +59,20 @@ export class UserController {
   }
 
   @Put(':Id')
-  async updateUser(@Param('Id') Id: string, @Body() updatedUser: Pick<User, 'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' >) {
+  async updateUser(
+    @Param('Id') Id: string,
+    @Body()
+    updatedUser: Pick<
+      User,
+      | 'firstName'
+      | 'lastName'
+      | 'image'
+      | 'emailAddress'
+      | 'dateOfBirth'
+      | 'gender'
+      | 'role'
+    >
+  ) {
     const result = await this.neo4jService.update(Id, updatedUser);
     return result;
   }

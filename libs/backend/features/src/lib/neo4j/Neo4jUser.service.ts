@@ -40,37 +40,58 @@ export class Neo4jUserService {
     Logger.log(`getFriends(${Id})`, this.TAG);
 
     try {
-        const query = `MATCH (user:User {Id: $Id})-[:FRIENDS]-(friend:User) RETURN friend`;
+      const query = `MATCH (user:User {Id: $Id})-[:FRIENDS]-(friend:User) RETURN friend`;
 
-        const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
+      const result = await this.neo4jService.read(query, { Id: parseInt(Id) });
 
-        const friends = result?.records.map(record => record.get('friend').properties);
-        return friends;
+      const friends = result?.records.map(
+        (record) => record.get('friend').properties
+      );
+      return friends;
     } catch (error) {
-        console.error('Error fetching friends:', error);
-        throw new Error('Failed to fetch friends');
+      console.error('Error fetching friends:', error);
+      throw new Error('Failed to fetch friends');
     }
-}
-async addFriend(email1: string, friendEmail: string) {
-  Logger.log("addfriends called", this.TAG);
-  Logger.log(`addFriend(${email1}, ${friendEmail})`, this.TAG);
+  }
+  async addFriend(email1: string, friendEmail: string) {
+    Logger.log('addfriends called', this.TAG);
+    Logger.log(`addFriend(${email1}, ${friendEmail})`, this.TAG);
 
-  try {
-    const query = `
+    try {
+      const query = `
       MATCH (user1:User { emailAddress: $email1 }), (user2:User { emailAddress: $friendEmail })
       CREATE (user1)-[:FRIENDS]->(user2)
     `;
 
-    const result = await this.neo4jService.write(query, { email1, friendEmail });
+      const result = await this.neo4jService.write(query, {
+        email1,
+        friendEmail,
+      });
 
-    return result;
-  } catch (error) {
-    console.error('Error adding friend:', error);
-    throw new Error('Failed to add friend');
+      return result;
+    } catch (error) {
+      console.error('Error adding friend:', error);
+      throw new Error('Failed to add friend');
+    }
   }
-}
+  async deleteFriend(email1: string, friendEmail: string) {
+    try {
+      const query = `
+      MATCH (user1:User { emailAddress: $email1 })-[r:FRIENDS]->(user2:User { emailAddress: $friendEmail })
+      DELETE r
+    `;
 
+      const result = await this.neo4jService.write(query, {
+        email1,
+        friendEmail,
+      });
 
+      return result;
+    } catch (error) {
+      console.error('Error deleting friend connection:', error);
+      throw new Error('Failed to delete friend connection');
+    }
+  }
 
   async findOne(emailAddress: string): Promise<User> {
     const query = `MATCH (user:User {emailAddress: $emailAddress}) RETURN user`;
@@ -117,9 +138,9 @@ async addFriend(email1: string, friendEmail: string) {
       emailAddress: newUser.emailAddress,
       dateOfBirth: newUser.dateOfBirth,
       gender: newUser.gender,
-      role: newUser.role || UserRole.guest, 
-      hasTransportation: newUser.hasTransportation || false, 
-      passwordHash: hashedPassword, 
+      role: newUser.role || UserRole.guest,
+      hasTransportation: newUser.hasTransportation || false,
+      passwordHash: hashedPassword,
     });
 
     const userProperties = result.records[0]?.get('user').properties;
@@ -130,24 +151,28 @@ async addFriend(email1: string, friendEmail: string) {
     };
     const accessToken = await this.jwtService.signAsync(payload);
     console.log('payload: ', payload);
-    console.log('accessToken:', accessToken); 
+    console.log('accessToken:', accessToken);
 
-    
     return { user: userProperties, access_token: accessToken };
-}
+  }
 
-
-async update(
-  Id: string,
-  user: Pick<
+  async update(
+    Id: string,
+    user: Pick<
       User,
-      'firstName' | 'lastName' | 'image' | 'emailAddress' | 'dateOfBirth' | 'gender' | 'role' 
-  >
-) {
-  Logger.log(`Update(${Id})`, this.TAG);
+      | 'firstName'
+      | 'lastName'
+      | 'image'
+      | 'emailAddress'
+      | 'dateOfBirth'
+      | 'gender'
+      | 'role'
+    >
+  ) {
+    Logger.log(`Update(${Id})`, this.TAG);
 
-  // Check if any of the user properties are undefined, and provide default values if needed
-  const updatedUser = {
+    // Check if any of the user properties are undefined, and provide default values if needed
+    const updatedUser = {
       firstName: user.firstName || '',
       lastName: user.lastName || '',
       image: user.image || '',
@@ -155,10 +180,9 @@ async update(
       dateOfBirth: user.dateOfBirth || '',
       gender: user.gender || '',
       role: user.role || '',
-      
-  };
+    };
 
-  const query = `
+    const query = `
       MATCH (user:User {Id: $Id})
       SET
           user.firstName = $firstName,
@@ -171,19 +195,17 @@ async update(
       RETURN user
   `;
 
-  const parameters = {
+    const parameters = {
       Id: parseInt(Id),
       ...updatedUser, // Use the updated user object with default values
-  };
+    };
 
-  console.log('Update Parameters:', parameters); // Log the parameters for debugging
+    console.log('Update Parameters:', parameters); // Log the parameters for debugging
 
-  const result = await this.neo4jService.write(query, parameters);
+    const result = await this.neo4jService.write(query, parameters);
 
-  return result.records;
-}
-
-
+    return result.records;
+  }
 
   async delete(Id: string) {
     Logger.log(`Delete(${Id})`, this.TAG);
