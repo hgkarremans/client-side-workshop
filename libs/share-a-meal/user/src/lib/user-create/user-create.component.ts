@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
 import { User } from '@avans-nx-workshop/shared/api';
+import { dateOfBirthValidator } from './dateOfBirthValidator';
 
 @Component({
   selector: 'clientside-nx-workshop-user-create',
@@ -26,7 +27,7 @@ export class UserCreateComponent implements OnInit {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
+      dateOfBirth: ['', [Validators.required, dateOfBirthValidator()]],
       emailAddress: ['', [Validators.required, Validators.email]],
       passwordHash: ['', Validators.required],
       image: [''],

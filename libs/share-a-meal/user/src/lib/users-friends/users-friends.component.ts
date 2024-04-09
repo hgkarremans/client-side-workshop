@@ -62,14 +62,20 @@ export class UsersFriendsComponent implements OnInit {
 
   addFriend() {
     console.log('Adding friend:', this.newFriendEmail);
-
+    
     // Check if the new friend's email is the same as the user's email
     if (this.newFriendEmail === this.email) {
       this.errorMessage = 'Cannot add yourself as a friend.';
       return;
     }
-
-    // Proceed with adding the friend if the emails are different
+  
+    // Check if the new friend is already in the friends list
+    if (this.friends.find(friend => friend.emailAddress === this.newFriendEmail)) {
+      this.errorMessage = 'You are already friends with this person.';
+      return;
+    }
+  
+    // Proceed with adding the friend if the emails are different and the friend is not already in the list
     this.userService
       .addFriend(this.email, this.newFriendEmail, this.token)
       .subscribe(
@@ -82,4 +88,5 @@ export class UsersFriendsComponent implements OnInit {
         }
       );
   }
+  
 }

@@ -29,7 +29,10 @@
               [ngClass]="{'is-invalid': userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched}">
             <div *ngIf="userForm.get('dateOfBirth')?.hasError('required') && userForm.get('dateOfBirth')?.touched">Date
               of Birth is required.</div>
+            <div *ngIf="userForm.get('dateOfBirth')?.hasError('invalidDateOfBirth') && userForm.get('dateOfBirth')?.touched">Date
+              of Birth must be at least yesterday.</div>
           </div>
+          
           <div>
             <label for="image">Profile picture Url</label>
             <input type="text" class="form-control" placeholder="Enter image URL" formControlName="image">
