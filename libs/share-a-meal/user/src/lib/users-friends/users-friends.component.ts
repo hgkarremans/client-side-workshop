@@ -42,6 +42,15 @@ export class UsersFriendsComponent implements OnInit {
 
   addFriend() {
     console.log('Adding friend:', this.newFriendEmail);
-    this.userService.addFriend(this.email, this.newFriendEmail, this.token)
+    this.userService.addFriend(this.email, this.newFriendEmail, this.token).subscribe(
+      (response) => {
+        console.log('Friend added:', response);
+        this.loadFriends();
+      },
+      (error) => {
+        console.error('Error adding friend:', error);
+      }
+    );
+    
   }
 }

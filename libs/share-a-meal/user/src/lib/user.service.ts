@@ -56,6 +56,7 @@ export class UserService {
 addFriend(userEmail: string, friendEmail: string, token: string): Observable<any> {
   console.log(`addFriend called for userEmail: ${userEmail} and friendEmail: ${friendEmail}`);
   const url = `${this.apiUrl}/friends`;
+  console.log('URL:', url);
   
   // Construct headers with Authorization token
   const headers = new HttpHeaders({
@@ -63,14 +64,21 @@ addFriend(userEmail: string, friendEmail: string, token: string): Observable<any
   });
 
   // Include headers in the HTTP request
-  return this.http.post<any>(url, { userEmail, friendEmail }, { headers }).pipe(
-    tap(response => console.log('Friend added:', response)),
+  return this.http.post<any>(url, { email1: userEmail, friendEmail }, { headers }).pipe(
+    tap(response => {
+      if (!response) {
+        throw new Error('No response received after adding friend.');
+      }
+      console.log('Friend added:', response);
+    }),
     catchError(error => {
       console.error('Error adding friend:', error);
       return throwError(error); // Rethrow the error to be caught by the caller
     })
   );
 }
+
+
 
 
 
