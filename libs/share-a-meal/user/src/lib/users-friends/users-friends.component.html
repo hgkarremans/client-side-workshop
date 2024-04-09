@@ -3,6 +3,7 @@
   <div class="add-friend">
     <input type="text" placeholder="Enter email to add friend" [(ngModel)]="newFriendEmail">
     <button class="add-button" (click)="addFriend()">Add Friend</button>
+    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
   </div>
   <ul>
     <li *ngFor="let friend of friends" class="friend-item">

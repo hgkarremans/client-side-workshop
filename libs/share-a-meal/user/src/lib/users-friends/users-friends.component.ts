@@ -13,6 +13,7 @@ export class UsersFriendsComponent implements OnInit {
   token: any;
   email: any;
   newFriendEmail = '';
+  errorMessage = ''; // Variable to hold the error message
 
   constructor(
     private userService: UserService,
@@ -61,6 +62,14 @@ export class UsersFriendsComponent implements OnInit {
 
   addFriend() {
     console.log('Adding friend:', this.newFriendEmail);
+
+    // Check if the new friend's email is the same as the user's email
+    if (this.newFriendEmail === this.email) {
+      this.errorMessage = 'Cannot add yourself as a friend.';
+      return;
+    }
+
+    // Proceed with adding the friend if the emails are different
     this.userService
       .addFriend(this.email, this.newFriendEmail, this.token)
       .subscribe(
